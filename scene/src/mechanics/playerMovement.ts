@@ -1,5 +1,17 @@
 import { movePlayerTo } from "@decentraland/RestrictedActions"
 
+const velocity = 0.5
+let isWrapped = false
+let moveUp=false
+let moveDown=false
+let moveLeft=false
+let moveRight=false
+let moveRotateRight = false
+let moveRotateLeft = false
+let moving = false
+// button up event
+let maxXPos = 2
+let maxZPos = 2
 let glb = new GLTFShape("models/player/block_user_col.glb")
 
 const moveMeters=1
@@ -24,7 +36,6 @@ shipCollider.addComponent(new Transform({position: new Vector3(2,0,8), scale: ne
 engine.addEntity(shipCollider)
 
 movePlayerTo({ x: 2, y: 0, z: 8 })
-let isWrapped = false
 /* 
 const myEntity2 = new Entity()
 myEntity2.addComponent(glb)
@@ -32,15 +43,6 @@ myEntity2.addComponent(new Transform({position: new Vector3(3,0,3)}))
 engine.addEntity(myEntity2) */
 // Instance the input objectw
 const input = Input.instance
-let moveUp=false
-let moveDown=false
-let moveLeft=false
-let moveRight=false
-let moveRotateRight = false
-let moveRotateLeft = false
-let moving = false
-// button up event
-let maxPos = 2
 let position = shipCollider.getComponent(Transform)
 input.subscribe("BUTTON_UP", ActionButton.FORWARD, false, (e) => {
     log("pointer Up", e)
@@ -50,7 +52,7 @@ input.subscribe("BUTTON_UP", ActionButton.FORWARD, false, (e) => {
     }
     if (!moving){
         position = shipCollider.getComponent(Transform)
-        maxPos = position.position.x + moveMeters
+        maxXPos = position.position.x + moveMeters
         moving = true
         moveUp = true
     }
@@ -64,7 +66,7 @@ input.subscribe("BUTTON_UP", ActionButton.FORWARD, false, (e) => {
     }
     if (!moving){
         position = shipCollider.getComponent(Transform)
-        maxPos = position.position.x - moveMeters
+        maxXPos = position.position.x - moveMeters
         moving = true
         moveDown=true
     }
@@ -72,19 +74,29 @@ input.subscribe("BUTTON_UP", ActionButton.FORWARD, false, (e) => {
 
   input.subscribe("BUTTON_UP", ActionButton.LEFT, false, (e) => {
     log("pointer Up", e)
+    let localPos = shipCollider.getComponent(Transform).position.z + moveMeters
+    if (localPos>=15){
+        return
+    }
     if (!moving){
+      position = shipCollider.getComponent(Transform)
+      maxZPos = position.position.z + moveMeters
         moving = true
-        moveLeft=true
-        position = shipCollider.getComponent(Transform)
+        moveLeft = true
     }
   })
 
   input.subscribe("BUTTON_UP", ActionButton.RIGHT, false, (e) => {
     log("pointer Up", e)
+    let localPos = shipCollider.getComponent(Transform).position.z - moveMeters
+    if (localPos<=1){
+        return
+    }
     if (!moving){
-        moving = true
-        moveRight = true
-        position = shipCollider.getComponent(Transform)
+      position = shipCollider.getComponent(Transform)
+      maxZPos = position.position.z - moveMeters
+      moving = true
+      moveRight=true
     }
   })
 
@@ -119,9 +131,9 @@ input.subscribe("BUTTON_UP", ActionButton.FORWARD, false, (e) => {
             
             //forward == left
             //left == down
-            transform.position.x = transform.position.x+(0.25*dt)
-            if(transform.position.x >= maxPos){
-                transform.position.x = maxPos
+            transform.position.x = transform.position.x+(velocity*dt)
+            if(transform.position.x >= maxXPos){
+                transform.position.x = maxXPos
                 moveUp = false
                 moving = false
             }
@@ -129,35 +141,43 @@ input.subscribe("BUTTON_UP", ActionButton.FORWARD, false, (e) => {
       else if (moveDown){
         //forward == left
         //left == down
-            transform.position.x = transform.position.x-(0.25*dt)
-            if(transform.position.x <= maxPos){
-                transform.position.x = maxPos
+            transform.position.x = transform.position.x-(velocity*dt)
+            if(transform.position.x <= maxXPos){
+                transform.position.x = maxXPos
                 moveDown = false
                 moving = false
             }
       }
       else if (moveLeft){
-        let distance = Vector3.Forward().scale(1)
-        //forward == left
-        //left == down
-        transform.translate(distance)
-        moveLeft=false
+        transform.position.z = transform.position.z+(velocity*dt)
+        if(transform.position.z >= maxZPos){
+            transform.position.z = maxZPos
+            moveLeft = false
+            moving = false
+        }
+        log(transform.position.z)
       }
       else if (moveRight){
-        let distance = Vector3.Backward().scale(1)
-        //forward == left
-        //left == down
-        transform.translate(distance)
-        moveRight=false
+        transform.position.z = transform.position.z- (velocity*dt)
+        if(transform.position.z <= maxZPos){
+            transform.position.z = maxZPos
+            moveLeft = false
+            moving = false
+        }
+        log(transform.position.z)
         }
         else if (moveRotateLeft){
-          
             let transform = shipCollider.getComponent(Transform)
-            if (transform.rotation >= Vector3.Left().toQuaternion()){
-            transform.rotate(Vector3.Left(), 0.15*dt)
+            transform.rotate(new Vector3(0,1,0), 90)
             moveRotateLeft=false
-            } 
+            moving=false
           }
+          else if (moveRotateRight){
+              let transform = shipCollider.getComponent(Transform)
+              transform.rotate(new Vector3(0,1,0), -90)
+              moveRotateRight=false
+              moving=false
+            }
         }
     }
   }
