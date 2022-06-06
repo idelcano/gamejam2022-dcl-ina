@@ -13,8 +13,8 @@
   "main": "bin/game.js",
   "tags": [],
   "scene": {
-    "parcels": ["0,0"],
-    "base": "0,0"
+    "parcels": ["-38,76"],
+    "base": "-38,76"
   },
   "spawnPoints": [
     {
