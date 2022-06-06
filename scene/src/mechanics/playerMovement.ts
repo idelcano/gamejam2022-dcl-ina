@@ -20,13 +20,14 @@ const moveMeters = 1;
 let physicsCast = PhysicsCast.instance
 
 
-/* const player = new Entity();
-player.addComponent(new BoxShape());
+let cabina_glb = new GLTFShape("models/cabina.glb");
+ const player = new Entity();
+player.addComponent(cabina_glb);
 player.addComponent(
-  new Transform({ position: Vector3.Zero(), scale: new Vector3(0.4, 0.4, 0.4) })
-); */
-//engine.addEntity(player)
-//player.setParent(Attachable.AVATAR)
+  new Transform({ 
+    position: Vector3.Zero(), scale: new Vector3(0.8, 1, 0.8) })
+); 
+engine.addEntity(player)
 
 const shipCollider = new Entity();
 shipCollider.addComponent(glb);
@@ -37,6 +38,7 @@ shipCollider.addComponent(
   })
 );
 engine.addEntity(shipCollider);
+player.setParent(shipCollider)
 
 movePlayerTo({ x: 2, y: 0, z: 8 });
 /* 

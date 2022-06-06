@@ -16,7 +16,7 @@ firstPersonText.positionX = "-15%"
 firstPersonText.color = Color4.Blue()
 firstPersonText.visible=false
 
-onCameraModeChangedObservable.add(({ cameraMode }) => {
+/* onCameraModeChangedObservable.add(({ cameraMode }) => {
     log("Camera mode changed:", cameraMode)
     if (cameraMode === CameraMode.ThirdPerson){
         firstPersonContainer.visible=true
@@ -25,4 +25,4 @@ onCameraModeChangedObservable.add(({ cameraMode }) => {
         firstPersonContainer.visible=false
         firstPersonText.visible=false
     }
-  })
+  }) */
