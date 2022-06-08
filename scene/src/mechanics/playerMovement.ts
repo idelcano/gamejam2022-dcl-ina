@@ -64,8 +64,8 @@ const shipCollider = new Entity();
 shipCollider.addComponent(glb);
 shipCollider.addComponent(
   new Transform({
-    position: new Vector3(1, 0, 8.5),
-    scale: new Vector3(1.5, 1, 1.1),
+    position: new Vector3(1, 0, 8),
+    scale: new Vector3(1.5, 1, 1.5),
   })
 );
  
@@ -76,8 +76,10 @@ playerPanel.setParent(shipCollider)
 let player_avatar_transform= playerPanel.getComponent(Transform)
 player_avatar_transform.position.z = player_avatar_transform.position.z +1
 player_avatar_transform.position.y = player_avatar_transform.position.y +3 */
-
-movePlayerTo({ x: 1, y: 0, z: 8.5 });
+onSceneReadyObservable.add(() => {
+  log("SCENE LOADED")
+  movePlayerTo({ x: 1, y: 0, z: 8 });
+})
 /* 
 const myEntity2 = new Entity()
 myEntity2.addComponent(glb)
