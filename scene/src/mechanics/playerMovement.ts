@@ -1,5 +1,6 @@
-import { getUserData, UserData } from "@decentraland/Identity";
 import { movePlayerTo } from "@decentraland/RestrictedActions";
+import { walk } from "src/effects/effects";
+import { GlobalVariables } from "src/Global/globalValues";
 import { getData } from "../network/player";
 
 const velocity = 0.5;
@@ -59,8 +60,8 @@ player.addComponent(
 //player.getComponent(Transform).position.x = player.getComponent(Transform).position.x+0.5
 //player.getComponent(Transform).position.z = player.getComponent(Transform).position.z-0.5
 engine.addEntity(player)
+let shipCollider = new Entity()
 
-const shipCollider = new Entity();
 shipCollider.addComponent(glb);
 shipCollider.addComponent(
   new Transform({
@@ -182,7 +183,7 @@ export class SimpleMove implements ISystem {
     if (moving) {
       if (!isWrapped) {
         isWrapped = true;
-        shipCollider.getComponent(Transform).scale.setAll(0.85);
+        shipCollider.getComponent(Transform).scale.setAll(0.85)
         return;
       }
       let transform = shipCollider.getComponent(Transform);
@@ -194,6 +195,7 @@ export class SimpleMove implements ISystem {
           transform.position.x = maxXPos;
           moveUp = false;
           moving = false;
+          GlobalVariables.stepsui.increase()
         }
       } else if (moveDown) {
         //forward == left
@@ -203,6 +205,7 @@ export class SimpleMove implements ISystem {
           transform.position.x = maxXPos;
           moveDown = false;
           moving = false;
+          GlobalVariables.stepsui.increase()
         }
       } else if (moveLeft) {
         transform.position.z = transform.position.z + velocity * dt;
@@ -210,6 +213,7 @@ export class SimpleMove implements ISystem {
           transform.position.z = maxZPos;
           moveLeft = false;
           moving = false;
+          GlobalVariables.stepsui.increase()
         }
         log(transform.position.z);
       } else if (moveRight) {
@@ -218,6 +222,7 @@ export class SimpleMove implements ISystem {
           transform.position.z = maxZPos;
           moveRight = false;
           moving = false;
+          GlobalVariables.stepsui.increase()
         }
         log(transform.position.z);
       } else if (moveRotateLeft) {
@@ -225,11 +230,13 @@ export class SimpleMove implements ISystem {
         transform.rotate(new Vector3(0, 1, 0), 90);
         moveRotateLeft = false;
         moving = false;
+        GlobalVariables.stepsui.increase()
       } else if (moveRotateRight) {
         let transform = shipCollider.getComponent(Transform);
         transform.rotate(new Vector3(0, 1, 0), -90);
         moveRotateRight = false;
         moving = false;
+        GlobalVariables.stepsui.increase()
       }
     }
   }
@@ -333,6 +340,9 @@ function detectWallBeforeMove(targetPos: Vector3, move: (hasWall: boolean) => vo
         }
       }
       move(hasWall)
+      if(!hasWall){
+        walk()
+      }
     },
     distance
   )
