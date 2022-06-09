@@ -67,7 +67,18 @@ export let heyhello: npc.Dialog[] = [
 ]
 
 
-export let heycontrols: npc.Dialog[] = [
+export let heyfantasmico: npc.Dialog[] = [
+    {
+        text: "hey, that ghost is distracted! take the opportunity to shoot him with shift!!",
+        isEndOfDialog: true,
+        image: {
+            path: 'images/ina2.png',
+            height: 250,
+            width: 230,
+            offsetX: -700,
+            offsetY: -50,
+        },
+    },
 ]
 
 export let heyglassess: npc.Dialog[] = [

@@ -71,7 +71,9 @@ engine.addEntity(cube7);
       )
     }
 )  */
-
+export function hitFantasmico(){
+  hitEnemy.playOnce()
+}
 export function hitui() {
   zas.playOnce();
   hitEnemy.playOnce();

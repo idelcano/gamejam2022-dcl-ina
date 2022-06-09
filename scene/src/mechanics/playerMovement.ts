@@ -1,11 +1,18 @@
 import { movePlayerTo } from "@decentraland/RestrictedActions";
-import { walk } from "src/effects/effects";
+import { hitFantasmico, openfire, walk } from "src/effects/effects";
 import { GlobalVariables } from "src/Global/globalValues";
 import { getData } from "../network/player";
+import { Trigger } from "./triggers";
+import * as utils from "@dcl/ecs-scene-utils";
 
 const velocity = 0.5;
 const distance = 1.5;
 let isWrapped = false;
+let firemoveUp = false;
+let firemoveDown = false;
+let firemoveLeft = false;
+let firemoveRight = false;
+let firemoving = false;
 let moveUp = false;
 let moveDown = false;
 let moveLeft = false;
@@ -18,7 +25,8 @@ let moving = false;
 let maxXPos = 1;
 let maxZPos = 1;
 let glb = new GLTFShape("models/player/block_user_col.glb");
-
+let glb_bullet = new GLTFShape("models/items/bullet.glb");
+let fire_ent = new Entity()
 const moveMeters = 1;
 
 let physicsCast = PhysicsCast.instance
@@ -104,6 +112,26 @@ input.subscribe("BUTTON_UP", ActionButton.FORWARD, false, (e) => {
     moveToLeft()
   }
 });
+input.subscribe("BUTTON_UP", ActionButton.WALK, false, (e) => {
+  log("pointer Up", e);
+  if (firemoving){
+    return;
+  }
+  firemoving = true
+  if(rotationDiff==0){
+    fireForward()
+  }
+/*   else if(rotationDiff==1 || rotationDiff== -3){
+    fireToRight()
+  }
+  else if(rotationDiff==2 || rotationDiff == -2){
+    fireBackward()
+  }
+  else if(rotationDiff==3 || rotationDiff -1){
+    fireToLeft()
+  } */
+});
+
 
 input.subscribe("BUTTON_UP", ActionButton.BACKWARD, false, (e) => {
   log("pointer Up", e);
@@ -248,6 +276,49 @@ function moveForward() {
   detectWallBeforeMove(targetPos, moveToForwardNow)
 
 }
+function fireForward() {
+  let originFire = new Vector3(shipCollider.getComponent(Transform).position.x, 
+  shipCollider.getComponent(Transform).position.y, shipCollider.getComponent(Transform).position.z)
+  let targetFire = new Vector3(16, 
+  shipCollider.getComponent(Transform).position.y, shipCollider.getComponent(Transform).position.z)
+  fire_ent.addComponentOrReplace(new Transform({position:originFire, scale: new Vector3(0.2,0.2,0.2)}))
+  openfire()
+  engine.addEntity(fire_ent)
+  
+  let triggerBox = new utils.TriggerBoxShape(new Vector3(0.2,0.2,0.2), new Vector3(
+    shipCollider.getComponent(Transform).position.x,
+    shipCollider.getComponent(Transform).position.y,
+    shipCollider.getComponent(Transform).position.z));
+  fire_ent.addComponent(
+    new utils.TriggerComponent(
+        triggerBox, //shape
+        {
+          onTriggerEnter(entity) {
+            if (entity.name?.indexOf("fantasmico") !== -1){
+              engine.removeEntity(entity)
+              hitFantasmico()
+              engine.removeEntity(fire_ent)
+              firemoving = false
+              firemoveDown = false
+              firemoveLeft = false
+              firemoveRight = false
+              firemoveUp = false
+            }else{
+              engine.removeEntity(fire_ent)
+              firemoving = false
+              firemoveDown = false
+              firemoveLeft = false
+              firemoveRight = false
+              firemoveUp = false
+            }
+          },
+          enableDebug: true,
+        }
+      )
+);
+  openFire(originFire, targetFire)
+
+}
 function moveToForwardNow(hasWall: boolean) {
   let localPos = shipCollider.getComponent(Transform).position.x + moveMeters;
   if (localPos >= 15 || hasWall) {
@@ -259,7 +330,6 @@ function moveToForwardNow(hasWall: boolean) {
     moving = true;
     moveUp = true;
   }
-
 }
 
 function moveBackward(){
@@ -321,6 +391,20 @@ function moveToRightNow(hasWall: boolean) {
   }
 }
 
+function openFire(targetPos: Vector3, originPos: Vector3) { 
+  let localPos = fire_ent.getComponent(Transform).position.x + moveMeters;
+  if (localPos >= 15) {
+    engine.removeEntity(fire_ent)
+    return;
+  }
+  if (!firemoving && localPos != targetPos.x) {
+    position = fire_ent.getComponent(Transform);
+    maxXPos = position.position.x + moveMeters;
+
+    firemoving = true;
+    firemoveUp = true;
+  }
+}
 function detectWallBeforeMove(targetPos: Vector3, move: (hasWall: boolean) => void) { 
   let originPos = shipCollider.getComponent(Transform).position
   let rayFromPoints = physicsCast.getRayFromPositions(originPos, targetPos)
