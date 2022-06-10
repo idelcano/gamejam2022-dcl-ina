@@ -404,7 +404,7 @@ function openFireCommon(originFire: Vector3) {
             firemoving = false;
           }
         },
-        enableDebug: true,
+        enableDebug: false,
       }
     )
   );

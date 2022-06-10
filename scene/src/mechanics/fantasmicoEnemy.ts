@@ -70,7 +70,7 @@ export class Fantasmico extends Entity{
               if (entity.name?.indexOf("Bullet") !== -1) {
               }
           },
-          enableDebug: true,
+          enableDebug: false,
         }
       )
     );
