@@ -1,9 +1,9 @@
 import { movePlayerTo } from "@decentraland/RestrictedActions";
-import { hitFantasmico, openfire, walk } from "src/effects/effects";
+import { bulletWall, hitFantasmico, openfire, walk } from "src/effects/effects";
 import { GlobalVariables } from "src/Global/globalValues";
 import { getData } from "../network/player";
-import { Trigger } from "./triggers";
 import * as utils from "@dcl/ecs-scene-utils";
+import { FantasmicoDetails } from "./fantasmicoEnemy";
 
 const velocity = 0.5;
 const distance = 1.5;
@@ -13,6 +13,9 @@ let firemoveDown = false;
 let firemoveLeft = false;
 let firemoveRight = false;
 let firemoving = false;
+let emptyMove = false
+let startMove = 0
+const endMove = 1;
 let moveUp = false;
 let moveDown = false;
 let moveLeft = false;
@@ -24,10 +27,11 @@ let moving = false;
 // button up event
 let maxXPos = 1;
 let maxZPos = 1;
+let auxiliar_dt = 0;
+const moveMeters = 1;
 let glb = new GLTFShape("models/player/block_user_col.glb");
 let glb_bullet = new GLTFShape("models/items/bullet.glb");
-let fire_ent = new Entity();
-const moveMeters = 1;
+let fire_ent = new Entity("bullet");
 
 let physicsCast = PhysicsCast.instance;
 
@@ -70,8 +74,6 @@ player.addComponent(
     scale: new Vector3(0.61, 0.85, 0.51),
   })
 );
-//player.getComponent(Transform).position.x = player.getComponent(Transform).position.x+0.5
-//player.getComponent(Transform).position.z = player.getComponent(Transform).position.z-0.5
 engine.addEntity(player);
 let shipCollider = new Entity();
 
@@ -86,20 +88,10 @@ shipCollider.addComponent(
 engine.addEntity(shipCollider);
 player.setParent(shipCollider);
 playerPanel.setParent(shipCollider);
-/* playerPanel.setParent(shipCollider)
-let player_avatar_transform= playerPanel.getComponent(Transform)
-player_avatar_transform.position.z = player_avatar_transform.position.z +1
-player_avatar_transform.position.y = player_avatar_transform.position.y +3 */
 onSceneReadyObservable.add(() => {
   log("SCENE LOADED");
   movePlayerTo({ x: 1, y: 0, z: 8 });
 });
-/* 
-const myEntity2 = new Entity()
-myEntity2.addComponent(glb)
-myEntity2.addComponent(new Transform({position: new Vector3(3,0,3)}))
-engine.addEntity(myEntity2) */
-// Instance the input objectw
 const input = Input.instance;
 let position = shipCollider.getComponent(Transform);
 input.subscribe("BUTTON_UP", ActionButton.FORWARD, false, (e) => {
@@ -117,6 +109,8 @@ input.subscribe("BUTTON_UP", ActionButton.FORWARD, false, (e) => {
 input.subscribe("BUTTON_UP", ActionButton.WALK, false, (e) => {
   log("pointer Up", e);
   if (firemoving) {
+    startMove = 0
+    emptyMove = true
     return;
   }
   if (rotationDiff == 0) {
@@ -257,47 +251,50 @@ export class SimpleMove implements ISystem {
         moving = false;
         GlobalVariables.stepsui.increase();
       }
-      if (firemoving){
-        transform = fire_ent.getComponent(Transform)
+    }
+    if(moving || emptyMove){
+      if (firemoving || emptyMove){
         if(firemoveUp){
-          transform.position.x = transform.position.x + velocity * dt;
-          if (transform.position.x >= 16 || transform.position.x <= 0) {
-            if (fire_ent.isAddedToEngine()){
-              engine.removeEntity(fire_ent)
-            }            
-            firemoveUp = false;
-            firemoving = false;
-          }
+          
+          let transform = fire_ent.getComponent(Transform)
+          let newOriginPos = new Vector3(transform.position.x, transform.position.y, transform.position.z)
+          let newTargetPos = new Vector3(transform.position.x + velocity, transform.position.y, transform.position.z)
+          auxiliar_dt = dt
+          detectWallBulletDuringMove(newOriginPos, newTargetPos, continueFireUp)
         }else 
         if(firemoveDown){
-          transform.position.x = transform.position.x - velocity * dt;
-          if (transform.position.x >= 16 || transform.position.x <= 0) {
-            if (fire_ent.isAddedToEngine()){
-              engine.removeEntity(fire_ent)
-            }            
-            firemoveDown = false;
-            firemoving = false;
-          }
+          let transform = fire_ent.getComponent(Transform)
+          let newOriginPos = new Vector3(transform.position.x, transform.position.y, transform.position.z)
+          let newTargetPos = new Vector3(transform.position.x - velocity, transform.position.y, transform.position.z)
+          auxiliar_dt = dt
+          detectWallBulletDuringMove(newOriginPos, newTargetPos, continueFireDown)
+          
         } else 
         if(firemoveLeft){
-          transform.position.z = transform.position.z + velocity * dt;
-          if (transform.position.z >= 16 || transform.position.z <=0) {
-            if (fire_ent.isAddedToEngine()){
-              engine.removeEntity(fire_ent)
-            }            
-            firemoveLeft = false;
-            firemoving = false;
-          }
+          let transform = fire_ent.getComponent(Transform)
+          let newOriginPos = new Vector3(transform.position.x, transform.position.y, transform.position.z)
+          let newTargetPos = new Vector3(transform.position.x , transform.position.y, transform.position.z + velocity)
+          newTargetPos.z = transform.position.z + velocity;
+          auxiliar_dt = dt
+          detectWallBulletDuringMove(newOriginPos, newTargetPos, continueFireLeft)
+          
         } else 
         if(firemoveRight){
-          transform.position.z = transform.position.z - velocity * dt;
-          if (transform.position.z >= 16 || transform.position.z <=0) {
-            if (fire_ent.isAddedToEngine()){
-              engine.removeEntity(fire_ent)
-            }            
-            firemoveRight = false;
-            firemoving = false;
-          }
+          let transform = fire_ent.getComponent(Transform)
+          let newOriginPos = new Vector3(transform.position.x, transform.position.y, transform.position.z)
+          let newTargetPos = new Vector3(transform.position.x, transform.position.y, transform.position.z - velocity)
+          auxiliar_dt = dt
+          detectWallBulletDuringMove(newOriginPos, newTargetPos, continueFireRight)
+        }
+      }
+      if(emptyMove){
+
+        startMove = startMove + velocity * dt;
+
+        log("startmove" + startMove)
+        if (startMove >= endMove) {
+          emptyMove = false
+          GlobalVariables.stepsui.increase();
         }
       }
     }
@@ -307,45 +304,62 @@ engine.addSystem(new SimpleMove());
 
 
 function fireForward() {
+  let playerPos = new Vector3(
+    shipCollider.getComponent(Transform).position.x,
+    1,
+    shipCollider.getComponent(Transform).position.z
+  );
   let originFire = new Vector3(
     shipCollider.getComponent(Transform).position.x+1.5,
     1,
     shipCollider.getComponent(Transform).position.z
   );
-  openFireCommon(originFire);
-  firemoveUp = true;
-}
+
+  detectWallBulletBeforeMove(playerPos, originFire, openFireForward)
+  }
 
 function fireToRight() {
+  let playerPos = new Vector3(
+    shipCollider.getComponent(Transform).position.x,
+    1,
+    shipCollider.getComponent(Transform).position.z
+  );
   let originFire = new Vector3(
     shipCollider.getComponent(Transform).position.x,
     1,
     shipCollider.getComponent(Transform).position.z-1.5
   );
-  openFireCommon(originFire);
-  firemoveRight = true;
 
+  detectWallBulletBeforeMove(playerPos, originFire, openFireRight)
 }
 
 function fireBackward() {
+  let playerPos = new Vector3(
+    shipCollider.getComponent(Transform).position.x,
+    1,
+    shipCollider.getComponent(Transform).position.z
+  );
   let originFire = new Vector3(
     shipCollider.getComponent(Transform).position.x-1.5,
     1,
     shipCollider.getComponent(Transform).position.z
   );
-  openFireCommon(originFire);
-  firemoveDown = true
+  detectWallBulletBeforeMove(playerPos, originFire, openFireBackward)
 
 }
 
 function fireToLeft() {
+  let playerPos = new Vector3(
+    shipCollider.getComponent(Transform).position.x,
+    1,
+    shipCollider.getComponent(Transform).position.z
+  );
   let originFire = new Vector3(
     shipCollider.getComponent(Transform).position.x,
     1,
     shipCollider.getComponent(Transform).position.z+1.5
   );
-  openFireCommon(originFire);
-  firemoveLeft = true
+  detectWallBulletBeforeMove(playerPos, originFire, openFireLeft)
 
 }
 
@@ -366,8 +380,15 @@ function openFireCommon(originFire: Vector3) {
       {
         onTriggerEnter(entity) {
           if (entity.name?.indexOf("fantasmico") !== -1) {
-            engine.removeEntity(entity);
+            log(entity)
+            log(entity.name)
+            log(entity.uuid)
             hitFantasmico();
+            let fantasmico = entity.getComponent(FantasmicoDetails)
+            fantasmico.lives = fantasmico.lives-1
+            if (fantasmico.lives<=0){
+              engine.removeEntity(entity);
+            }
             engine.removeEntity(fire_ent);
             firemoveDown = false;
             firemoveLeft = false;
@@ -396,7 +417,9 @@ function moveForward() {
     shipCollider.getComponent(Transform).position.y,
     shipCollider.getComponent(Transform).position.z
   );
-  detectWallBeforeMove(targetPos, moveToForwardNow);
+
+  let originPos = shipCollider.getComponent(Transform).position;
+  detectWallBeforeMove(originPos, targetPos, moveToForwardNow);
 }
 
 function moveToForwardNow(hasWall: boolean) {
@@ -418,7 +441,8 @@ function moveBackward() {
     shipCollider.getComponent(Transform).position.y,
     shipCollider.getComponent(Transform).position.z
   );
-  detectWallBeforeMove(targetPos, moveToBackwardNow);
+  let originPos = shipCollider.getComponent(Transform).position;
+  detectWallBeforeMove(originPos, targetPos, moveToBackwardNow);
 }
 
 function moveToBackwardNow(hasWall: boolean) {
@@ -439,7 +463,8 @@ function moveToLeft() {
     shipCollider.getComponent(Transform).position.y,
     shipCollider.getComponent(Transform).position.z + moveMeters
   );
-  detectWallBeforeMove(targetPos, moveToLeftNow);
+  let originPos = shipCollider.getComponent(Transform).position;
+  detectWallBeforeMove(originPos, targetPos, moveToLeftNow);
 }
 
 function moveToLeftNow(hasWall: boolean) {
@@ -461,7 +486,8 @@ function moveToRight() {
     shipCollider.getComponent(Transform).position.y,
     shipCollider.getComponent(Transform).position.z - moveMeters
   );
-  detectWallBeforeMove(targetPos, moveToRightNow);
+  let originPos = shipCollider.getComponent(Transform).position;
+  detectWallBeforeMove(originPos, targetPos, moveToRightNow);
 }
 
 function moveToRightNow(hasWall: boolean) {
@@ -477,26 +503,14 @@ function moveToRightNow(hasWall: boolean) {
   }
 }
 
-function openFire(targetPos: Vector3, originPos: Vector3) {
-  let localPos = fire_ent.getComponent(Transform).position.x + moveMeters;
-  if (localPos >= 15) {
-    engine.removeEntity(fire_ent);
-    return;
-  }
-  if (!firemoving && localPos != targetPos.x) {
-    position = fire_ent.getComponent(Transform);
-    maxXPos = position.position.x + moveMeters;
-
-    firemoving = true;
-    firemoveUp = true;
-  }
-}
 function detectWallBeforeMove(
+  originPos: Vector3,
   targetPos: Vector3,
   move: (hasWall: boolean) => void
 ) {
-  let originPos = shipCollider.getComponent(Transform).position;
-  let rayFromPoints = physicsCast.getRayFromPositions(originPos, targetPos);
+  let newOriginPos = new Vector3(originPos.x, originPos.y+1, originPos.z)
+  let newtargetPos = new Vector3(targetPos.x, targetPos.y+1, targetPos.z)
+  let rayFromPoints = physicsCast.getRayFromPositions(newOriginPos, newtargetPos);
   rayFromPoints.distance = distance;
   let hasWall = false;
   physicsCast.hitAll(
@@ -523,3 +537,148 @@ function detectWallBeforeMove(
     distance
   );
 }
+
+function detectWallBulletBeforeMove(
+  originPos: Vector3,
+  targetPos: Vector3,
+  move: (originPos: Vector3) => void
+) {
+  let newOriginPos = new Vector3(originPos.x, originPos.y, originPos.z)
+  let newtargetPos = new Vector3(targetPos.x, targetPos.y, targetPos.z)
+  let rayFromPoints = physicsCast.getRayFromPositions(newOriginPos, newtargetPos);
+  rayFromPoints.distance = distance;
+  let hasWall = false;
+  physicsCast.hitAll(
+    rayFromPoints,
+    (e) => {
+      if (e == undefined) {
+        return;
+      }
+      for (let entityHit of e.entities) {
+        log(entityHit.entity.meshName);
+        if (
+          entityHit.entity.meshName.indexOf("wall") == 0
+        ) {
+          hasWall = true;
+        }
+      }
+      if(hasWall){
+        bulletWall();
+      }
+      if (!hasWall) {
+        move(originPos);
+      }
+    },
+    distance
+  );
+}
+function detectWallBulletDuringMove(
+  originPos: Vector3,
+  targetPos: Vector3,
+  move: () => void
+) {
+  let newOriginPos = new Vector3(originPos.x, originPos.y, originPos.z)
+  let newtargetPos = new Vector3(targetPos.x, targetPos.y, targetPos.z)
+  let rayFromPoints = physicsCast.getRayFromPositions(newOriginPos, newtargetPos);
+  rayFromPoints.distance = distance;
+  let hasWall = false;
+  physicsCast.hitAll(
+    rayFromPoints,
+    (e) => {
+      if (e == undefined) {
+        return;
+      }
+      for (let entityHit of e.entities) {
+        log(entityHit.entity.meshName);
+        if (
+          entityHit.entity.meshName.indexOf("wall") == 0
+        ) {
+          hasWall = true;
+        }
+      }
+      if(hasWall){
+        bulletWall();
+        if (fire_ent.isAddedToEngine()){
+          engine.removeEntity(fire_ent)
+        }            
+        firemoveRight = false;
+        firemoveLeft = false;
+        firemoveUp = false;
+        firemoveDown = false;
+        firemoving = false;
+      }
+      if (!hasWall) {
+        move();
+      }
+    },
+    distance
+  );
+}
+
+function openFireForward(originPos?: Vector3) {
+  openFireCommon(originPos!)
+  firemoveUp = true
+}
+
+function openFireBackward(originPos?: Vector3) {
+  openFireCommon(originPos!)
+  firemoveDown = true
+}
+
+function openFireLeft(originPos?: Vector3) {
+  openFireCommon(originPos!)
+  firemoveLeft = true
+}
+
+function openFireRight(originPos?: Vector3) {
+  openFireCommon(originPos!)
+  firemoveRight = true
+}
+
+function continueFireRight(){
+  let transform = fire_ent.getComponent(Transform)
+  transform.position.z = transform.position.z - velocity * auxiliar_dt;
+  if (transform.position.z >= 16 || transform.position.z <=0) {
+    if (fire_ent.isAddedToEngine()){
+      engine.removeEntity(fire_ent)
+    }            
+    firemoveRight = false;
+    firemoving = false;
+  }
+}
+function continueFireLeft() {
+  let transform = fire_ent.getComponent(Transform)
+  transform.position.z = transform.position.z + velocity * auxiliar_dt;
+  if (transform.position.z >= 16 || transform.position.z <=0) {
+    if (fire_ent.isAddedToEngine()){
+      engine.removeEntity(fire_ent)
+    }            
+    firemoveLeft = false;
+    firemoving = false;
+  }
+}
+
+function continueFireDown() {
+  let transform = fire_ent.getComponent(Transform)
+  transform.position.x = transform.position.x - velocity * auxiliar_dt;
+  if (transform.position.x >= 16 || transform.position.x <= 0) {
+    if (fire_ent.isAddedToEngine()){
+      engine.removeEntity(fire_ent)
+    }            
+    firemoveDown = false;
+    firemoving = false;
+  }
+}
+
+function continueFireUp() {
+  let transform = fire_ent.getComponent(Transform)
+  transform.position.x = transform.position.x + velocity * auxiliar_dt;
+  if (transform.position.x >= 16 || transform.position.x <= 0) {
+    if (fire_ent.isAddedToEngine()){
+      engine.removeEntity(fire_ent)
+    }            
+    firemoveUp = false;
+    firemoving = false;
+  }
+}
+

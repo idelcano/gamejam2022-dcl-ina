@@ -2,6 +2,7 @@
 import * as utils from "@dcl/ecs-scene-utils";
 import { getListOfWearables } from "node_modules/@dcl/crypto-scene-utils/dist/wearable/index";
 import { hitFantasmico } from "src/effects/effects";
+import { GlobalVariables } from "src/Global/globalValues";
 
 let fantasmico_glb = new GLTFShape("models/enemies/fantasmico.glb");
 export enum Direction {
@@ -10,19 +11,37 @@ export enum Direction {
     Left,
     Right,
   }
-
+@Component('FantasmicoDetails')
+export class FantasmicoDetails{
+    lives: number = 3
+    active: boolean = true
+    direction: Direction = Direction.Up
+    position: Vector3
+    constructor(position: Vector3, rotationPos: Direction, startDisabled: boolean){
+        this.lives = 3
+        this.position = position
+        this.direction = rotationPos
+        this.active = startDisabled
+    }
+}
 export class Fantasmico extends Entity{
     entity: Entity
     lives: number
+    active: boolean
+    public direction: Direction
     constructor(position: Vector3, rotationPos: Direction, startDisabled: boolean){
     super()
+    this.active =startDisabled
+    this.direction = rotationPos
     this.lives = 3
-    this.entity = new Entity("fantasmico")
+    let fantasmicoDetails: FantasmicoDetails = new FantasmicoDetails(position, rotationPos, startDisabled)
+    this.entity = new Entity("fantasmico" + GlobalVariables.activeFantasmicos.length)
+    this.entity.addComponent(fantasmicoDetails)
     this.entity.addComponent(fantasmico_glb);
     this.entity.addComponent(
       new Transform({
         position: position,
-        scale: new Vector3(1, 1, 1),
+        scale: new Vector3(1, 1, 0.3),
       })
     );
     if (rotationPos == Direction.Left){
@@ -35,22 +54,26 @@ export class Fantasmico extends Entity{
         this.entity.getComponent(Transform).rotate(new Vector3(0,1,0),255)
     }
     engine.addEntity(this.entity);
+    this.entity.addComponent(new Billboard())
 
-    let triggerBox = new utils.TriggerBoxShape(new Vector3(0.8,0.8,0.8)
+    let triggerBox = new utils.TriggerBoxShape(new Vector3(0.5,0.8,0.5)
     );
-    this.entity.addComponent(
+    this.entity.addComponentOrReplace(
       new utils.TriggerComponent(
         triggerBox,
         {
           onTriggerEnter(entity) {
               log("fantasmico hit " +entity.name)
-            if (entity.name?.indexOf("Circle") !== -1) {
-               //hitFantasmico()
-            }
+              if (entity.name?.indexOf("Circle") !== -1) {
+                 //hitFantasmico()
+              }
+              if (entity.name?.indexOf("Bullet") !== -1) {
+              }
           },
           enableDebug: true,
         }
       )
     );
+    GlobalVariables.activeFantasmicos.push(this)
     }
 }

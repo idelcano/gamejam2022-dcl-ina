@@ -118,3 +118,6 @@ export function openfire() {
 export function listen() {
   hey_listen.playOnce();
 }
+export function bulletWall() {
+  //steps.playOnce();
+}

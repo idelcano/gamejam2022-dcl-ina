@@ -1,5 +1,6 @@
 import * as ui from "@dcl/ui-scene-utils";
 import { Level } from "src/levels/level";
+import { Fantasmico } from "src/mechanics/fantasmicoEnemy";
 export class GlobalVariables {
   static lives: number = 100;
   static steps: number = 0;
@@ -21,6 +22,7 @@ export class GlobalVariables {
   );
 
   static level: Level;
+  static activeFantasmicos: Fantasmico[] = [];
 }
 
 let healthLabel = new ui.CornerLabel(

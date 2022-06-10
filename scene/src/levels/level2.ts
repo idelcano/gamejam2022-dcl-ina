@@ -15,9 +15,9 @@ import {
 } from "src/effects/effects";
 import { Level } from "src/levels/level";
 import { Direction, Fantasmico } from "src/mechanics/fantasmicoEnemy";
-let scene = new Entity()
+let scene = new Entity();
 let base1_glb = new GLTFShape("models/enemies/base1.glb");
-let fantasmicos=[]
+let fantasmicos = [];
 export class Level2 implements Level {
   complete() {
     if (this.map.isAddedToEngine()) engine.removeEntity(this.map);
@@ -37,12 +37,65 @@ export class Level2 implements Level {
         scale: new Vector3(0.5, 0.5, 0.5),
       })
     );
-   // engine.addEntity(this.map);
-    let fantasmico = new Fantasmico(new Vector3(3, 1, 14), Direction.Left, true)
-    fantasmicos.push(fantasmico)
+    engine.addEntity(this.map);
+    let fantasmico = new Fantasmico(
+      new Vector3(3, 1, 14),
+      Direction.Left,
+      true
+    );
+    let fantasmicosList = [
+      { posX: 7.7, posZ: 4, dir: "right" },
+      { posX: 7.7, posZ: 5, dir: "right" },
+      { posX: 7.7, posZ: 6, dir: "right" },
+      { posX: 7.7, posZ: 7, dir: "right" },
+      { posX: 7.7, posZ: 8, dir: "right" },
+      { posX: 7.7, posZ: 9, dir: "right" },
+      { posX: 7.7, posZ: 10, dir: "right" },
+      { posX: 7.7, posZ: 11, dir: "right" },
+      { posX: 7.7, posZ: 12, dir: "right" },
+      { posX: 13, posZ: 4, dir: "left" },
+      { posX: 13, posZ: 5, dir: "left" },
+      { posX: 13, posZ: 6, dir: "left" },
+      { posX: 13, posZ: 7, dir: "left" },
+      { posX: 13, posZ: 8, dir: "left" },
+      { posX: 13, posZ: 9, dir: "left" },
+      { posX: 13, posZ: 10, dir: "left" },
+      { posX: 13, posZ: 11, dir: "left" },
+      { posX: 13, posZ: 12, dir: "left" },
+      { posX: 13, posZ: 13, dir: "left" },
+      { posX: 13, posZ: 14, dir: "left" },
+    ];
+    createFantasmicos(fantasmicosList);
+
     let dialogWindow = new DialogWindow();
     dialogWindow.openDialogWindow(heyfantasmico, 0);
     listen();
-    
   }
 }
+function createFantasmicos(
+  fantasmicosPos: {
+    posX: number;
+    posZ: number;
+    dir: string;
+  }[]
+) {
+  for (let item of fantasmicosPos) {
+    if (item["dir"] == "right") {
+      let fantasmico = new Fantasmico(
+        new Vector3(item["posX"], 1, item["posZ"]),
+        Direction.Right,
+        false
+      );
+      fantasmicos.push(fantasmico);
+    } else if (item["dir"] == "left") {
+      let fantasmico = new Fantasmico(
+        new Vector3(item["posX"], 1, item["posZ"]),
+        Direction.Left,
+        false
+      );
+      fantasmicos.push(fantasmico);
+    }
+  }
+}
+
+export class FantasmicosMove implements ISystem {}
