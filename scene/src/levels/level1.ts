@@ -233,8 +233,8 @@ export class Level1 implements Level {
         return;
       }
       yeah();
-      GlobalVariables.lives = GlobalVariables.lives + 1;
-      GlobalVariables.livesui.increase();
+      GlobalVariables.lives = GlobalVariables.lives + 50;
+      GlobalVariables.livesui.increase(50);
       engine.removeSystem(simpleRotate1);
       engine.removeEntity(powerUp1);
     };
@@ -243,8 +243,8 @@ export class Level1 implements Level {
         return;
       }
       yeah();
-      GlobalVariables.lives = GlobalVariables.lives + 1;
-      GlobalVariables.livesui.increase();
+      GlobalVariables.lives = GlobalVariables.lives + 50;
+      GlobalVariables.livesui.increase(50);
       engine.removeSystem(simpleRotate2);
       engine.removeEntity(powerUp2);
     };

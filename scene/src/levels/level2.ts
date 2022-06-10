@@ -1,6 +1,6 @@
 import * as ui from "@dcl/ui-scene-utils";
 import { DialogWindow } from "@dcl/npc-scene-utils";
-import { heyfantasmico, heyglassess, heyhello, heytail } from "../dialogs/dialogs";
+import { heyfantasmico } from "../dialogs/dialogs";
 import { Trigger } from "../mechanics/triggers";
 import { checkWearableCategory } from "../network/checkWearables";
 import { glassesContract, tailContract } from "../network/contracts";
@@ -14,9 +14,10 @@ import {
   yeah,
 } from "src/effects/effects";
 import { Level } from "src/levels/level";
+import { Direction, Fantasmico } from "src/mechanics/fantasmicoEnemy";
 let scene = new Entity()
-let fantasmico_glb = new GLTFShape("models/enemies/fantasmico.glb");
 let base1_glb = new GLTFShape("models/enemies/base1.glb");
+let fantasmicos=[]
 export class Level2 implements Level {
   complete() {
     if (this.map.isAddedToEngine()) engine.removeEntity(this.map);
@@ -36,18 +37,9 @@ export class Level2 implements Level {
         scale: new Vector3(0.5, 0.5, 0.5),
       })
     );
-    engine.addEntity(this.map);
-    let firstFantasmico = new Entity()
-    firstFantasmico.addComponent(fantasmico_glb);
-    firstFantasmico.addComponent(
-      new Transform({
-        position: new Vector3(3, 1, 14),
-        scale: new Vector3(1, 1, 1),
-      })
-    );
-    firstFantasmico.getComponent(Transform).rotate(new Vector3(0,1,0),180)
-    engine.addEntity(firstFantasmico);
-
+   // engine.addEntity(this.map);
+    let fantasmico = new Fantasmico(new Vector3(3, 1, 14), Direction.Left, true)
+    fantasmicos.push(fantasmico)
     let dialogWindow = new DialogWindow();
     dialogWindow.openDialogWindow(heyfantasmico, 0);
     listen();

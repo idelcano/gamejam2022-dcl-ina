@@ -19,7 +19,7 @@ firstPersonText.color = Color4.Blue()
 firstPersonText.visible=false
 
 export const levelCompleted = new UIText(canvas)
-levelCompleted.value = "Level completed. Loading next level"
+levelCompleted.value = "Congrats! Level completed. Loading next level..."
 levelCompleted.font = new Font(Fonts.SanFrancisco)
 levelCompleted.fontSize = 20
 levelCompleted.positionX = "-15%"

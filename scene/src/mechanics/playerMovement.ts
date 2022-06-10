@@ -26,49 +26,54 @@ let maxXPos = 1;
 let maxZPos = 1;
 let glb = new GLTFShape("models/player/block_user_col.glb");
 let glb_bullet = new GLTFShape("models/items/bullet.glb");
-let fire_ent = new Entity()
+let fire_ent = new Entity();
 const moveMeters = 1;
 
-let physicsCast = PhysicsCast.instance
+let physicsCast = PhysicsCast.instance;
 
-let playerPanel = new Entity()
-playerPanel.addComponent(new PlaneShape())
-
+let playerPanel = new Entity();
+playerPanel.addComponent(new PlaneShape());
 
 executeTask(async () => {
-  let data = await getData()
+  let data = await getData();
   //let myTexture = new AvatarTexture()
-  let myTexture = new Texture(data.avatar.snapshots.face256)
-  const myMaterial = new Material()
-  myMaterial.albedoTexture = myTexture
-  playerPanel.addComponent(myMaterial)
-  playerPanel.addComponent(new Transform({
-    //position: new Vector3(1.5, 1.5, 8.7),
-    position: Vector3.Zero(),
-    scale: new Vector3(0.4,0.5,0.3)
-  }))
-  playerPanel.getComponent(Transform).rotate(new Vector3(0,1,0),90)
-  playerPanel.getComponent(Transform).rotate(new Vector3(1,0,0),205)
-  playerPanel.getComponent(Transform).position.y = playerPanel.getComponent(Transform).position.y +1.5
-  playerPanel.getComponent(Transform).position.x = playerPanel.getComponent(Transform).position.x +0.38
-  playerPanel.getComponent(Transform).position.z = playerPanel.getComponent(Transform).position.z +0.08
+  let myTexture = new Texture(data.avatar.snapshots.face256);
+  const myMaterial = new Material();
+  myMaterial.albedoTexture = myTexture;
+  playerPanel.addComponent(myMaterial);
+  playerPanel.addComponent(
+    new Transform({
+      //position: new Vector3(1.5, 1.5, 8.7),
+      position: Vector3.Zero(),
+      scale: new Vector3(0.4, 0.5, 0.3),
+    })
+  );
+  playerPanel.getComponent(Transform).rotate(new Vector3(0, 1, 0), 90);
+  playerPanel.getComponent(Transform).rotate(new Vector3(1, 0, 0), 205);
+  playerPanel.getComponent(Transform).position.y =
+    playerPanel.getComponent(Transform).position.y + 1.5;
+  playerPanel.getComponent(Transform).position.x =
+    playerPanel.getComponent(Transform).position.x + 0.38;
+  playerPanel.getComponent(Transform).position.z =
+    playerPanel.getComponent(Transform).position.z + 0.08;
 
   //playerPanel.getComponent(Transform).rotate(new Vector3(0,0,1),180)
- })
- engine.addEntity(playerPanel)
-
+});
+engine.addEntity(playerPanel);
 
 let cabina_glb = new GLTFShape("models/cabina.glb");
- const player = new Entity();
+const player = new Entity();
 player.addComponent(cabina_glb);
 player.addComponent(
-  new Transform({ 
-    position: Vector3.Zero(), scale: new Vector3(.61, .85, .51) })
-); 
+  new Transform({
+    position: Vector3.Zero(),
+    scale: new Vector3(0.61, 0.85, 0.51),
+  })
+);
 //player.getComponent(Transform).position.x = player.getComponent(Transform).position.x+0.5
 //player.getComponent(Transform).position.z = player.getComponent(Transform).position.z-0.5
-engine.addEntity(player)
-let shipCollider = new Entity()
+engine.addEntity(player);
+let shipCollider = new Entity();
 
 shipCollider.addComponent(glb);
 shipCollider.addComponent(
@@ -77,18 +82,18 @@ shipCollider.addComponent(
     scale: new Vector3(1.5, 1, 1.5),
   })
 );
- 
+
 engine.addEntity(shipCollider);
-player.setParent(shipCollider)
-playerPanel.setParent(shipCollider)
+player.setParent(shipCollider);
+playerPanel.setParent(shipCollider);
 /* playerPanel.setParent(shipCollider)
 let player_avatar_transform= playerPanel.getComponent(Transform)
 player_avatar_transform.position.z = player_avatar_transform.position.z +1
 player_avatar_transform.position.y = player_avatar_transform.position.y +3 */
 onSceneReadyObservable.add(() => {
-  log("SCENE LOADED")
+  log("SCENE LOADED");
   movePlayerTo({ x: 1, y: 0, z: 8 });
-})
+});
 /* 
 const myEntity2 = new Entity()
 myEntity2.addComponent(glb)
@@ -99,29 +104,25 @@ const input = Input.instance;
 let position = shipCollider.getComponent(Transform);
 input.subscribe("BUTTON_UP", ActionButton.FORWARD, false, (e) => {
   log("pointer Up", e);
-  if(rotationDiff==0){
-    moveForward()
-  }
-  else if(rotationDiff==1 || rotationDiff== -3){
-    moveToRight()
-  }
-  else if(rotationDiff==2 || rotationDiff == -2){
-    moveBackward()
-  }
-  else if(rotationDiff==3 || rotationDiff -1){
-    moveToLeft()
+  if (rotationDiff == 0) {
+    moveForward();
+  } else if (rotationDiff == 1 || rotationDiff == -3) {
+    moveToRight();
+  } else if (rotationDiff == 2 || rotationDiff == -2) {
+    moveBackward();
+  } else if (rotationDiff == 3 || rotationDiff - 1) {
+    moveToLeft();
   }
 });
 input.subscribe("BUTTON_UP", ActionButton.WALK, false, (e) => {
   log("pointer Up", e);
-  if (firemoving){
+  if (firemoving) {
     return;
   }
-  firemoving = true
-  if(rotationDiff==0){
-    fireForward()
+  if (rotationDiff == 0) {
+    fireForward();
   }
-/*   else if(rotationDiff==1 || rotationDiff== -3){
+    else if(rotationDiff==1 || rotationDiff== -3){
     fireToRight()
   }
   else if(rotationDiff==2 || rotationDiff == -2){
@@ -129,55 +130,45 @@ input.subscribe("BUTTON_UP", ActionButton.WALK, false, (e) => {
   }
   else if(rotationDiff==3 || rotationDiff -1){
     fireToLeft()
-  } */
+  }
 });
-
 
 input.subscribe("BUTTON_UP", ActionButton.BACKWARD, false, (e) => {
   log("pointer Up", e);
-  if(rotationDiff==0){
-    moveBackward()
-  }
-  else if(rotationDiff==1 || rotationDiff== -3){
-    moveToLeft()
-  }
-  else if(rotationDiff==2 || rotationDiff == -2){
-    moveForward()
-  }
-  else if(rotationDiff==3 || rotationDiff -1){
-    moveToRight()
+  if (rotationDiff == 0) {
+    moveBackward();
+  } else if (rotationDiff == 1 || rotationDiff == -3) {
+    moveToLeft();
+  } else if (rotationDiff == 2 || rotationDiff == -2) {
+    moveForward();
+  } else if (rotationDiff == 3 || rotationDiff - 1) {
+    moveToRight();
   }
 });
 
 input.subscribe("BUTTON_UP", ActionButton.LEFT, false, (e) => {
   log("pointer Up", e);
-  if(rotationDiff==0){
-    moveToLeft()
-  }
-  else if(rotationDiff==1 || rotationDiff== -3){
-    moveForward()
-  }
-  else if(rotationDiff==2 || rotationDiff == -2){
-    moveToRight()
-  }
-  else if(rotationDiff==3 || rotationDiff -1){
-    moveBackward()
+  if (rotationDiff == 0) {
+    moveToLeft();
+  } else if (rotationDiff == 1 || rotationDiff == -3) {
+    moveForward();
+  } else if (rotationDiff == 2 || rotationDiff == -2) {
+    moveToRight();
+  } else if (rotationDiff == 3 || rotationDiff - 1) {
+    moveBackward();
   }
 });
 
 input.subscribe("BUTTON_UP", ActionButton.RIGHT, false, (e) => {
   log("pointer Up", e);
-  if(rotationDiff==0){
-    moveToRight()
-  }
-  else if(rotationDiff==1 || rotationDiff== -3){
-    moveBackward()
-  }
-  else if(rotationDiff==2 || rotationDiff == -2){
-    moveToLeft()
-  }
-  else if(rotationDiff==3 || rotationDiff -1){
-    moveForward()
+  if (rotationDiff == 0) {
+    moveToRight();
+  } else if (rotationDiff == 1 || rotationDiff == -3) {
+    moveBackward();
+  } else if (rotationDiff == 2 || rotationDiff == -2) {
+    moveToLeft();
+  } else if (rotationDiff == 3 || rotationDiff - 1) {
+    moveForward();
   }
 });
 
@@ -187,9 +178,9 @@ input.subscribe("BUTTON_UP", ActionButton.PRIMARY, false, (e) => {
     moving = true;
     moveRotateRight = true;
     position = shipCollider.getComponent(Transform);
-    rotationDiff = rotationDiff -1
-    if (rotationDiff==-4){
-      rotationDiff=0
+    rotationDiff = rotationDiff - 1;
+    if (rotationDiff == -4) {
+      rotationDiff = 0;
     }
   }
 });
@@ -200,9 +191,9 @@ input.subscribe("BUTTON_UP", ActionButton.SECONDARY, false, (e) => {
     moving = true;
     moveRotateLeft = true;
     position = shipCollider.getComponent(Transform);
-    rotationDiff = rotationDiff +1
-    if (rotationDiff==4){
-      rotationDiff=0
+    rotationDiff = rotationDiff + 1;
+    if (rotationDiff == 4) {
+      rotationDiff = 0;
     }
   }
 });
@@ -211,7 +202,7 @@ export class SimpleMove implements ISystem {
     if (moving) {
       if (!isWrapped) {
         isWrapped = true;
-        shipCollider.getComponent(Transform).scale.setAll(0.85)
+        shipCollider.getComponent(Transform).scale.setAll(0.85);
         return;
       }
       let transform = shipCollider.getComponent(Transform);
@@ -223,7 +214,7 @@ export class SimpleMove implements ISystem {
           transform.position.x = maxXPos;
           moveUp = false;
           moving = false;
-          GlobalVariables.stepsui.increase()
+          GlobalVariables.stepsui.increase();
         }
       } else if (moveDown) {
         //forward == left
@@ -233,7 +224,7 @@ export class SimpleMove implements ISystem {
           transform.position.x = maxXPos;
           moveDown = false;
           moving = false;
-          GlobalVariables.stepsui.increase()
+          GlobalVariables.stepsui.increase();
         }
       } else if (moveLeft) {
         transform.position.z = transform.position.z + velocity * dt;
@@ -241,7 +232,7 @@ export class SimpleMove implements ISystem {
           transform.position.z = maxZPos;
           moveLeft = false;
           moving = false;
-          GlobalVariables.stepsui.increase()
+          GlobalVariables.stepsui.increase();
         }
         log(transform.position.z);
       } else if (moveRight) {
@@ -250,7 +241,7 @@ export class SimpleMove implements ISystem {
           transform.position.z = maxZPos;
           moveRight = false;
           moving = false;
-          GlobalVariables.stepsui.increase()
+          GlobalVariables.stepsui.increase();
         }
         log(transform.position.z);
       } else if (moveRotateLeft) {
@@ -258,67 +249,156 @@ export class SimpleMove implements ISystem {
         transform.rotate(new Vector3(0, 1, 0), 90);
         moveRotateLeft = false;
         moving = false;
-        GlobalVariables.stepsui.increase()
+        GlobalVariables.stepsui.increase();
       } else if (moveRotateRight) {
         let transform = shipCollider.getComponent(Transform);
         transform.rotate(new Vector3(0, 1, 0), -90);
         moveRotateRight = false;
         moving = false;
-        GlobalVariables.stepsui.increase()
+        GlobalVariables.stepsui.increase();
+      }
+      if (firemoving){
+        transform = fire_ent.getComponent(Transform)
+        if(firemoveUp){
+          transform.position.x = transform.position.x + velocity * dt;
+          if (transform.position.x >= 16 || transform.position.x <= 0) {
+            if (fire_ent.isAddedToEngine()){
+              engine.removeEntity(fire_ent)
+            }            
+            firemoveUp = false;
+            firemoving = false;
+          }
+        }else 
+        if(firemoveDown){
+          transform.position.x = transform.position.x - velocity * dt;
+          if (transform.position.x >= 16 || transform.position.x <= 0) {
+            if (fire_ent.isAddedToEngine()){
+              engine.removeEntity(fire_ent)
+            }            
+            firemoveDown = false;
+            firemoving = false;
+          }
+        } else 
+        if(firemoveLeft){
+          transform.position.z = transform.position.z + velocity * dt;
+          if (transform.position.z >= 16 || transform.position.z <=0) {
+            if (fire_ent.isAddedToEngine()){
+              engine.removeEntity(fire_ent)
+            }            
+            firemoveLeft = false;
+            firemoving = false;
+          }
+        } else 
+        if(firemoveRight){
+          transform.position.z = transform.position.z - velocity * dt;
+          if (transform.position.z >= 16 || transform.position.z <=0) {
+            if (fire_ent.isAddedToEngine()){
+              engine.removeEntity(fire_ent)
+            }            
+            firemoveRight = false;
+            firemoving = false;
+          }
+        }
       }
     }
   }
 }
 engine.addSystem(new SimpleMove());
-function moveForward() {
-  let targetPos = new Vector3(shipCollider.getComponent(Transform).position.x+moveMeters, 
-  shipCollider.getComponent(Transform).position.y, shipCollider.getComponent(Transform).position.z)
-  detectWallBeforeMove(targetPos, moveToForwardNow)
 
-}
+
 function fireForward() {
-  let originFire = new Vector3(shipCollider.getComponent(Transform).position.x, 
-  shipCollider.getComponent(Transform).position.y, shipCollider.getComponent(Transform).position.z)
-  let targetFire = new Vector3(16, 
-  shipCollider.getComponent(Transform).position.y, shipCollider.getComponent(Transform).position.z)
-  fire_ent.addComponentOrReplace(new Transform({position:originFire, scale: new Vector3(0.2,0.2,0.2)}))
-  openfire()
-  engine.addEntity(fire_ent)
-  
-  let triggerBox = new utils.TriggerBoxShape(new Vector3(0.2,0.2,0.2), new Vector3(
+  let originFire = new Vector3(
+    shipCollider.getComponent(Transform).position.x+1.5,
+    1,
+    shipCollider.getComponent(Transform).position.z
+  );
+  openFireCommon(originFire);
+  firemoveUp = true;
+}
+
+function fireToRight() {
+  let originFire = new Vector3(
     shipCollider.getComponent(Transform).position.x,
-    shipCollider.getComponent(Transform).position.y,
-    shipCollider.getComponent(Transform).position.z));
-  fire_ent.addComponent(
-    new utils.TriggerComponent(
-        triggerBox, //shape
-        {
-          onTriggerEnter(entity) {
-            if (entity.name?.indexOf("fantasmico") !== -1){
-              engine.removeEntity(entity)
-              hitFantasmico()
-              engine.removeEntity(fire_ent)
-              firemoving = false
-              firemoveDown = false
-              firemoveLeft = false
-              firemoveRight = false
-              firemoveUp = false
-            }else{
-              engine.removeEntity(fire_ent)
-              firemoving = false
-              firemoveDown = false
-              firemoveLeft = false
-              firemoveRight = false
-              firemoveUp = false
-            }
-          },
-          enableDebug: true,
-        }
-      )
-);
-  openFire(originFire, targetFire)
+    1,
+    shipCollider.getComponent(Transform).position.z-1.5
+  );
+  openFireCommon(originFire);
+  firemoveRight = true;
 
 }
+
+function fireBackward() {
+  let originFire = new Vector3(
+    shipCollider.getComponent(Transform).position.x-1.5,
+    1,
+    shipCollider.getComponent(Transform).position.z
+  );
+  openFireCommon(originFire);
+  firemoveDown = true
+
+}
+
+function fireToLeft() {
+  let originFire = new Vector3(
+    shipCollider.getComponent(Transform).position.x,
+    1,
+    shipCollider.getComponent(Transform).position.z+1.5
+  );
+  openFireCommon(originFire);
+  firemoveLeft = true
+
+}
+
+function openFireCommon(originFire: Vector3) {
+  fire_ent.addComponentOrReplace(
+    new Transform({ position: originFire, scale: new Vector3(0.02, 0.02, 0.02) })
+  );
+  fire_ent.addComponentOrReplace(glb_bullet)
+  
+  openfire();
+  engine.addEntity(fire_ent);
+
+  let triggerBox = new utils.TriggerBoxShape(new Vector3(0.2,0.2,0.2)
+  );
+  fire_ent.addComponentOrReplace(
+    new utils.TriggerComponent(
+      triggerBox,
+      {
+        onTriggerEnter(entity) {
+          if (entity.name?.indexOf("fantasmico") !== -1) {
+            engine.removeEntity(entity);
+            hitFantasmico();
+            engine.removeEntity(fire_ent);
+            firemoveDown = false;
+            firemoveLeft = false;
+            firemoveRight = false;
+            firemoveUp = false;
+            firemoving = false;
+          } else {
+            engine.removeEntity(fire_ent);
+            firemoveDown = false;
+            firemoveLeft = false;
+            firemoveRight = false;
+            firemoveUp = false;
+            firemoving = false;
+          }
+        },
+        enableDebug: true,
+      }
+    )
+  );
+  firemoving = true;
+}
+
+function moveForward() {
+  let targetPos = new Vector3(
+    shipCollider.getComponent(Transform).position.x + moveMeters,
+    shipCollider.getComponent(Transform).position.y,
+    shipCollider.getComponent(Transform).position.z
+  );
+  detectWallBeforeMove(targetPos, moveToForwardNow);
+}
+
 function moveToForwardNow(hasWall: boolean) {
   let localPos = shipCollider.getComponent(Transform).position.x + moveMeters;
   if (localPos >= 15 || hasWall) {
@@ -332,11 +412,13 @@ function moveToForwardNow(hasWall: boolean) {
   }
 }
 
-function moveBackward(){
-  let targetPos = new Vector3(shipCollider.getComponent(Transform).position.x - moveMeters, 
-  shipCollider.getComponent(Transform).position.y, 
-  shipCollider.getComponent(Transform).position.z)
-  detectWallBeforeMove(targetPos, moveToBackwardNow)
+function moveBackward() {
+  let targetPos = new Vector3(
+    shipCollider.getComponent(Transform).position.x - moveMeters,
+    shipCollider.getComponent(Transform).position.y,
+    shipCollider.getComponent(Transform).position.z
+  );
+  detectWallBeforeMove(targetPos, moveToBackwardNow);
 }
 
 function moveToBackwardNow(hasWall: boolean) {
@@ -351,14 +433,16 @@ function moveToBackwardNow(hasWall: boolean) {
     moveDown = true;
   }
 }
-function moveToLeft(){
-  let targetPos = new Vector3(shipCollider.getComponent(Transform).position.x, 
-  shipCollider.getComponent(Transform).position.y, 
-  shipCollider.getComponent(Transform).position.z + moveMeters)
-  detectWallBeforeMove(targetPos, moveToLeftNow)
+function moveToLeft() {
+  let targetPos = new Vector3(
+    shipCollider.getComponent(Transform).position.x,
+    shipCollider.getComponent(Transform).position.y,
+    shipCollider.getComponent(Transform).position.z + moveMeters
+  );
+  detectWallBeforeMove(targetPos, moveToLeftNow);
 }
 
-function moveToLeftNow(hasWall: boolean){
+function moveToLeftNow(hasWall: boolean) {
   let localPos = shipCollider.getComponent(Transform).position.z + moveMeters;
   if (localPos >= 15 || hasWall) {
     return;
@@ -371,11 +455,13 @@ function moveToLeftNow(hasWall: boolean){
   }
 }
 
-function moveToRight(){
-  let targetPos = new Vector3(shipCollider.getComponent(Transform).position.x, 
-  shipCollider.getComponent(Transform).position.y, 
-  shipCollider.getComponent(Transform).position.z - moveMeters)
-  detectWallBeforeMove(targetPos, moveToRightNow)
+function moveToRight() {
+  let targetPos = new Vector3(
+    shipCollider.getComponent(Transform).position.x,
+    shipCollider.getComponent(Transform).position.y,
+    shipCollider.getComponent(Transform).position.z - moveMeters
+  );
+  detectWallBeforeMove(targetPos, moveToRightNow);
 }
 
 function moveToRightNow(hasWall: boolean) {
@@ -391,10 +477,10 @@ function moveToRightNow(hasWall: boolean) {
   }
 }
 
-function openFire(targetPos: Vector3, originPos: Vector3) { 
+function openFire(targetPos: Vector3, originPos: Vector3) {
   let localPos = fire_ent.getComponent(Transform).position.x + moveMeters;
   if (localPos >= 15) {
-    engine.removeEntity(fire_ent)
+    engine.removeEntity(fire_ent);
     return;
   }
   if (!firemoving && localPos != targetPos.x) {
@@ -405,30 +491,35 @@ function openFire(targetPos: Vector3, originPos: Vector3) {
     firemoveUp = true;
   }
 }
-function detectWallBeforeMove(targetPos: Vector3, move: (hasWall: boolean) => void) { 
-  let originPos = shipCollider.getComponent(Transform).position
-  let rayFromPoints = physicsCast.getRayFromPositions(originPos, targetPos)
-  rayFromPoints.distance = distance
-  let hasWall = false
+function detectWallBeforeMove(
+  targetPos: Vector3,
+  move: (hasWall: boolean) => void
+) {
+  let originPos = shipCollider.getComponent(Transform).position;
+  let rayFromPoints = physicsCast.getRayFromPositions(originPos, targetPos);
+  rayFromPoints.distance = distance;
+  let hasWall = false;
   physicsCast.hitAll(
     rayFromPoints,
     (e) => {
-      if (e == undefined){
-        return
+      if (e == undefined) {
+        return;
       }
       for (let entityHit of e.entities) {
-
-        log(entityHit.entity.meshName)
-        if (entityHit.entity.meshName.indexOf("wall") == 0){
-          hasWall= true
+        log(entityHit.entity.meshName);
+        if (
+          entityHit.entity.meshName.indexOf("wall") == 0 ||
+          entityHit.entity.meshName.indexOf("fantasmico") == 0 ||
+          entityHit.entity.meshName.indexOf("enemy") == 0
+        ) {
+          hasWall = true;
         }
       }
-      move(hasWall)
-      if(!hasWall){
-        walk()
+      move(hasWall);
+      if (!hasWall) {
+        walk();
       }
     },
     distance
-  )
+  );
 }
-

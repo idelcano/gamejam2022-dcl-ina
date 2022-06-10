@@ -1,7 +1,7 @@
 import * as ui from "@dcl/ui-scene-utils";
 import { Level } from "src/levels/level";
 export class GlobalVariables {
-  static lives: number = 3;
+  static lives: number = 100;
   static steps: number = 0;
   static livesui = new ui.UICounter(
     GlobalVariables.lives,
