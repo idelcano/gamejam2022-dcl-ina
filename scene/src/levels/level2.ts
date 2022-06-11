@@ -38,32 +38,28 @@ export class Level2 implements Level {
       })
     );
     engine.addEntity(this.map);
-    let fantasmico = new Fantasmico(
-      new Vector3(3, 1, 14),
-      Direction.Left,
-      true
-    );
     let fantasmicosList = [
-      { posX: 7.7, posZ: 4, dir: "right" },
-      { posX: 7.7, posZ: 5, dir: "right" },
-      { posX: 7.7, posZ: 6, dir: "right" },
-      { posX: 7.7, posZ: 7, dir: "right" },
-      { posX: 7.7, posZ: 8, dir: "right" },
-      { posX: 7.7, posZ: 9, dir: "right" },
-      { posX: 7.7, posZ: 10, dir: "right" },
-      { posX: 7.7, posZ: 11, dir: "right" },
-      { posX: 7.7, posZ: 12, dir: "right" },
-      { posX: 13, posZ: 4, dir: "left" },
-      { posX: 13, posZ: 5, dir: "left" },
-      { posX: 13, posZ: 6, dir: "left" },
-      { posX: 13, posZ: 7, dir: "left" },
-      { posX: 13, posZ: 8, dir: "left" },
-      { posX: 13, posZ: 9, dir: "left" },
-      { posX: 13, posZ: 10, dir: "left" },
-      { posX: 13, posZ: 11, dir: "left" },
-      { posX: 13, posZ: 12, dir: "left" },
-      { posX: 13, posZ: 13, dir: "left" },
-      { posX: 13, posZ: 14, dir: "left" },
+      { posX: 3, posZ: 14, dir: "right" },
+      { posX: 7.7, posZ: 4, dir: "left" },
+      { posX: 7.7, posZ: 5, dir: "left" },
+      { posX: 7.7, posZ: 6, dir: "left" },
+      { posX: 7.7, posZ: 7, dir: "left" },
+      { posX: 7.7, posZ: 8, dir: "left" },
+      { posX: 7.7, posZ: 9, dir: "left" },
+      { posX: 7.7, posZ: 10, dir: "left" },
+      { posX: 7.7, posZ: 11, dir: "left" },
+      { posX: 7.7, posZ: 12, dir: "left" },
+      { posX: 13, posZ: 4, dir: "right" },
+      { posX: 13, posZ: 5, dir: "right" },
+      { posX: 13, posZ: 6, dir: "right" },
+      { posX: 13, posZ: 7, dir: "right" },
+      { posX: 13, posZ: 8, dir: "right" },
+      { posX: 13, posZ: 9, dir: "right" },
+      { posX: 13, posZ: 10, dir: "right" },
+      { posX: 13, posZ: 11, dir: "right" },
+      { posX: 13, posZ: 12, dir: "right" },
+      { posX: 13, posZ: 13, dir: "right" },
+      { posX: 13, posZ: 14, dir: "right" },
     ];
     createFantasmicos(fantasmicosList);
 

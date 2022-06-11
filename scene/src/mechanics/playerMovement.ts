@@ -1,9 +1,15 @@
 import { movePlayerTo } from "@decentraland/RestrictedActions";
-import { bulletWall, hitFantasmico, openfire, walk } from "src/effects/effects";
+import {
+  bulletWall,
+  hitFantasmicoSound,
+  hitui,
+  openfire,
+  walk,
+} from "src/effects/effects";
 import { GlobalVariables } from "src/Global/globalValues";
 import { getData } from "../network/player";
 import * as utils from "@dcl/ecs-scene-utils";
-import { FantasmicoDetails } from "./fantasmicoEnemy";
+import { Direction, FantasmicoDetails } from "./fantasmicoEnemy";
 
 const velocity = 0.5;
 const distance = 1.5;
@@ -13,8 +19,8 @@ let firemoveDown = false;
 let firemoveLeft = false;
 let firemoveRight = false;
 let firemoving = false;
-let emptyMove = false
-let startMove = 0
+let emptyMove = false;
+let startMove = 0;
 const endMove = 1;
 let moveUp = false;
 let moveDown = false;
@@ -91,6 +97,7 @@ playerPanel.setParent(shipCollider);
 onSceneReadyObservable.add(() => {
   log("SCENE LOADED");
   movePlayerTo({ x: 1, y: 0, z: 8 });
+  shipCollider.getComponent(Transform).scale.setAll(0.85);
 });
 const input = Input.instance;
 let position = shipCollider.getComponent(Transform);
@@ -109,21 +116,18 @@ input.subscribe("BUTTON_UP", ActionButton.FORWARD, false, (e) => {
 input.subscribe("BUTTON_UP", ActionButton.WALK, false, (e) => {
   log("pointer Up", e);
   if (firemoving) {
-    startMove = 0
-    emptyMove = true
+    startMove = 0;
+    emptyMove = true;
     return;
   }
   if (rotationDiff == 0) {
     fireForward();
-  }
-    else if(rotationDiff==1 || rotationDiff== -3){
-    fireToRight()
-  }
-  else if(rotationDiff==2 || rotationDiff == -2){
-    fireBackward()
-  }
-  else if(rotationDiff==3 || rotationDiff -1){
-    fireToLeft()
+  } else if (rotationDiff == 1 || rotationDiff == -3) {
+    fireToRight();
+  } else if (rotationDiff == 2 || rotationDiff == -2) {
+    fireBackward();
+  } else if (rotationDiff == 3 || rotationDiff - 1) {
+    fireToLeft();
   }
 });
 
@@ -191,6 +195,15 @@ input.subscribe("BUTTON_UP", ActionButton.SECONDARY, false, (e) => {
     }
   }
 });
+export class FantasmicosSimpleMove implements ISystem {
+  update(dt: number) {
+    if (moving) {
+      //detect player or hit
+      fantasmicosMovements(dt);
+    }
+  }
+}
+engine.addSystem(new FantasmicosSimpleMove());
 export class SimpleMove implements ISystem {
   update(dt: number) {
     if (moving) {
@@ -208,6 +221,7 @@ export class SimpleMove implements ISystem {
           transform.position.x = maxXPos;
           moveUp = false;
           moving = false;
+          hitFantasmicos();
           GlobalVariables.stepsui.increase();
         }
       } else if (moveDown) {
@@ -218,6 +232,7 @@ export class SimpleMove implements ISystem {
           transform.position.x = maxXPos;
           moveDown = false;
           moving = false;
+          hitFantasmicos();
           GlobalVariables.stepsui.increase();
         }
       } else if (moveLeft) {
@@ -226,6 +241,7 @@ export class SimpleMove implements ISystem {
           transform.position.z = maxZPos;
           moveLeft = false;
           moving = false;
+          hitFantasmicos();
           GlobalVariables.stepsui.increase();
         }
         log(transform.position.z);
@@ -235,6 +251,7 @@ export class SimpleMove implements ISystem {
           transform.position.z = maxZPos;
           moveRight = false;
           moving = false;
+          hitFantasmicos();
           GlobalVariables.stepsui.increase();
         }
         log(transform.position.z);
@@ -243,170 +260,212 @@ export class SimpleMove implements ISystem {
         transform.rotate(new Vector3(0, 1, 0), 90);
         moveRotateLeft = false;
         moving = false;
+        hitFantasmicos();
         GlobalVariables.stepsui.increase();
       } else if (moveRotateRight) {
         let transform = shipCollider.getComponent(Transform);
         transform.rotate(new Vector3(0, 1, 0), -90);
         moveRotateRight = false;
         moving = false;
+        hitFantasmicos();
         GlobalVariables.stepsui.increase();
       }
     }
-    if(moving || emptyMove){
-      if (firemoving || emptyMove){
-        if(firemoveUp){
-          
-          let transform = fire_ent.getComponent(Transform)
-          let newOriginPos = new Vector3(transform.position.x, transform.position.y, transform.position.z)
-          let newTargetPos = new Vector3(transform.position.x + velocity, transform.position.y, transform.position.z)
-          auxiliar_dt = dt
-          detectWallBulletDuringMove(newOriginPos, newTargetPos, continueFireUp)
-        }else 
-        if(firemoveDown){
-          let transform = fire_ent.getComponent(Transform)
-          let newOriginPos = new Vector3(transform.position.x, transform.position.y, transform.position.z)
-          let newTargetPos = new Vector3(transform.position.x - velocity, transform.position.y, transform.position.z)
-          auxiliar_dt = dt
-          detectWallBulletDuringMove(newOriginPos, newTargetPos, continueFireDown)
-          
-        } else 
-        if(firemoveLeft){
-          let transform = fire_ent.getComponent(Transform)
-          let newOriginPos = new Vector3(transform.position.x, transform.position.y, transform.position.z)
-          let newTargetPos = new Vector3(transform.position.x , transform.position.y, transform.position.z + velocity)
+    if (moving || emptyMove) {
+      if (firemoving || emptyMove) {
+        if (firemoveUp) {
+          let transform = fire_ent.getComponent(Transform);
+          let newOriginPos = new Vector3(
+            transform.position.x,
+            transform.position.y,
+            transform.position.z
+          );
+          let newTargetPos = new Vector3(
+            transform.position.x + velocity,
+            transform.position.y,
+            transform.position.z
+          );
+          auxiliar_dt = dt;
+          detectWallBulletDuringMove(
+            newOriginPos,
+            newTargetPos,
+            continueFireUp
+          );
+        } else if (firemoveDown) {
+          let transform = fire_ent.getComponent(Transform);
+          let newOriginPos = new Vector3(
+            transform.position.x,
+            transform.position.y,
+            transform.position.z
+          );
+          let newTargetPos = new Vector3(
+            transform.position.x - velocity,
+            transform.position.y,
+            transform.position.z
+          );
+          auxiliar_dt = dt;
+          detectWallBulletDuringMove(
+            newOriginPos,
+            newTargetPos,
+            continueFireDown
+          );
+        } else if (firemoveLeft) {
+          let transform = fire_ent.getComponent(Transform);
+          let newOriginPos = new Vector3(
+            transform.position.x,
+            transform.position.y,
+            transform.position.z
+          );
+          let newTargetPos = new Vector3(
+            transform.position.x,
+            transform.position.y,
+            transform.position.z + velocity
+          );
           newTargetPos.z = transform.position.z + velocity;
-          auxiliar_dt = dt
-          detectWallBulletDuringMove(newOriginPos, newTargetPos, continueFireLeft)
-          
-        } else 
-        if(firemoveRight){
-          let transform = fire_ent.getComponent(Transform)
-          let newOriginPos = new Vector3(transform.position.x, transform.position.y, transform.position.z)
-          let newTargetPos = new Vector3(transform.position.x, transform.position.y, transform.position.z - velocity)
-          auxiliar_dt = dt
-          detectWallBulletDuringMove(newOriginPos, newTargetPos, continueFireRight)
+          auxiliar_dt = dt;
+          detectWallBulletDuringMove(
+            newOriginPos,
+            newTargetPos,
+            continueFireLeft
+          );
+        } else if (firemoveRight) {
+          let transform = fire_ent.getComponent(Transform);
+          let newOriginPos = new Vector3(
+            transform.position.x,
+            transform.position.y,
+            transform.position.z
+          );
+          let newTargetPos = new Vector3(
+            transform.position.x,
+            transform.position.y,
+            transform.position.z - velocity
+          );
+          auxiliar_dt = dt;
+          detectWallBulletDuringMove(
+            newOriginPos,
+            newTargetPos,
+            continueFireRight
+          );
         }
       }
-      if(emptyMove){
-
+      if (emptyMove) {
         startMove = startMove + velocity * dt;
 
-        log("startmove" + startMove)
+        log("startmove" + startMove);
         if (startMove >= endMove) {
-          emptyMove = false
+          emptyMove = false;
+          hitFantasmicos();
           GlobalVariables.stepsui.increase();
         }
       }
+      moveFantasmicos(dt);
     }
   }
 }
 engine.addSystem(new SimpleMove());
 
-
 function fireForward() {
   let playerPos = new Vector3(
-    shipCollider.getComponent(Transform).position.x,
-    1,
+    shipCollider.getComponent(Transform).position.x + 1,
+    1.2,
     shipCollider.getComponent(Transform).position.z
   );
   let originFire = new Vector3(
-    shipCollider.getComponent(Transform).position.x+1.5,
-    1,
+    shipCollider.getComponent(Transform).position.x + 1.5 * 2,
+    1.2,
     shipCollider.getComponent(Transform).position.z
   );
 
-  detectWallBulletBeforeMove(playerPos, originFire, openFireForward)
-  }
+  detectWallBulletBeforeMove(playerPos, originFire, openFireForward);
+}
 
 function fireToRight() {
   let playerPos = new Vector3(
     shipCollider.getComponent(Transform).position.x,
-    1,
-    shipCollider.getComponent(Transform).position.z
+    1.2,
+    shipCollider.getComponent(Transform).position.z - 1
   );
   let originFire = new Vector3(
     shipCollider.getComponent(Transform).position.x,
-    1,
-    shipCollider.getComponent(Transform).position.z-1.5
+    1.2,
+    shipCollider.getComponent(Transform).position.z - 1.5 * 2
   );
 
-  detectWallBulletBeforeMove(playerPos, originFire, openFireRight)
+  detectWallBulletBeforeMove(playerPos, originFire, openFireRight);
 }
 
 function fireBackward() {
   let playerPos = new Vector3(
-    shipCollider.getComponent(Transform).position.x,
-    1,
+    shipCollider.getComponent(Transform).position.x - 1,
+    1.2,
     shipCollider.getComponent(Transform).position.z
   );
   let originFire = new Vector3(
-    shipCollider.getComponent(Transform).position.x-1.5,
-    1,
+    shipCollider.getComponent(Transform).position.x - 1.5 * 2,
+    1.2,
     shipCollider.getComponent(Transform).position.z
   );
-  detectWallBulletBeforeMove(playerPos, originFire, openFireBackward)
-
+  detectWallBulletBeforeMove(playerPos, originFire, openFireBackward);
 }
 
 function fireToLeft() {
   let playerPos = new Vector3(
     shipCollider.getComponent(Transform).position.x,
-    1,
-    shipCollider.getComponent(Transform).position.z
+    1.2,
+    shipCollider.getComponent(Transform).position.z + 1
   );
   let originFire = new Vector3(
     shipCollider.getComponent(Transform).position.x,
-    1,
-    shipCollider.getComponent(Transform).position.z+1.5
+    1.2,
+    shipCollider.getComponent(Transform).position.z + 1.5 * 2
   );
-  detectWallBulletBeforeMove(playerPos, originFire, openFireLeft)
-
+  detectWallBulletBeforeMove(playerPos, originFire, openFireLeft);
 }
 
 function openFireCommon(originFire: Vector3) {
   fire_ent.addComponentOrReplace(
-    new Transform({ position: originFire, scale: new Vector3(0.02, 0.02, 0.02) })
+    new Transform({
+      position: originFire,
+      scale: new Vector3(0.02, 0.02, 0.02),
+    })
   );
-  fire_ent.addComponentOrReplace(glb_bullet)
-  
+  fire_ent.addComponentOrReplace(glb_bullet);
+
   openfire();
   engine.addEntity(fire_ent);
 
-  let triggerBox = new utils.TriggerBoxShape(new Vector3(0.2,0.2,0.2)
-  );
+  let triggerBox = new utils.TriggerBoxShape(new Vector3(0.2, 0.2, 0.2));
   fire_ent.addComponentOrReplace(
-    new utils.TriggerComponent(
-      triggerBox,
-      {
-        onTriggerEnter(entity) {
-          if (entity.name?.indexOf("fantasmico") !== -1) {
-            log(entity)
-            log(entity.name)
-            log(entity.uuid)
-            hitFantasmico();
-            let fantasmico = entity.getComponent(FantasmicoDetails)
-            fantasmico.lives = fantasmico.lives-1
-            if (fantasmico.lives<=0){
-              engine.removeEntity(entity);
-            }
-            engine.removeEntity(fire_ent);
-            firemoveDown = false;
-            firemoveLeft = false;
-            firemoveRight = false;
-            firemoveUp = false;
-            firemoving = false;
-          } else {
-            engine.removeEntity(fire_ent);
-            firemoveDown = false;
-            firemoveLeft = false;
-            firemoveRight = false;
-            firemoveUp = false;
-            firemoving = false;
+    new utils.TriggerComponent(triggerBox, {
+      onTriggerEnter(entity) {
+        if (entity.name?.indexOf("fantasmico") !== -1) {
+          log(entity);
+          log(entity.name);
+          log(entity.uuid);
+          hitFantasmicoSound();
+          let fantasmico = entity.getComponent(FantasmicoDetails);
+          fantasmico.lives = fantasmico.lives - 1;
+          if (fantasmico.lives <= 0) {
+            engine.removeEntity(entity);
+            GlobalVariables.activeFantasmicos
           }
-        },
-        enableDebug: false,
-      }
-    )
+          engine.removeEntity(fire_ent);
+          firemoveDown = false;
+          firemoveLeft = false;
+          firemoveRight = false;
+          firemoveUp = false;
+          firemoving = false;
+        } else {
+          engine.removeEntity(fire_ent);
+          firemoveDown = false;
+          firemoveLeft = false;
+          firemoveRight = false;
+          firemoveUp = false;
+          firemoving = false;
+        }
+      },
+      enableDebug: false,
+    })
   );
   firemoving = true;
 }
@@ -508,9 +567,12 @@ function detectWallBeforeMove(
   targetPos: Vector3,
   move: (hasWall: boolean) => void
 ) {
-  let newOriginPos = new Vector3(originPos.x, originPos.y+1, originPos.z)
-  let newtargetPos = new Vector3(targetPos.x, targetPos.y+1, targetPos.z)
-  let rayFromPoints = physicsCast.getRayFromPositions(newOriginPos, newtargetPos);
+  let newOriginPos = new Vector3(originPos.x, originPos.y + 1, originPos.z);
+  let newtargetPos = new Vector3(targetPos.x, targetPos.y + 1, targetPos.z);
+  let rayFromPoints = physicsCast.getRayFromPositions(
+    newOriginPos,
+    newtargetPos
+  );
   rayFromPoints.distance = distance;
   let hasWall = false;
   physicsCast.hitAll(
@@ -526,6 +588,8 @@ function detectWallBeforeMove(
           entityHit.entity.meshName.indexOf("fantasmico") == 0 ||
           entityHit.entity.meshName.indexOf("enemy") == 0
         ) {
+          log(entityHit.entity.meshName.indexOf("fantasmico"));
+          log(entityHit.hitPoint);
           hasWall = true;
         }
       }
@@ -543,9 +607,12 @@ function detectWallBulletBeforeMove(
   targetPos: Vector3,
   move: (originPos: Vector3) => void
 ) {
-  let newOriginPos = new Vector3(originPos.x, originPos.y, originPos.z)
-  let newtargetPos = new Vector3(targetPos.x, targetPos.y, targetPos.z)
-  let rayFromPoints = physicsCast.getRayFromPositions(newOriginPos, newtargetPos);
+  let newOriginPos = new Vector3(originPos.x, originPos.y, originPos.z);
+  let newtargetPos = new Vector3(targetPos.x, targetPos.y, targetPos.z);
+  let rayFromPoints = physicsCast.getRayFromPositions(
+    newOriginPos,
+    newtargetPos
+  );
   rayFromPoints.distance = distance;
   let hasWall = false;
   physicsCast.hitAll(
@@ -556,13 +623,11 @@ function detectWallBulletBeforeMove(
       }
       for (let entityHit of e.entities) {
         log(entityHit.entity.meshName);
-        if (
-          entityHit.entity.meshName.indexOf("wall") == 0
-        ) {
+        if (entityHit.entity.meshName.indexOf("wall") == 0) {
           hasWall = true;
         }
       }
-      if(hasWall){
+      if (hasWall) {
         bulletWall();
       }
       if (!hasWall) {
@@ -577,9 +642,12 @@ function detectWallBulletDuringMove(
   targetPos: Vector3,
   move: () => void
 ) {
-  let newOriginPos = new Vector3(originPos.x, originPos.y, originPos.z)
-  let newtargetPos = new Vector3(targetPos.x, targetPos.y, targetPos.z)
-  let rayFromPoints = physicsCast.getRayFromPositions(newOriginPos, newtargetPos);
+  let newOriginPos = new Vector3(originPos.x, originPos.y, originPos.z);
+  let newtargetPos = new Vector3(targetPos.x, targetPos.y, targetPos.z);
+  let rayFromPoints = physicsCast.getRayFromPositions(
+    newOriginPos,
+    newtargetPos
+  );
   rayFromPoints.distance = distance;
   let hasWall = false;
   physicsCast.hitAll(
@@ -590,17 +658,15 @@ function detectWallBulletDuringMove(
       }
       for (let entityHit of e.entities) {
         log(entityHit.entity.meshName);
-        if (
-          entityHit.entity.meshName.indexOf("wall") == 0
-        ) {
+        if (entityHit.entity.meshName.indexOf("wall") == 0) {
           hasWall = true;
         }
       }
-      if(hasWall){
+      if (hasWall) {
         bulletWall();
-        if (fire_ent.isAddedToEngine()){
-          engine.removeEntity(fire_ent)
-        }            
+        if (fire_ent.isAddedToEngine()) {
+          engine.removeEntity(fire_ent);
+        }
         firemoveRight = false;
         firemoveLeft = false;
         firemoveUp = false;
@@ -616,69 +682,328 @@ function detectWallBulletDuringMove(
 }
 
 function openFireForward(originPos?: Vector3) {
-  openFireCommon(originPos!)
-  firemoveUp = true
+  openFireCommon(originPos!);
+  firemoveUp = true;
 }
 
 function openFireBackward(originPos?: Vector3) {
-  openFireCommon(originPos!)
-  firemoveDown = true
+  openFireCommon(originPos!);
+  firemoveDown = true;
 }
 
 function openFireLeft(originPos?: Vector3) {
-  openFireCommon(originPos!)
-  firemoveLeft = true
+  openFireCommon(originPos!);
+  firemoveLeft = true;
 }
 
 function openFireRight(originPos?: Vector3) {
-  openFireCommon(originPos!)
-  firemoveRight = true
+  openFireCommon(originPos!);
+  firemoveRight = true;
 }
 
-function continueFireRight(){
-  let transform = fire_ent.getComponent(Transform)
+function continueFireRight() {
+  let transform = fire_ent.getComponent(Transform);
   transform.position.z = transform.position.z - velocity * auxiliar_dt;
-  if (transform.position.z >= 16 || transform.position.z <=0) {
-    if (fire_ent.isAddedToEngine()){
-      engine.removeEntity(fire_ent)
-    }            
+  if (transform.position.z >= 16 || transform.position.z <= 0) {
+    if (fire_ent.isAddedToEngine()) {
+      engine.removeEntity(fire_ent);
+    }
     firemoveRight = false;
     firemoving = false;
   }
 }
 function continueFireLeft() {
-  let transform = fire_ent.getComponent(Transform)
+  let transform = fire_ent.getComponent(Transform);
   transform.position.z = transform.position.z + velocity * auxiliar_dt;
-  if (transform.position.z >= 16 || transform.position.z <=0) {
-    if (fire_ent.isAddedToEngine()){
-      engine.removeEntity(fire_ent)
-    }            
+  if (transform.position.z >= 16 || transform.position.z <= 0) {
+    if (fire_ent.isAddedToEngine()) {
+      engine.removeEntity(fire_ent);
+    }
     firemoveLeft = false;
     firemoving = false;
   }
 }
 
 function continueFireDown() {
-  let transform = fire_ent.getComponent(Transform)
+  let transform = fire_ent.getComponent(Transform);
   transform.position.x = transform.position.x - velocity * auxiliar_dt;
   if (transform.position.x >= 16 || transform.position.x <= 0) {
-    if (fire_ent.isAddedToEngine()){
-      engine.removeEntity(fire_ent)
-    }            
+    if (fire_ent.isAddedToEngine()) {
+      engine.removeEntity(fire_ent);
+    }
     firemoveDown = false;
     firemoving = false;
   }
 }
 
 function continueFireUp() {
-  let transform = fire_ent.getComponent(Transform)
+  let transform = fire_ent.getComponent(Transform);
   transform.position.x = transform.position.x + velocity * auxiliar_dt;
   if (transform.position.x >= 16 || transform.position.x <= 0) {
-    if (fire_ent.isAddedToEngine()){
-      engine.removeEntity(fire_ent)
-    }            
+    if (fire_ent.isAddedToEngine()) {
+      engine.removeEntity(fire_ent);
+    }
     firemoveUp = false;
     firemoving = false;
   }
 }
 
+function fantasmicosMovements(dt: number) {
+  for (let item of GlobalVariables.activeFantasmicos) {
+    let fantasmico = item.entity;
+    let fantasmicoDetails = fantasmico.getComponent(FantasmicoDetails);
+    if (fantasmicoDetails.alive == false)
+    {
+      continue
+    }
+    if (!fantasmicoDetails.active) {
+      let originPos = fantasmico.getComponent(Transform).position;
+      let newOriginPos = new Vector3(originPos.x, originPos.y, originPos.z);
+      let direction = fantasmico.getComponent(FantasmicoDetails).direction;
+      //right z-
+      //left z+
+      //up x+
+      //down x-
+      //let shipPosition = shipCollider.getComponent(Transform).position
+
+      let hasPlayer = false;
+      let hitPlayer = false;
+      if (direction == Direction.Up) {
+        let firstDiff =
+          Math.floor(shipCollider.getComponent(Transform).position.z) -
+          Math.floor(newOriginPos.z);
+        if (firstDiff < 1.1 && firstDiff > -1.1) {
+          let diff =
+            Math.floor(shipCollider.getComponent(Transform).position.x) -
+            Math.floor(newOriginPos.x);
+
+          if (diff <= 2 && diff >= -2) {
+            hitPlayer = true;
+            hasPlayer = true;
+            fantasmicoDetails.moving = false;
+            fantasmicoDetails.hitPlayer = true;
+            fantasmicoDetails.active = true;
+          } else if (diff <= 6 && diff >= -6) {
+            fantasmicoDetails.active = true;
+            fantasmicoDetails.hitPlayer = false;
+            fantasmicoDetails.moving = true;
+          } else {
+            fantasmicoDetails.moving = false;
+            fantasmicoDetails.hitPlayer = false;
+            fantasmicoDetails.active = false;
+          }
+        }
+      } else if (direction == Direction.Down) {
+        let firstDiff =
+          Math.floor(shipCollider.getComponent(Transform).position.z) -
+          Math.floor(newOriginPos.z);
+        if (firstDiff < 1.1 && firstDiff > -1.1) {
+          let diff =
+            Math.floor(shipCollider.getComponent(Transform).position.x) -
+            Math.floor(newOriginPos.x);
+
+          if (diff <= 2 && diff >= -2) {
+            fantasmicoDetails.moving = false;
+            fantasmicoDetails.hitPlayer = true;
+            fantasmicoDetails.active = true;
+          } else if (diff <= 6 && diff >= -6) {
+            fantasmicoDetails.active = true;
+            fantasmicoDetails.hitPlayer = false;
+            fantasmicoDetails.moving = true;
+          } else {
+            fantasmicoDetails.moving = false;
+            fantasmicoDetails.hitPlayer = false;
+            fantasmicoDetails.active = false;
+          }
+        }
+      } else if (direction == Direction.Right) {
+        let firstDiff =
+          Math.floor(shipCollider.getComponent(Transform).position.x) -
+          Math.floor(newOriginPos.x);
+        if (firstDiff < 1.1 && firstDiff > -1.1) {
+          let diff =
+            Math.floor(shipCollider.getComponent(Transform).position.z) -
+            Math.floor(newOriginPos.z);
+
+          if (diff <= 2 && diff >= -2) {
+            fantasmicoDetails.moving = false;
+            fantasmicoDetails.hitPlayer = true;
+            fantasmicoDetails.active = true;
+          } else if (diff <= 6 && diff >= -6) {
+            fantasmicoDetails.active = true;
+            fantasmicoDetails.hitPlayer = false;
+            fantasmicoDetails.moving = true;
+          } else {
+            fantasmicoDetails.moving = false;
+            fantasmicoDetails.hitPlayer = false;
+            fantasmicoDetails.active = false;
+          }
+        }
+      } else if (direction == Direction.Left) {
+        let firstDiff =
+          Math.floor(shipCollider.getComponent(Transform).position.x) -
+          Math.floor(newOriginPos.x);
+        if (firstDiff < 1.1 && firstDiff > -1.1) {
+          let diff =
+            Math.floor(shipCollider.getComponent(Transform).position.z) -
+            Math.floor(newOriginPos.z);
+
+          if (diff <= 2 && diff >= -2) {
+            fantasmicoDetails.moving = false;
+            fantasmicoDetails.hitPlayer = true;
+            fantasmicoDetails.active = true;
+          } else if (diff <= 6 && diff >= -6) {
+            hasPlayer = true;
+            fantasmicoDetails.active = true;
+            fantasmicoDetails.hitPlayer = false;
+            fantasmicoDetails.moving = true;
+          } else {
+            fantasmicoDetails.moving = false;
+            fantasmicoDetails.hitPlayer = false;
+            fantasmicoDetails.active = false;
+          }
+        }
+      }
+    }
+  }
+}
+
+function hitFantasmicos() {
+  for (let item of GlobalVariables.activeFantasmicos) {
+    let fantasmico = item.entity;
+    let fantasmicoDetails = fantasmico.getComponent(FantasmicoDetails);
+    if (fantasmicoDetails.alive == false)
+    {
+      continue
+    }
+    let transform = fantasmico.getComponent(Transform);
+    if (fantasmicoDetails.hitPlayer && fantasmicoDetails.moving) {
+      if (fantasmicoDetails.direction == Direction.Up) {
+        let firstDiff =
+          Math.floor(shipCollider.getComponent(Transform).position.z) -
+          Math.floor(transform.position.z);
+        if (firstDiff < 1.1 && firstDiff > -1.1) {
+          let diff =
+            Math.floor(shipCollider.getComponent(Transform).position.x) -
+            Math.floor(transform.position.x);
+          log("Diff" + diff);
+          if (diff > -2 && diff < 2) {
+            if (fantasmicoDetails.lives>0){
+              hitui();
+            }
+            fantasmicoDetails.hitPlayer = false;
+          }
+        }
+      } else if (fantasmicoDetails.direction == Direction.Down) {
+        let firstDiff =
+          Math.floor(shipCollider.getComponent(Transform).position.z) -
+          Math.floor(transform.position.z);
+        if (firstDiff < 1.1 && firstDiff > -1.1) {
+          let diff =
+            Math.floor(shipCollider.getComponent(Transform).position.x) -
+            Math.floor(transform.position.x);
+          log("Diff" + diff);
+          if (diff > -2 && diff < 2) {
+            if (fantasmicoDetails.lives>0){
+              hitui();
+            }
+            fantasmicoDetails.hitPlayer = false;
+          }
+        }
+      } else if (fantasmicoDetails.direction == Direction.Right) {
+        let firstDiff =
+          Math.floor(shipCollider.getComponent(Transform).position.x) -
+          Math.floor(transform.position.x);
+        if (firstDiff < 1.1 && firstDiff > -1.1) {
+          let diff =
+            Math.floor(shipCollider.getComponent(Transform).position.z) -
+            Math.floor(transform.position.z);
+          log("Diff" + diff);
+          if (diff > -2 && diff < 2) {
+            if (fantasmicoDetails.lives>0){
+              hitui();
+            }
+            fantasmicoDetails.hitPlayer = false;
+          }
+        }
+      } else if (fantasmicoDetails.direction == Direction.Left) {
+        let firstDiff =
+          Math.floor(shipCollider.getComponent(Transform).position.x) -
+          Math.floor(transform.position.x);
+        if (firstDiff < 1.1 && firstDiff > -1.1) {
+          let diff =
+            Math.floor(shipCollider.getComponent(Transform).position.z) -
+            Math.floor(transform.position.z);
+          log("Diff" + diff);
+          if (diff > -2 && diff < 2) {
+            if (fantasmicoDetails.lives>0){
+              hitui();
+            }
+            fantasmicoDetails.hitPlayer = false;
+          }
+        }
+      }
+    }
+  }
+}
+function moveFantasmicos(dt: number) {
+  for (let item of GlobalVariables.activeFantasmicos) {
+    let fantasmico = item.entity;
+    let fantasmicoDetails = fantasmico.getComponent(FantasmicoDetails);
+    if (fantasmicoDetails.alive == false)
+    {
+      continue
+    }
+    if (fantasmicoDetails.moving) {
+      let transform = fantasmico.getComponent(Transform);
+      let fantasmicoDetails = fantasmico.getComponent(FantasmicoDetails);
+      if (fantasmicoDetails.moving) {
+        if (fantasmicoDetails.direction == Direction.Up) {
+          let diff =
+            Math.floor(shipCollider.getComponent(Transform).position.x) -
+            Math.floor(transform.position.x);
+          log("Diff" + diff);
+
+          if (diff < -2 || diff > 2) {
+            transform.position.x = transform.position.x + velocity * dt;
+          } else if (diff >= -2 && diff <= 2) {
+            fantasmicoDetails.hitPlayer = true;
+          }
+        } else if (fantasmicoDetails.direction == Direction.Down) {
+          let diff =
+            Math.floor(shipCollider.getComponent(Transform).position.x) -
+            Math.floor(transform.position.x);
+          log("Diff" + diff);
+
+          if (diff < -2 || diff > 2) {
+            transform.position.x = transform.position.x - velocity * dt;
+          } else if (diff >= -2 && diff <= 2) {
+            fantasmicoDetails.hitPlayer = true;
+          }
+        } else if (fantasmicoDetails.direction == Direction.Right) {
+          let diff =
+            Math.floor(shipCollider.getComponent(Transform).position.z) -
+            Math.floor(transform.position.z);
+          log("Diff" + diff);
+
+          if (diff < -2 || diff > 2) {
+            transform.position.z = transform.position.z - velocity * dt;
+          } else if (diff >= -2 && diff <= 2) {
+            fantasmicoDetails.hitPlayer = true;
+          }
+        } else if (fantasmicoDetails.direction == Direction.Left) {
+          let diff =
+            Math.floor(shipCollider.getComponent(Transform).position.z) -
+            Math.floor(transform.position.z);
+          log("Diff" + diff);
+          if (diff < -2 || diff > 2) {
+            transform.position.z = transform.position.z + velocity * dt;
+          } else if (diff >= -2 && diff <= 2) {
+            fantasmicoDetails.hitPlayer = true;
+          }
+        }
+        log("x: " + transform.position.x + " z: " + transform.position.z);
+      }
+    }
+  }
+}

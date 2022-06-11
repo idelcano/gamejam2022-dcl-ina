@@ -1,7 +1,5 @@
 
 import * as utils from "@dcl/ecs-scene-utils";
-import { getListOfWearables } from "node_modules/@dcl/crypto-scene-utils/dist/wearable/index";
-import { hitFantasmico } from "src/effects/effects";
 import { GlobalVariables } from "src/Global/globalValues";
 
 let fantasmico_glb = new GLTFShape("models/enemies/fantasmico.glb");
@@ -17,6 +15,9 @@ export class FantasmicoDetails{
     active: boolean = true
     direction: Direction = Direction.Up
     position: Vector3
+    moving: boolean = false
+    hitPlayer: boolean = false
+    alive: boolean = true
     constructor(position: Vector3, rotationPos: Direction, startDisabled: boolean){
         this.lives = 3
         this.position = position

@@ -71,7 +71,7 @@ engine.addEntity(cube7);
       )
     }
 )  */
-export function hitFantasmico(){
+export function hitFantasmicoSound(){
   hitEnemy.playOnce()
 }
 export function hitui() {
