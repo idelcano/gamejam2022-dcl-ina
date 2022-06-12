@@ -57,7 +57,7 @@ stepsui.height = 30
 stepsui.vAlign = "bottom"
 stepsui.positionX = -80
  */
- onCameraModeChangedObservable.add(({ cameraMode }) => {
+/*  onCameraModeChangedObservable.add(({ cameraMode }) => {
     log("Camera mode changed:", cameraMode)
     if (cameraMode === CameraMode.ThirdPerson){
         firstPersonContainer.visible=true
@@ -66,4 +66,4 @@ stepsui.positionX = -80
         firstPersonContainer.visible=false
         firstPersonText.visible=false
     }
-  }) 
+  })  */

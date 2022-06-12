@@ -18,10 +18,12 @@ import { Direction, Fantasmico } from "src/mechanics/fantasmicoEnemy";
 let scene = new Entity();
 let base1_glb = new GLTFShape("models/enemies/base1.glb");
 let fantasmicos = [];
+let levelStarted = false
 export class Level2 implements Level {
   complete() {
     if (this.map.isAddedToEngine()) engine.removeEntity(this.map);
     if (scene.isAddedToEngine()) engine.removeEntity(scene);
+    levelStarted = false
   }
   map: Entity;
   constructor() {
@@ -29,6 +31,12 @@ export class Level2 implements Level {
   }
   start() {
     //first map
+    
+    GlobalVariables.shipEntity.getComponent(Transform).position.x = 1;
+    GlobalVariables.shipEntity.getComponent(Transform).position.z = 8;
+    GlobalVariables.shipEntity.getComponent(Transform).position.y = 0;
+
+    GlobalVariables.shipEntity.getComponent(Transform).scale.setAll(0.85);
     let map_glb = new GLTFShape("models/maps/mapa2.glb");
     this.map.addComponent(map_glb);
     this.map.addComponent(
@@ -66,6 +74,7 @@ export class Level2 implements Level {
     let dialogWindow = new DialogWindow();
     dialogWindow.openDialogWindow(heyfantasmico, 0);
     listen();
+    levelStarted  = true
   }
 }
 function createFantasmicos(

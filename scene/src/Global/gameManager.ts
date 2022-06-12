@@ -1,15 +1,31 @@
-import { Level1 } from "src/levels/level1";
-import { Level2 } from "src/levels/level2";
 import { Level } from "src/levels/level";
 import { GlobalVariables } from "./globalValues";
+import { Level0 } from "src/levels/level0";
+import { PlayerModifiers } from "src/mechanics/avatarModifiers";
+import { PlayerMovement, restart } from "src/mechanics/playerMovement";
+let playerMovement : PlayerMovement
+export function loadGameMechanics(){
+    new PlayerModifiers()
+    playerMovement = new PlayerMovement()
+}
 
+export function completeLevel0() {
+    GlobalVariables.level.complete();
+    loadGameMechanics()
+    GlobalVariables.level = GlobalVariables.level1;
+    GlobalVariables.level.start()
+}
 export function completeLevel1() {
     GlobalVariables.level.complete();
-    GlobalVariables.level = new Level2();
+    GlobalVariables.level = GlobalVariables.level2;
     GlobalVariables.level.start()
+    restart()
 }
   
 export function completeLevel2() {
     GlobalVariables.level.complete();
+    GlobalVariables.level = GlobalVariables.level2;
+    GlobalVariables.level.start() 
+    restart()
     //GlobalVariables.level = new Level3();
 }

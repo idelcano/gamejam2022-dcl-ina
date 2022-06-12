@@ -23,6 +23,9 @@ export class GlobalVariables {
 
   static level: Level;
   static activeFantasmicos: Fantasmico[] = [];
+  static shipEntity: Entity;
+  static level1: Level;
+  static level2: Level;
 }
 
 let healthLabel = new ui.CornerLabel(
