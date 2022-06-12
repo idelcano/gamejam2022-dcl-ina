@@ -1,0 +1,23 @@
+{
+    "entityNumberCounter": 4,
+    "entities": [
+        {
+            "hierarchyOrder": 0.0,
+            "name": "border",
+            "uniqueNumber": 3,
+            "parent": -1,
+            "exposed": false,
+            "collapsedChildren": false,
+            "components": [
+                {
+                    "name": "transform",
+                    "specifics": "{\"pos\":{\"x\":7.5,\"y\":0.0,\"z\":7.75},\"rot\":{\"x\":0.0,\"y\":0.0,\"z\":0.0,\"w\":1.0},\"scale\":{\"x\":0.25,\"y\":1.0,\"z\":0.5}}"
+                },
+                {
+                    "name": "GLTFShape",
+                    "specifics": "{\"assetID\":\"ad40c8b7-7fe4-424f-abb7-9cfbe63e554a\"}"
+                }
+            ]
+        }
+    ]
+}

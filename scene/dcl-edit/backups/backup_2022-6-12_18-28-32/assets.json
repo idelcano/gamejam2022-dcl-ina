@@ -1,0 +1,159 @@
+{
+    "gltfAssets": [
+        {
+            "name": "border",
+            "id": "ad40c8b7-7fe4-424f-abb7-9cfbe63e554a",
+            "gltfPath": "models/border.glb"
+        },
+        {
+            "name": "cabina.bak",
+            "id": "ee8c7318-d742-42be-ad6c-03f2230970e1",
+            "gltfPath": "models/cabina.bak.glb"
+        },
+        {
+            "name": "cabina",
+            "id": "10b4db6a-b378-442b-a8a8-ccc13581a0fe",
+            "gltfPath": "models/cabina.glb"
+        },
+        {
+            "name": "cabina2",
+            "id": "49c9cc94-894b-4507-81d6-f6e69aea98f9",
+            "gltfPath": "models/cabina2.glb"
+        },
+        {
+            "name": "map1",
+            "id": "7e7c4af4-9cbf-416c-8bd8-73ec388746f8",
+            "gltfPath": "models/map1.glb"
+        },
+        {
+            "name": "map2 copy",
+            "id": "48936f51-296e-48eb-90b0-d1040470b386",
+            "gltfPath": "models/map2 copy.glb"
+        },
+        {
+            "name": "map2",
+            "id": "dde77970-ca76-483d-a456-0d3a764e2364",
+            "gltfPath": "models/map2.glb"
+        },
+        {
+            "name": "map3",
+            "id": "69378093-e1b7-421b-bbf8-a4c35785eb40",
+            "gltfPath": "models/map3.glb"
+        },
+        {
+            "name": "untitled",
+            "id": "f343ffd4-5fdd-4304-ba77-0d255a471adb",
+            "gltfPath": "models/untitled.glb"
+        },
+        {
+            "name": "base1",
+            "id": "e91afb78-e645-4dcb-8b69-63cbcc946c82",
+            "gltfPath": "models/enemies/base1.glb"
+        },
+        {
+            "name": "base2",
+            "id": "101a7f64-9ed3-497a-9687-b61ea421f92c",
+            "gltfPath": "models/enemies/base2.glb"
+        },
+        {
+            "name": "fantasmico",
+            "id": "e1266874-06b0-403e-aceb-aa1b36c4e8f6",
+            "gltfPath": "models/enemies/fantasmico.glb"
+        },
+        {
+            "name": "finalboss",
+            "id": "60ba7d8e-dfca-4957-973f-5e547c637a41",
+            "gltfPath": "models/enemies/finalboss.glb"
+        },
+        {
+            "name": "bullet",
+            "id": "ea9bf200-fdae-4e49-bda0-99f299a7e17f",
+            "gltfPath": "models/items/bullet.glb"
+        },
+        {
+            "name": "enemy Bullet",
+            "id": "b8fa7dee-aa8e-48a3-8170-c8d461d35765",
+            "gltfPath": "models/items/enemyBullet.glb"
+        },
+        {
+            "name": "powerup",
+            "id": "b596cda7-12d5-492a-93ae-dd35ffc39452",
+            "gltfPath": "models/items/powerup.glb"
+        },
+        {
+            "name": "bluechip",
+            "id": "83202fe9-97b2-4c33-9b6d-97dd47c7a6ee",
+            "gltfPath": "models/maps/bluechip.glb"
+        },
+        {
+            "name": "door",
+            "id": "0d4415e9-9951-4a90-bcae-7e59709e7664",
+            "gltfPath": "models/maps/door.glb"
+        },
+        {
+            "name": "door map 1",
+            "id": "84cdcdd9-c525-4f50-92cf-a5c75b2d2bf3",
+            "gltfPath": "models/maps/door_map_1.glb"
+        },
+        {
+            "name": "mapa0",
+            "id": "87c20e54-9174-4fea-9825-075e834bd52e",
+            "gltfPath": "models/maps/mapa0.glb"
+        },
+        {
+            "name": "mapa1 copy",
+            "id": "a4299bd9-7ed0-436e-a23b-b342c7690f02",
+            "gltfPath": "models/maps/mapa1 copy.glb"
+        },
+        {
+            "name": "mapa1",
+            "id": "0091f50a-7ffe-4bdb-a0b3-2bd6eed6060b",
+            "gltfPath": "models/maps/mapa1.glb"
+        },
+        {
+            "name": "mapa2",
+            "id": "4ce4b33d-79a2-489f-ae50-eba20371b502",
+            "gltfPath": "models/maps/mapa2.glb"
+        },
+        {
+            "name": "block user",
+            "id": "4262c013-970e-476f-8ea9-8c411feba22f",
+            "gltfPath": "models/player/block_user.glb"
+        },
+        {
+            "name": "block user col copy 2",
+            "id": "aa64d760-1307-4fcf-b82d-309a01892548",
+            "gltfPath": "models/player/block_user_col copy 2.glb"
+        },
+        {
+            "name": "block user col copy",
+            "id": "2257eb6f-7a70-4e04-aab3-93bccfc53a0f",
+            "gltfPath": "models/player/block_user_col copy.glb"
+        },
+        {
+            "name": "block user col",
+            "id": "11df2116-ed90-4e04-b46d-2f8f47056a24",
+            "gltfPath": "models/player/block_user_col.glb"
+        },
+        {
+            "name": "doorwall",
+            "id": "76bf3ab0-9c47-4a49-add8-3fed367417fc",
+            "gltfPath": "models/maps/doorwall.glb"
+        },
+        {
+            "name": "hueco carcel",
+            "id": "de881a62-c78c-42fa-a9a8-0598efd6abe1",
+            "gltfPath": "models/maps/hueco_carcel.glb"
+        },
+        {
+            "name": "hueco carcel2",
+            "id": "816ae303-7288-4ee3-9215-7136af63a18e",
+            "gltfPath": "models/maps/hueco_carcel2.glb"
+        },
+        {
+            "name": "startpoint",
+            "id": "65a7ef79-875a-44ea-855f-076390272c20",
+            "gltfPath": "models/maps/startpoint.glb"
+        }
+    ]
+}

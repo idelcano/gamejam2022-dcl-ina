@@ -53,8 +53,8 @@ export class Level0 implements Level {
         },
         {
           button: ActionButton.ANY,
-          showFeedback: true,
           hoverText: "Get free BLUE CHIP NFT!!!",
+          showFeedback: true,
           distance: 7,
         }
       )
@@ -70,12 +70,14 @@ export class Level0 implements Level {
     myEntity.getComponent(TextShape).shadowColor = Color3.White();
     myEntity.getComponent(TextShape).shadowOffsetY = 1;
     myEntity.getComponent(TextShape).shadowOffsetX = -1;
-    myEntity.getComponent(TextShape).paddingBottom = 13;
-    myEntity.addComponent(new Billboard())
+    myEntity.getComponent(TextShape).paddingBottom = 4;
+
 
     engine.addEntity(myEntity);
+    myEntity.addComponent(new Transform({position: new Vector3(8,1,8)}))
+    myEntity.getComponent(Transform).position.z=8
+    myEntity.getComponent(Transform).rotate(new Vector3(0,1,0),90)
     engine.addEntity(this.cube);
-    myEntity.setParent(this.cube);
 
   }
 }

@@ -1,0 +1,23 @@
+{
+    "entityNumberCounter": 6,
+    "entities": [
+        {
+            "hierarchyOrder": 0.0,
+            "name": "finalboss",
+            "uniqueNumber": 5,
+            "parent": -1,
+            "exposed": false,
+            "collapsedChildren": false,
+            "components": [
+                {
+                    "name": "transform",
+                    "specifics": "{\"pos\":{\"x\":-1.0690441131591797,\"y\":14.864117622375489,\"z\":-5.131353378295898},\"rot\":{\"x\":0.0,\"y\":-0.7071065902709961,\"z\":0.0,\"w\":0.7071070075035095},\"scale\":{\"x\":1.0,\"y\":1.0,\"z\":1.0}}"
+                },
+                {
+                    "name": "GLTFShape",
+                    "specifics": "{\"assetID\":\"60ba7d8e-dfca-4957-973f-5e547c637a41\"}"
+                }
+            ]
+        }
+    ]
+}

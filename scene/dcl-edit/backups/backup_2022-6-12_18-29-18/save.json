@@ -1,0 +1,95 @@
+{
+    "entityNumberCounter": 11,
+    "entities": [
+        {
+            "hierarchyOrder": 4.0,
+            "name": "finalboss",
+            "uniqueNumber": 5,
+            "parent": -1,
+            "exposed": false,
+            "collapsedChildren": false,
+            "components": [
+                {
+                    "name": "transform",
+                    "specifics": "{\"pos\":{\"x\":12.0,\"y\":0.0,\"z\":8.0},\"rot\":{\"x\":0.0,\"y\":0.047978244721889499,\"z\":0.0,\"w\":-0.9988483786582947},\"scale\":{\"x\":0.5,\"y\":0.5,\"z\":0.5}}"
+                },
+                {
+                    "name": "GLTFShape",
+                    "specifics": "{\"assetID\":\"60ba7d8e-dfca-4957-973f-5e547c637a41\"}"
+                }
+            ]
+        },
+        {
+            "hierarchyOrder": 3.0,
+            "name": "door map 1",
+            "uniqueNumber": 6,
+            "parent": -1,
+            "exposed": false,
+            "collapsedChildren": false,
+            "components": [
+                {
+                    "name": "transform",
+                    "specifics": "{\"pos\":{\"x\":5.697000026702881,\"y\":4.3420000076293949,\"z\":5.136000156402588},\"rot\":{\"x\":0.0,\"y\":0.0,\"z\":0.0,\"w\":1.0},\"scale\":{\"x\":1.0,\"y\":1.0,\"z\":1.0}}"
+                },
+                {
+                    "name": "GLTFShape",
+                    "specifics": "{\"assetID\":\"84cdcdd9-c525-4f50-92cf-a5c75b2d2bf3\"}"
+                }
+            ]
+        },
+        {
+            "hierarchyOrder": 2.0,
+            "name": "doorwall",
+            "uniqueNumber": 8,
+            "parent": -1,
+            "exposed": false,
+            "collapsedChildren": false,
+            "components": [
+                {
+                    "name": "transform",
+                    "specifics": "{\"pos\":{\"x\":-2.0,\"y\":-2.677000045776367,\"z\":8.0},\"rot\":{\"x\":0.0,\"y\":0.0,\"z\":0.0,\"w\":1.0},\"scale\":{\"x\":0.5460000038146973,\"y\":1.0,\"z\":0.5}}"
+                },
+                {
+                    "name": "GLTFShape",
+                    "specifics": "{\"assetID\":\"76bf3ab0-9c47-4a49-add8-3fed367417fc\"}"
+                }
+            ]
+        },
+        {
+            "hierarchyOrder": 1.0,
+            "name": "startpoint",
+            "uniqueNumber": 9,
+            "parent": -1,
+            "exposed": false,
+            "collapsedChildren": false,
+            "components": [
+                {
+                    "name": "transform",
+                    "specifics": "{\"pos\":{\"x\":7.900000095367432,\"y\":-0.1889999955892563,\"z\":7.921999931335449},\"rot\":{\"x\":0.0,\"y\":0.0,\"z\":0.0,\"w\":1.0},\"scale\":{\"x\":0.5,\"y\":0.5,\"z\":0.5}}"
+                },
+                {
+                    "name": "GLTFShape",
+                    "specifics": "{\"assetID\":\"65a7ef79-875a-44ea-855f-076390272c20\"}"
+                }
+            ]
+        },
+        {
+            "hierarchyOrder": 0.0,
+            "name": "hueco carcel2",
+            "uniqueNumber": 10,
+            "parent": -1,
+            "exposed": false,
+            "collapsedChildren": false,
+            "components": [
+                {
+                    "name": "transform",
+                    "specifics": "{\"pos\":{\"x\":10.628000259399414,\"y\":-1.0,\"z\":8.0},\"rot\":{\"x\":0.0,\"y\":0.0,\"z\":0.0,\"w\":1.0},\"scale\":{\"x\":0.5,\"y\":0.5,\"z\":0.5}}"
+                },
+                {
+                    "name": "GLTFShape",
+                    "specifics": "{\"assetID\":\"816ae303-7288-4ee3-9215-7136af63a18e\"}"
+                }
+            ]
+        }
+    ]
+}

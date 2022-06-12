@@ -1,5 +1,5 @@
 import { Level } from "src/levels/level";
-import { GlobalVariables } from "./globalValues";
+import { activateUI, GlobalVariables } from "./globalValues";
 import { Level0 } from "src/levels/level0";
 import { PlayerModifiers } from "src/mechanics/avatarModifiers";
 import { PlayerMovement, restart } from "src/mechanics/playerMovement";
@@ -13,6 +13,8 @@ export function completeLevel0() {
     GlobalVariables.level.complete();
     loadGameMechanics()
     GlobalVariables.level = GlobalVariables.level1;
+    activateUI()
+  
     GlobalVariables.level.start()
 }
 export function completeLevel1() {

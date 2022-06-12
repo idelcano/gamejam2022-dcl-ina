@@ -1,0 +1,23 @@
+{
+    "entityNumberCounter": 4,
+    "entities": [
+        {
+            "hierarchyOrder": 0.0,
+            "name": "border",
+            "uniqueNumber": 3,
+            "parent": -1,
+            "exposed": false,
+            "collapsedChildren": false,
+            "components": [
+                {
+                    "name": "transform",
+                    "specifics": "{\"pos\":{\"x\":5.135150909423828,\"y\":0.0,\"z\":4.668458461761475},\"rot\":{\"x\":0.0,\"y\":0.0,\"z\":0.0,\"w\":1.0},\"scale\":{\"x\":0.0,\"y\":1.0,\"z\":0.25}}"
+                },
+                {
+                    "name": "GLTFShape",
+                    "specifics": "{\"assetID\":\"ad40c8b7-7fe4-424f-abb7-9cfbe63e554a\"}"
+                }
+            ]
+        }
+    ]
+}
