@@ -1,5 +1,6 @@
 
 import * as npc from '@dcl/npc-scene-utils'
+import { GlobalVariables } from 'src/Global/globalValues'
 
 export let heyhello: npc.Dialog[] = [
     {
@@ -79,6 +80,19 @@ export let heytail: npc.Dialog[] = [
         text: "Hey, do you have a spanish museum tail? you will get an extra live!",
         isEndOfDialog: true,
         image: {
+            path: 'images/ina2.png',
+            height: 250,
+            width: 230,
+            offsetX: -700,
+            offsetY: -50,
+        },
+    },
+]
+export let gameovernot: npc.Dialog[] = [
+    {
+        text: "It seems that you have died...\nbut not! i managed to hack the game, i will update your health to 100, unfortunately 1000 steps will be added to you.",
+        isEndOfDialog: true,
+        image:{
             path: 'images/ina2.png',
             height: 250,
             width: 230,

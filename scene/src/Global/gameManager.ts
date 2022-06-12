@@ -20,14 +20,14 @@ export function completeLevel0() {
 export function completeLevel1() {
     GlobalVariables.level.complete();
     GlobalVariables.level = GlobalVariables.level2;
-    GlobalVariables.level.start()
     restart()
+    GlobalVariables.level.start()
 }
   
 export function completeLevel2() {
     GlobalVariables.level.complete();
-    GlobalVariables.level = GlobalVariables.level2;
-    GlobalVariables.level.start() 
+    GlobalVariables.level = GlobalVariables.level3;
     restart()
+    GlobalVariables.level.start() 
     //GlobalVariables.level = new Level3();
 }

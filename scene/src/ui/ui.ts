@@ -61,6 +61,14 @@ endIntro.width = 512
 endIntro.height = 512
 endIntro.visible = false
 
+export const gameover = new UIText(canvas)
+gameover.value = "GAME OVER..."
+gameover.font = new Font(Fonts.SanFrancisco)
+gameover.fontSize = 20
+gameover.positionX = "-15%"
+gameover.color = Color4.Red()
+gameover.visible=false
+
 export const levelCompleted = new UIText(canvas)
 levelCompleted.value = "Congrats! Level completed. Loading next level..."
 levelCompleted.font = new Font(Fonts.SanFrancisco)

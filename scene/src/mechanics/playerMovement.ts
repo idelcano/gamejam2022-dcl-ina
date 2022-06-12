@@ -1,6 +1,7 @@
 import { movePlayerTo } from "@decentraland/RestrictedActions";
 import {
   bulletWall,
+  gameoverui,
   hitFantasmicoSound,
   hitui,
   openfire,
@@ -13,6 +14,7 @@ import { Direction, FantasmicoDetails } from "./fantasmicoEnemy";
 
 const velocity = 0.5;
 const distance = 1.5;
+let gameover = false
 let isWrapped = false;
 let firemoveUp = false;
 let firemoveDown = false;
@@ -227,6 +229,16 @@ export class PlayerMovement {
 
     class SimpleMove implements ISystem {
       update(dt: number) {
+        if(parseInt(GlobalVariables.livesui.uiText.value) <= 0){
+          gameover = true
+
+        }
+        if(gameover){
+          GlobalVariables.livesui.increase(100)
+          GlobalVariables.stepsui.increase(1000)
+          gameover = false
+          gameoverui()
+        }
         if (moving) {
           if (!isWrapped) {
             isWrapped = true;
@@ -459,7 +471,7 @@ export class PlayerMovement {
       fire_ent.addComponentOrReplace(
         new utils.TriggerComponent(triggerBox, {
           onTriggerEnter(entity) {
-            if (entity.name?.indexOf("fantasmico") !== -1) {
+            if (entity.name?.indexOf("fantasmico") == 0) {
               log(entity);
               log(entity.name);
               log(entity.uuid);
@@ -730,6 +742,7 @@ export class PlayerMovement {
       let transform = fire_ent.getComponent(Transform);
       transform.position.z = transform.position.z - velocity * auxiliar_dt;
       if (transform.position.z >= 16 || transform.position.z <= 0) {
+        bulletWall();
         if (fire_ent.isAddedToEngine()) {
           engine.removeEntity(fire_ent);
         }
@@ -741,6 +754,7 @@ export class PlayerMovement {
       let transform = fire_ent.getComponent(Transform);
       transform.position.z = transform.position.z + velocity * auxiliar_dt;
       if (transform.position.z >= 16 || transform.position.z <= 0) {
+        bulletWall();
         if (fire_ent.isAddedToEngine()) {
           engine.removeEntity(fire_ent);
         }
@@ -753,6 +767,7 @@ export class PlayerMovement {
       let transform = fire_ent.getComponent(Transform);
       transform.position.x = transform.position.x - velocity * auxiliar_dt;
       if (transform.position.x >= 16 || transform.position.x <= 0) {
+        bulletWall();
         if (fire_ent.isAddedToEngine()) {
           engine.removeEntity(fire_ent);
         }
@@ -765,6 +780,7 @@ export class PlayerMovement {
       let transform = fire_ent.getComponent(Transform);
       transform.position.x = transform.position.x + velocity * auxiliar_dt;
       if (transform.position.x >= 16 || transform.position.x <= 0) {
+        bulletWall();
         if (fire_ent.isAddedToEngine()) {
           engine.removeEntity(fire_ent);
         }

@@ -25,7 +25,7 @@ let door2 = new Entity("door2");
 let doorask1 = new Entity("door-ask1");
 let doorask2 = new Entity("door-ask2");
 let doorask3 = new Entity("door-ask3");
-let levelStarted = false
+let levelStarted = false;
 export class Level1 implements Level {
   complete() {
     if (this.map.isAddedToEngine()) engine.removeEntity(this.map);
@@ -39,11 +39,11 @@ export class Level1 implements Level {
     if (doorask3.isAddedToEngine()) engine.removeEntity(doorask3);
     if (powerUp1.isAddedToEngine()) engine.removeEntity(powerUp1);
     if (powerUp2.isAddedToEngine()) engine.removeEntity(powerUp2);
-    levelStarted = false
+    levelStarted = false;
 
     executeTask(async () => {
       movePlayerTo({ x: 1, y: 0, z: 8 });
-      })
+    });
   }
   map: Entity;
   textA: Entity;
@@ -56,23 +56,21 @@ export class Level1 implements Level {
     this.textC = new Entity();
   }
   start() {
-
-
     GlobalVariables.shipEntity.getComponent(Transform).position.x = 1;
     GlobalVariables.shipEntity.getComponent(Transform).position.z = 8;
     GlobalVariables.shipEntity.getComponent(Transform).position.y = 0;
     GlobalVariables.shipEntity.getComponent(Transform).scale.setAll(0.85);
- 
+
     let border_glb = new GLTFShape("models/border.glb");
-    let border = new Entity("border")
+    let border = new Entity("border");
     border.addComponent(border_glb);
     border.addComponent(
       new Transform({
         position: new Vector3(8, 0, 8),
-        scale: new Vector3(.5, .5, .5),
+        scale: new Vector3(0.5, 0.5, 0.5),
       })
     );
-    engine.addEntity(border)
+    engine.addEntity(border);
 
     //first map
     let map_glb = new GLTFShape("models/maps/mapa1.glb");
@@ -137,7 +135,7 @@ export class Level1 implements Level {
     engine.addEntity(doorask3);
 
     let wrong3 = function () {
-      if (!levelStarted) return
+      if (!levelStarted) return;
       if (!doorask3.isAddedToEngine()) {
         return;
       }
@@ -148,7 +146,7 @@ export class Level1 implements Level {
     };
 
     let wrong2 = function () {
-      if (!levelStarted) return
+      if (!levelStarted) return;
       if (!doorask2.isAddedToEngine()) {
         return;
       }
@@ -159,14 +157,14 @@ export class Level1 implements Level {
     };
 
     let valid1 = function () {
-      if (!levelStarted) return
+      if (!levelStarted) return;
       if (!doorask1.isAddedToEngine()) {
         return;
       }
       //next level
       engine.removeEntity(doorask2);
       changeLevel();
-      completeLevel1()
+      completeLevel1();
     };
     const trigger5 = new Trigger(new Vector3(12.5, 2, 12), wrong3, false);
     const trigger6 = new Trigger(new Vector3(12.5, 2, 8), wrong2, false);
@@ -203,11 +201,11 @@ export class Level1 implements Level {
 
     utils.setTimeout(8000, () => {
       dialogWindow.openDialogWindow(heyhello, 0);
-    listen();
-    })
+      listen();
+    });
 
     let askAndRemoveDoor1 = function () {
-      if (!levelStarted) return
+      if (!levelStarted) return;
       if (!door1.isAddedToEngine()) {
         return;
       }
@@ -235,7 +233,7 @@ export class Level1 implements Level {
     };
 
     let askAndRemoveDoor2 = function () {
-      if (!levelStarted) return
+      if (!levelStarted) return;
       if (!door2.isAddedToEngine()) {
         return;
       }
@@ -263,7 +261,7 @@ export class Level1 implements Level {
     };
 
     let getPowerUp1 = function () {
-      if (!levelStarted) return
+      if (!levelStarted) return;
       if (!powerUp1.isAddedToEngine()) {
         return;
       }
@@ -320,7 +318,7 @@ export class Level1 implements Level {
     );
     const trigger3 = new Trigger(new Vector3(6.9, 2, 3), getPowerUp1, false);
     const trigger4 = new Trigger(new Vector3(6.9, 2, 15), getPowerUp2, false);
-    levelStarted = true
+    levelStarted = true;
   }
 }
 export class SimpleRotate1 implements ISystem {

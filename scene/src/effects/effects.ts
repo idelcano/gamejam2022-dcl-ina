@@ -1,7 +1,19 @@
 import * as utils from "@dcl/ecs-scene-utils";
 import { GlobalVariables } from "src/Global/globalValues";
-import { getData } from "src/network/player";
-import { doorHit1, doorHit2, endIntro, secondIntro, firstPersonText, levelCompleted, firstIntro, thirdintro } from "src/ui/ui";
+import * as ui from "@dcl/ui-scene-utils";
+import {
+  doorHit1,
+  doorHit2,
+  endIntro,
+  secondIntro,
+  firstPersonText,
+  levelCompleted,
+  firstIntro,
+  thirdintro,
+  gameover,
+} from "src/ui/ui";
+import { DialogWindow } from "@dcl/npc-scene-utils";
+import { gameovernot } from "src/dialogs/dialogs";
 
 const cube = new Entity();
 const cube2 = new Entity();
@@ -90,10 +102,10 @@ engine.addEntity(cube10);
       )
     }
 )  */
-export function hitFantasmicoSound(){
-  hitEnemy.playOnce()
+export function hitFantasmicoSound() {
+  hitEnemy.playOnce();
 }
-export function intro(){
+export function intro() {
   firstPersonText.visible = true;
   malo.playOnce();
   utils.setTimeout(100, () => {
@@ -110,15 +122,30 @@ export function intro(){
   utils.setTimeout(6000, () => {
     thirdintro.visible = false;
     endIntro.visible = true;
-    
   });
   utils.setTimeout(8000, () => {
     firstPersonText.visible = false;
     endIntro.visible = false;
-    
   });
-
 }
+
+export function gameoverui() {
+  player_hit.playOnce();
+  firstPersonText.visible = true;
+  gameover.visible = true;
+  utils.setTimeout(1000, () => {
+    let dialogWindow = new DialogWindow();
+    dialogWindow.openDialogWindow(gameovernot, 0);
+  });
+  utils.setTimeout(3000, () => {
+    hidegameoverui();
+  });
+}
+export function hidegameoverui() {
+  firstPersonText.visible = false;
+  gameover.visible = false;
+}
+
 export function hitui() {
   zas.playOnce();
   player_hit.playOnce();
@@ -129,7 +156,7 @@ export function hitui() {
   utils.setTimeout(200, () => {
     doorHit1.visible = false;
     doorHit2.visible = true;
-    GlobalVariables.livesui.decrease(10)
+    GlobalVariables.livesui.decrease(10);
   });
   utils.setTimeout(300, () => {
     doorHit1.visible = true;
@@ -168,5 +195,5 @@ export function listen() {
   hey_listen.playOnce();
 }
 export function bulletWall() {
-  bullet_clac.playOnce()
+  bullet_clac.playOnce();
 }

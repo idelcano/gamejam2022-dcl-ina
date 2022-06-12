@@ -11,7 +11,7 @@ export enum Direction {
   }
 @Component('FantasmicoDetails')
 export class FantasmicoDetails{
-    lives: number = 3
+    lives: number
     active: boolean = true
     direction: Direction = Direction.Up
     position: Vector3
@@ -19,7 +19,7 @@ export class FantasmicoDetails{
     hitPlayer: boolean = false
     alive: boolean = true
     constructor(position: Vector3, rotationPos: Direction, startDisabled: boolean){
-        this.lives = 3
+        this.lives = 1
         this.position = position
         this.direction = rotationPos
         this.active = startDisabled
@@ -34,7 +34,7 @@ export class Fantasmico extends Entity{
     super()
     this.active =startDisabled
     this.direction = rotationPos
-    this.lives = 3
+    this.lives = 1
     let fantasmicoDetails: FantasmicoDetails = new FantasmicoDetails(position, rotationPos, startDisabled)
     this.entity = new Entity("fantasmico" + GlobalVariables.activeFantasmicos.length)
     this.entity.addComponent(fantasmicoDetails)

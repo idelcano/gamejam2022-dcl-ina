@@ -15,6 +15,8 @@ import {
 } from "src/effects/effects";
 import { Level } from "src/levels/level";
 import { Direction, Fantasmico } from "src/mechanics/fantasmicoEnemy";
+import { completeLevel2 } from "src/Global/gameManager";
+import { movePlayerTo } from "@decentraland/RestrictedActions";
 let scene = new Entity();
 let base1_glb = new GLTFShape("models/enemies/base1.glb");
 let fantasmicos = [];
@@ -22,12 +24,27 @@ let levelStarted = false
 export class Level2 implements Level {
   complete() {
     if (this.map.isAddedToEngine()) engine.removeEntity(this.map);
+    if (this.nlentity.isAddedToEngine()) engine.removeEntity(this.nlentity);
     if (scene.isAddedToEngine()) engine.removeEntity(scene);
     levelStarted = false
+
+    for (let item of GlobalVariables.activeFantasmicos) {
+      let fantasmico = item.entity;
+      if (fantasmico != null && fantasmico.isAddedToEngine()){
+        engine.removeEntity(fantasmico)
+      }
+    }
+    levelStarted = false;
+
+    executeTask(async () => {
+      movePlayerTo({ x: 1, y: 0, z: 8 });
+    });
   }
   map: Entity;
+  nlentity: Entity;
   constructor() {
     this.map = new Entity("map2");
+    this.nlentity = new Entity("nextlevel")
   }
   start() {
     //first map
@@ -75,6 +92,24 @@ export class Level2 implements Level {
     dialogWindow.openDialogWindow(heyfantasmico, 0);
     listen();
     levelStarted  = true
+
+    let nextlevel = new GLTFShape("models/maps/nextlevel.glb");
+    this.nlentity.addComponent(nextlevel);
+    this.nlentity.addComponent(
+      new Transform({
+        position: new Vector3(14, 1, 14),
+        scale: new Vector3(0.5, 0.5, 1),
+      })
+    );
+    engine.addEntity(this.nlentity);
+    let finalLevel = function finalLevel(){
+      if (!levelStarted) return;
+      changeLevel();
+      completeLevel2();
+    }
+    const trigger7 = new Trigger(new Vector3(14.5, 2, 14.5), finalLevel, false);
+
+
   }
 }
 function createFantasmicos(
@@ -102,5 +137,3 @@ function createFantasmicos(
     }
   }
 }
-
-export class FantasmicosMove implements ISystem {}

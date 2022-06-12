@@ -10,17 +10,21 @@ export class Level0 implements Level {
   complete() {
     if (this.map.isAddedToEngine()) engine.removeEntity(this.map);
     if (this.cube.isAddedToEngine()) engine.removeEntity(this.cube);
+    if (this.text.isAddedToEngine()) engine.removeEntity(this.text);
   }
   map: Entity;
   cube: Entity;
+  text: Entity;
   constructor() {
     this.map = new Entity("map0");
     this.cube = new Entity();
+    this.text = new Entity();
   }
   start() {
     //first map
     let map_glb = new GLTFShape("models/maps/mapa0.glb");
     let bluechip = new GLTFShape("models/maps/bluechip.glb");
+
     this.map.addComponent(map_glb);
     this.map.addComponent(
       new Transform({
@@ -48,6 +52,7 @@ export class Level0 implements Level {
             GlobalVariables.level = new Level1();
             completeLevel0();
             engine.removeEntity(this.cube);
+            engine.removeEntity(this.text);
           });
 
         },
@@ -78,6 +83,7 @@ export class Level0 implements Level {
     myEntity.getComponent(Transform).position.z=8
     myEntity.getComponent(Transform).rotate(new Vector3(0,1,0),90)
     engine.addEntity(this.cube);
+    this.text = myEntity
 
   }
 }
