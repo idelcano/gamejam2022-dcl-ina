@@ -5,6 +5,7 @@ import { Trigger } from "../mechanics/triggers";
 import { checkWearableCategory } from "../network/checkWearables";
 import { glassesContract, tailContract } from "../network/contracts";
 import { GlobalVariables } from "src/Global/globalValues";
+import * as utils from "@dcl/ecs-scene-utils";
 import { getQuestionA, getQuestionB, getQuestionC } from "../network/questions";
 import {
   accessGranted,
@@ -199,8 +200,11 @@ export class Level1 implements Level {
     this.textC.setParent(doorask3);
 
     let dialogWindow = new DialogWindow();
-    dialogWindow.openDialogWindow(heyhello, 0);
+
+    utils.setTimeout(8000, () => {
+      dialogWindow.openDialogWindow(heyhello, 0);
     listen();
+    })
 
     let askAndRemoveDoor1 = function () {
       if (!levelStarted) return

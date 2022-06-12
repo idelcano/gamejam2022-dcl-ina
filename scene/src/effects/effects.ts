@@ -1,6 +1,7 @@
 import * as utils from "@dcl/ecs-scene-utils";
+import { GlobalVariables } from "src/Global/globalValues";
 import { getData } from "src/network/player";
-import { doorHit1, doorHit2, levelCompleted } from "src/ui/ui";
+import { doorHit1, doorHit2, endIntro, secondIntro, firstPersonText, levelCompleted, firstIntro, thirdintro } from "src/ui/ui";
 
 const cube = new Entity();
 const cube2 = new Entity();
@@ -9,6 +10,9 @@ const cube4 = new Entity();
 const cube5 = new Entity();
 const cube6 = new Entity();
 const cube7 = new Entity();
+const cube8 = new Entity();
+const cube9 = new Entity();
+const cube10 = new Entity();
 
 const clip = new AudioClip("sounds/zas2.mp3");
 const zas = new AudioSource(clip);
@@ -30,6 +34,15 @@ const yes = new AudioSource(clip6);
 const clip7 = new AudioClip("sounds/hey_listen.mp3");
 const hey_listen = new AudioSource(clip7);
 
+const clip8 = new AudioClip("sounds/bulletclack.mp3");
+const bullet_clac = new AudioSource(clip8);
+
+const clip9 = new AudioClip("sounds/playerherido.mp3");
+const player_hit = new AudioSource(clip9);
+
+const clip10 = new AudioClip("sounds/malo.mp3");
+const malo = new AudioSource(clip10);
+
 // Add AudioSource component to entity
 cube.addComponent(zas);
 cube2.addComponent(accesoConcedido);
@@ -38,6 +51,9 @@ cube4.addComponent(hitEnemy);
 cube5.addComponent(steps);
 cube6.addComponent(yes);
 cube7.addComponent(hey_listen);
+cube8.addComponent(bullet_clac);
+cube9.addComponent(player_hit);
+cube10.addComponent(malo);
 engine.addEntity(cube);
 engine.addEntity(cube2);
 engine.addEntity(cube3);
@@ -45,6 +61,9 @@ engine.addEntity(cube4);
 engine.addEntity(cube5);
 engine.addEntity(cube6);
 engine.addEntity(cube7);
+engine.addEntity(cube8);
+engine.addEntity(cube9);
+engine.addEntity(cube10);
 
 /* executeTask(async () => {
     let n = new AttachToAvatar({
@@ -74,9 +93,35 @@ engine.addEntity(cube7);
 export function hitFantasmicoSound(){
   hitEnemy.playOnce()
 }
+export function intro(){
+  firstPersonText.visible = true;
+  malo.playOnce();
+  utils.setTimeout(100, () => {
+    firstIntro.visible = true;
+  });
+  utils.setTimeout(2000, () => {
+    firstIntro.visible = false;
+    secondIntro.visible = true;
+  });
+  utils.setTimeout(4000, () => {
+    secondIntro.visible = false;
+    thirdintro.visible = true;
+  });
+  utils.setTimeout(6000, () => {
+    thirdintro.visible = false;
+    endIntro.visible = true;
+    
+  });
+  utils.setTimeout(8000, () => {
+    firstPersonText.visible = false;
+    endIntro.visible = false;
+    
+  });
+
+}
 export function hitui() {
   zas.playOnce();
-  hitEnemy.playOnce();
+  player_hit.playOnce();
   utils.setTimeout(100, () => {
     doorHit1.visible = true;
     doorHit2.visible = false;
@@ -84,6 +129,7 @@ export function hitui() {
   utils.setTimeout(200, () => {
     doorHit1.visible = false;
     doorHit2.visible = true;
+    GlobalVariables.livesui.decrease(10)
   });
   utils.setTimeout(300, () => {
     doorHit1.visible = true;
@@ -98,13 +144,16 @@ export function hitui() {
 export function changeLevel() {
   yes.playOnce();
   levelCompleted.visible = true;
-  utils.setTimeout(1000, () => {
+  utils.setTimeout(2000, () => {
     levelCompleted.visible = false;
   });
 }
 
 export function accessGranted() {
   accesoConcedido.playOnce();
+}
+export function malorisa() {
+  malo.playOnce();
 }
 export function yeah() {
   yes.playOnce();
@@ -119,5 +168,5 @@ export function listen() {
   hey_listen.playOnce();
 }
 export function bulletWall() {
-  //steps.playOnce();
+  bullet_clac.playOnce()
 }

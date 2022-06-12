@@ -3,7 +3,7 @@ import * as npc from '@dcl/npc-scene-utils'
 
 export let heyhello: npc.Dialog[] = [
     {
-        text: "Hey, I am Ina_dcl, bad news, not blue chip here... we are trapped... I am not going to lie you, many avatars have died in this prision, and they will try to prevent you from escaping.",
+        text: "Hey, I am Ina_dcl, bad news, not blue chip here... we are trapped... I am not going to lie you, many avatars have died in this prision, and they will try to kill you.",
         image: {
             path: 'images/ina2.png',
             height: 250,
@@ -35,6 +35,7 @@ export let heyhello: npc.Dialog[] = [
 
     {
         text: "And only for you know! you could move in any direction using asdw, and rotate your mecha with e and d!",
+        isEndOfDialog: true,
         image: {
             path: 'images/ina2.png',
             height: 250,
@@ -43,33 +44,12 @@ export let heyhello: npc.Dialog[] = [
             offsetY: -50,
         },
     },
-    {
-        text: "You also can open fire clicking shift!",
-        image: {
-            path: 'images/ina2.png',
-            height: 250,
-            width: 230,
-            offsetX: -700,
-            offsetY: -50,
-        },
-    },
-    {
-            text: "You can see your life and extra shield (if you have any of my wearables) on the left of your picture!",
-            isEndOfDialog: true,
-            image: {
-                path: 'images/ina2.png',
-                height: 250,
-                width: 230,
-                offsetX: -700,
-                offsetY: -50,
-            },
-        },
 ]
 
 
 export let heyfantasmico: npc.Dialog[] = [
     {
-        text: "hey, that ghost is distracted! take the opportunity to shoot him with shift!!",
+        text: "hey, that ghost is alone! take the opportunity to shoot him with shift!!",
         isEndOfDialog: true,
         image: {
             path: 'images/ina2.png',

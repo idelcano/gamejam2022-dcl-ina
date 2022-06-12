@@ -10,13 +10,56 @@ firstPersonContainer.color = Color4.Black()
 firstPersonContainer.stackOrientation = UIStackOrientation.VERTICAL
 firstPersonContainer.visible=false
 
-const firstPersonText = new UIText(canvas)
-firstPersonText.value = "Please press \"V\" to change to first person camera"
-firstPersonText.font = new Font(Fonts.SanFrancisco)
-firstPersonText.fontSize = 20
-firstPersonText.positionX = "-15%"
-firstPersonText.color = Color4.Blue()
+export const firstPersonText = new UIContainerStack(canvas)
+firstPersonText.adaptWidth = true
+firstPersonText.width = "100%"
+firstPersonText.height = "200%"
+firstPersonText.color = Color4.Black() 
+firstPersonText.stackOrientation = UIStackOrientation.HORIZONTAL
 firstPersonText.visible=false
+
+let imageAtlas = "images/greatescape.png"
+let imageTexture = new Texture(imageAtlas)
+
+export const firstIntro = new UIImage(canvas, imageTexture)
+firstIntro.sourceLeft = 0
+firstIntro.sourceTop = 0
+firstIntro.sourceWidth = 512
+firstIntro.sourceHeight = 512
+firstIntro.width = 512
+firstIntro.height = 512
+firstIntro.vAlign = "center"
+firstIntro.visible = false
+
+export const secondIntro = new UIImage(canvas, imageTexture)
+secondIntro.sourceLeft = 512
+secondIntro.sourceTop = 0
+secondIntro.sourceWidth = 512
+secondIntro.sourceHeight = 512
+secondIntro.vAlign = "center"
+secondIntro.width = 512
+secondIntro.height = 512
+secondIntro.visible = false
+
+export const thirdintro = new UIImage(canvas, imageTexture)
+thirdintro.sourceLeft = 0
+thirdintro.sourceTop = 512
+thirdintro.sourceWidth = 512
+thirdintro.sourceHeight = 512
+thirdintro.vAlign = "center"
+thirdintro.width = 512
+thirdintro.height = 512
+thirdintro.visible = false
+
+export const endIntro = new UIImage(canvas, imageTexture)
+endIntro.sourceLeft = 512
+endIntro.sourceTop = 512
+endIntro.sourceWidth = 512
+endIntro.sourceHeight = 512
+endIntro.vAlign = "center"
+endIntro.width = 512
+endIntro.height = 512
+endIntro.visible = false
 
 export const levelCompleted = new UIText(canvas)
 levelCompleted.value = "Congrats! Level completed. Loading next level..."
