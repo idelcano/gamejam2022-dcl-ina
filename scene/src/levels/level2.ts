@@ -17,6 +17,7 @@ import { Level } from "src/levels/level";
 import { Direction, Fantasmico } from "src/mechanics/fantasmicoEnemy";
 import { completeLevel2 } from "src/Global/gameManager";
 import { movePlayerTo } from "@decentraland/RestrictedActions";
+import { PlayerModifiers } from "src/mechanics/avatarModifiers";
 let scene = new Entity();
 let base1_glb = new GLTFShape("models/enemies/base1.glb");
 let fantasmicos = [];
@@ -34,6 +35,7 @@ export class Level2 implements Level {
         engine.removeEntity(fantasmico)
       }
     }
+    GlobalVariables.activeFantasmicos = []
     levelStarted = false;
 
     executeTask(async () => {

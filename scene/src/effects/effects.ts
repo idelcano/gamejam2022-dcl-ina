@@ -25,6 +25,7 @@ const cube7 = new Entity();
 const cube8 = new Entity();
 const cube9 = new Entity();
 const cube10 = new Entity();
+const cube11 = new Entity();
 
 const clip = new AudioClip("sounds/zas2.mp3");
 const zas = new AudioSource(clip);
@@ -54,6 +55,8 @@ const player_hit = new AudioSource(clip9);
 
 const clip10 = new AudioClip("sounds/malo.mp3");
 const malo = new AudioSource(clip10);
+const clip11 = new AudioClip("sounds/golpe.mp3");
+const golpemalo = new AudioSource(clip11);
 
 // Add AudioSource component to entity
 cube.addComponent(zas);
@@ -66,6 +69,7 @@ cube7.addComponent(hey_listen);
 cube8.addComponent(bullet_clac);
 cube9.addComponent(player_hit);
 cube10.addComponent(malo);
+cube11.addComponent(golpemalo);
 engine.addEntity(cube);
 engine.addEntity(cube2);
 engine.addEntity(cube3);
@@ -76,6 +80,7 @@ engine.addEntity(cube7);
 engine.addEntity(cube8);
 engine.addEntity(cube9);
 engine.addEntity(cube10);
+engine.addEntity(cube11);
 
 /* executeTask(async () => {
     let n = new AttachToAvatar({
@@ -198,3 +203,7 @@ export function listen() {
 export function bulletWall() {
   bullet_clac.playOnce();
 }
+export function golpeBoss() {
+  golpemalo.playOnce();
+}
+

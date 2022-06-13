@@ -2,6 +2,7 @@ import { movePlayerTo } from "@decentraland/RestrictedActions";
 import {
   bulletWall,
   gameoverui,
+  golpeBoss,
   hitFantasmicoSound,
   hitui,
   openfire,
@@ -11,6 +12,7 @@ import { GlobalVariables } from "src/Global/globalValues";
 import { getData } from "../network/player";
 import * as utils from "@dcl/ecs-scene-utils";
 import { Direction, FantasmicoDetails } from "./fantasmicoEnemy";
+import { FinalBossComponent } from "src/levels/level3";
 
 const velocity = 0.5;
 const distance = 1.5;
@@ -283,7 +285,7 @@ export class PlayerMovement {
               GlobalVariables.steps = GlobalVariables.steps + 1;
               GlobalVariables.stepsui.increase();
             }
-            log(transform.position.z);
+            //log(transform.position.z);
           } else if (moveRight) {
             transform.position.z = transform.position.z - velocity * dt;
             if (transform.position.z <= maxZPos) {
@@ -294,7 +296,7 @@ export class PlayerMovement {
               GlobalVariables.steps = GlobalVariables.steps + 1;
               GlobalVariables.stepsui.increase();
             }
-            log(transform.position.z);
+            //log(transform.position.z);
           } else if (moveRotateLeft) {
             let transform = GlobalVariables.shipEntity.getComponent(Transform);
             transform.rotate(new Vector3(0, 1, 0), 90);
@@ -393,7 +395,7 @@ export class PlayerMovement {
           if (emptyMove) {
             startMove = startMove + velocity * dt;
 
-            log("startmove" + startMove);
+            //log("startmove" + startMove);
             if (startMove >= endMove) {
               emptyMove = false;
               hitFantasmicos();
@@ -473,17 +475,17 @@ export class PlayerMovement {
         })
       );
       engine.addEntity(fire_ent);
-        log(originFire)
+      //  log(originFire)
       openfire();
 
       let triggerBox = new utils.TriggerBoxShape(new Vector3(0.2, 0.2, 0.2));
       fire_ent.addComponentOrReplace(
         new utils.TriggerComponent(triggerBox, {
           onTriggerEnter(entity) {
+            log("raycast"+entity);
+            log("raycast"+entity.name);
+            log("raycast"+entity.uuid);
             if (entity.name?.indexOf("fantasmico") == 0) {
-              log(entity);
-              log(entity.name);
-              log(entity.uuid);
               hitFantasmicoSound();
               let fantasmico = entity.getComponent(FantasmicoDetails);
               fantasmico.lives = fantasmico.lives - 1;
@@ -499,7 +501,8 @@ export class PlayerMovement {
               fire_ent.getComponent(Transform).position.y = -50
               /* if (fire_ent.isAddedToEngine())
               engine.removeEntity(fire_ent); */
-            } 
+            }
+            
 /*             else {
               firemoveDown = false;
               firemoveLeft = false;
@@ -630,14 +633,15 @@ export class PlayerMovement {
         rayFromPoints,
         (e) => {
           if (e == undefined) {
+            log("player raycast undefined")
             return;
           }
           for (let entityHit of e.entities) {
-            log(entityHit.entity.meshName);
+            log("detectWallBeforeMove "+entityHit.entity.meshName);
             if (
               entityHit.entity.meshName.indexOf("wall") == 0 ||
               entityHit.entity.meshName.indexOf("fantasmico") == 0 ||
-              entityHit.entity.meshName.indexOf("enemy") == 0
+              entityHit.entity.meshName.indexOf("enemyall") == 0
             ) {
               log(entityHit.entity.meshName.indexOf("fantasmico"));
               log(entityHit.hitPoint);
@@ -670,13 +674,14 @@ export class PlayerMovement {
         rayFromPoints,
         (e) => {
           if (e == undefined) {
+            log("bullet raycast before move undefined")
             return;
           }
           for (let entityHit of e.entities) {
-            log(entityHit.entity.meshName);
+            log("detectWallBulletBeforeMove "+entityHit.entity.meshName);
             if (entityHit.entity.meshName.indexOf("wall") == 0) {
               hasWall = true;
-            }
+            } 
           }
           if (hasWall) {
             bulletWall();
@@ -705,13 +710,70 @@ export class PlayerMovement {
         rayFromPoints,
         (e) => {
           if (e == undefined) {
+            log("bullet raycast undefined during move")
             return;
-            log("bullet raycast undefined")
           }
           for (let entityHit of e.entities) {
-            log(entityHit.entity.meshName);
+            log("detectWallBulletDuringMove "+entityHit.entity.meshName);
             if (entityHit.entity.meshName.indexOf("wall") == 0) {
               hasWall = true;
+            }else 
+            if (entityHit.entity.meshName.indexOf("center_collider") == 0) {
+              log("hit center")
+              let entityComponent01 = GlobalVariables.finalBoss.getComponent(FinalBossComponent)
+              if ( entityComponent01.leftlives>0 || entityComponent01.rightlives>0){
+                return
+              }
+              entityComponent01.mainlives = entityComponent01.mainlives -1
+              if (entityComponent01.mainlives <0){
+                //bossdie
+                return
+              }else{
+              GlobalVariables.hitMain = true
+              golpeBoss()
+              fire_ent.getComponent(Transform).position.y = -50
+              firemoveRight = false;
+              firemoveLeft = false;
+              firemoveUp = false;
+              firemoveDown = false;
+              firemoving = false;
+              }
+            }
+            else 
+            if (entityHit.entity.meshName.indexOf("left_collider") == 0) {
+              log("hit left")
+              let entityComponent01 = GlobalVariables.finalBoss.getComponent(FinalBossComponent)
+              entityComponent01.leftlives = entityComponent01.leftlives -1
+              if (entityComponent01.leftlives <0){
+                return
+              }else{
+                GlobalVariables.hitLeft = true
+                golpeBoss()
+                fire_ent.getComponent(Transform).position.y = -50
+                firemoveRight = false;
+                firemoveLeft = false;
+                firemoveUp = false;
+                firemoveDown = false;
+                firemoving = false;
+              }
+            }
+            else 
+            if (entityHit.entity.meshName.indexOf("right_collider") == 0) {
+              log("hit right")
+              let entityComponent01 = GlobalVariables.finalBoss.getComponent(FinalBossComponent)
+              entityComponent01.rightlives = entityComponent01.rightlives -1
+              if (entityComponent01.rightlives <0){
+                return
+              }else{
+                GlobalVariables.hitRight = true
+                golpeBoss()
+                fire_ent.getComponent(Transform).position.y = -50
+                firemoveRight = false;
+                firemoveLeft = false;
+                firemoveUp = false;
+                firemoveDown = false;
+                firemoving = false;
+              }
             }
           }
           if (hasWall) {

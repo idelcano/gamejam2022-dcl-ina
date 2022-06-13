@@ -13,6 +13,13 @@ export class GlobalVariables {
   static level1: Level;
   static level2: Level;
   static level3: Level;
+  static hitLeft: boolean = false;
+  static movingLeft: boolean = false;
+  static hitRight: boolean = false;
+  static movingRight: boolean = false;
+  static hitMain: boolean = false;
+  static movingMain: boolean = false;
+  static finalBoss: Entity;
 }
 export function activateUI(){
 let healthLabel = new ui.CornerLabel(
