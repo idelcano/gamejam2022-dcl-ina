@@ -14,10 +14,13 @@ export class GlobalVariables {
   static level2: Level;
   static level3: Level;
   static hitLeft: boolean = false;
+  static hitLeftDie: boolean = false;
   static movingLeft: boolean = false;
   static hitRight: boolean = false;
+  static hitRightDie: boolean = false;
   static movingRight: boolean = false;
   static hitMain: boolean = false;
+  static hitMainDie: boolean = false;
   static movingMain: boolean = false;
   static finalBoss: Entity;
 }

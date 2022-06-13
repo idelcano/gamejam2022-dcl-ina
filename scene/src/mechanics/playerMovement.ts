@@ -16,7 +16,7 @@ import { FinalBossComponent } from "src/levels/level3";
 
 const velocity = 0.5;
 const distance = 1.5;
-let gameover = false
+let gameover = false;
 let isWrapped = false;
 let firemoveUp = false;
 let firemoveDown = false;
@@ -49,7 +49,7 @@ let physicsCast = PhysicsCast.instance;
 
 let playerPanel = new Entity();
 playerPanel.addComponent(new PlaneShape());
-export function restart(){
+export function restart() {
   isWrapped = false;
   firemoveUp = false;
   firemoveDown = false;
@@ -81,7 +81,7 @@ export class PlayerMovement {
         //scale: new Vector3(2.5, 3, 3.5),
       })
     );
-    
+
     engine.addEntity(GlobalVariables.shipEntity);
     executeTask(async () => {
       let data = await getData();
@@ -139,7 +139,7 @@ export class PlayerMovement {
     });
     input.subscribe("BUTTON_UP", ActionButton.WALK, false, (e) => {
       log("pointer Up", e);
-      if(moving) return;
+      if (moving) return;
       if (firemoving) {
         startMove = 0;
         emptyMove = true;
@@ -232,22 +232,23 @@ export class PlayerMovement {
 
     class SimpleMove implements ISystem {
       update(dt: number) {
-        if(parseInt(GlobalVariables.livesui.uiText.value) <= 0){
-          gameover = true
-
+        if (parseInt(GlobalVariables.livesui.uiText.value) <= 0) {
+          gameover = true;
         }
-        if(gameover){
+        if (gameover) {
           GlobalVariables.lives = GlobalVariables.lives - 10;
           GlobalVariables.steps = GlobalVariables.steps - 1000;
-          GlobalVariables.livesui.increase(100)
-          GlobalVariables.stepsui.increase(1000)
-          gameover = false
-          gameoverui()
+          GlobalVariables.livesui.increase(100);
+          GlobalVariables.stepsui.increase(1000);
+          gameover = false;
+          gameoverui();
         }
         if (moving) {
           if (!isWrapped) {
             isWrapped = true;
-            GlobalVariables.shipEntity.getComponent(Transform).scale.setAll(0.85);
+            GlobalVariables.shipEntity
+              .getComponent(Transform)
+              .scale.setAll(0.85);
             return;
           }
           let transform = GlobalVariables.shipEntity.getComponent(Transform);
@@ -482,9 +483,9 @@ export class PlayerMovement {
       fire_ent.addComponentOrReplace(
         new utils.TriggerComponent(triggerBox, {
           onTriggerEnter(entity) {
-            log("raycast"+entity);
-            log("raycast"+entity.name);
-            log("raycast"+entity.uuid);
+            log("raycast" + entity);
+            log("raycast" + entity.name);
+            log("raycast" + entity.uuid);
             if (entity.name?.indexOf("fantasmico") == 0) {
               hitFantasmicoSound();
               let fantasmico = entity.getComponent(FantasmicoDetails);
@@ -498,12 +499,12 @@ export class PlayerMovement {
               firemoveRight = false;
               firemoveUp = false;
               firemoving = false;
-              fire_ent.getComponent(Transform).position.y = -50
+              fire_ent.getComponent(Transform).position.y = -50;
               /* if (fire_ent.isAddedToEngine())
               engine.removeEntity(fire_ent); */
             }
-            
-/*             else {
+
+            /*             else {
               firemoveDown = false;
               firemoveLeft = false;
               firemoveRight = false;
@@ -522,18 +523,21 @@ export class PlayerMovement {
 
     function moveForward() {
       let targetPos = new Vector3(
-        GlobalVariables.shipEntity.getComponent(Transform).position.x + moveMeters,
+        GlobalVariables.shipEntity.getComponent(Transform).position.x +
+          moveMeters,
         GlobalVariables.shipEntity.getComponent(Transform).position.y,
         GlobalVariables.shipEntity.getComponent(Transform).position.z
       );
 
-      let originPos = GlobalVariables.shipEntity.getComponent(Transform).position;
+      let originPos =
+        GlobalVariables.shipEntity.getComponent(Transform).position;
       detectWallBeforeMove(originPos, targetPos, moveToForwardNow);
     }
 
     function moveToForwardNow(hasWall: boolean) {
       let localPos =
-        GlobalVariables.shipEntity.getComponent(Transform).position.x + moveMeters;
+        GlobalVariables.shipEntity.getComponent(Transform).position.x +
+        moveMeters;
       if (localPos >= 15 || hasWall) {
         return;
       }
@@ -547,17 +551,20 @@ export class PlayerMovement {
 
     function moveBackward() {
       let targetPos = new Vector3(
-        GlobalVariables.shipEntity.getComponent(Transform).position.x - moveMeters,
+        GlobalVariables.shipEntity.getComponent(Transform).position.x -
+          moveMeters,
         GlobalVariables.shipEntity.getComponent(Transform).position.y,
         GlobalVariables.shipEntity.getComponent(Transform).position.z
       );
-      let originPos = GlobalVariables.shipEntity.getComponent(Transform).position;
+      let originPos =
+        GlobalVariables.shipEntity.getComponent(Transform).position;
       detectWallBeforeMove(originPos, targetPos, moveToBackwardNow);
     }
 
     function moveToBackwardNow(hasWall: boolean) {
       let localPos =
-        GlobalVariables.shipEntity.getComponent(Transform).position.x - moveMeters;
+        GlobalVariables.shipEntity.getComponent(Transform).position.x -
+        moveMeters;
       if (localPos <= 1 || hasWall) {
         return;
       }
@@ -572,15 +579,18 @@ export class PlayerMovement {
       let targetPos = new Vector3(
         GlobalVariables.shipEntity.getComponent(Transform).position.x,
         GlobalVariables.shipEntity.getComponent(Transform).position.y,
-        GlobalVariables.shipEntity.getComponent(Transform).position.z + moveMeters
+        GlobalVariables.shipEntity.getComponent(Transform).position.z +
+          moveMeters
       );
-      let originPos = GlobalVariables.shipEntity.getComponent(Transform).position;
+      let originPos =
+        GlobalVariables.shipEntity.getComponent(Transform).position;
       detectWallBeforeMove(originPos, targetPos, moveToLeftNow);
     }
 
     function moveToLeftNow(hasWall: boolean) {
       let localPos =
-        GlobalVariables.shipEntity.getComponent(Transform).position.z + moveMeters;
+        GlobalVariables.shipEntity.getComponent(Transform).position.z +
+        moveMeters;
       if (localPos >= 15 || hasWall) {
         return;
       }
@@ -596,15 +606,18 @@ export class PlayerMovement {
       let targetPos = new Vector3(
         GlobalVariables.shipEntity.getComponent(Transform).position.x,
         GlobalVariables.shipEntity.getComponent(Transform).position.y,
-        GlobalVariables.shipEntity.getComponent(Transform).position.z - moveMeters
+        GlobalVariables.shipEntity.getComponent(Transform).position.z -
+          moveMeters
       );
-      let originPos = GlobalVariables.shipEntity.getComponent(Transform).position;
+      let originPos =
+        GlobalVariables.shipEntity.getComponent(Transform).position;
       detectWallBeforeMove(originPos, targetPos, moveToRightNow);
     }
 
     function moveToRightNow(hasWall: boolean) {
       let localPos =
-        GlobalVariables.shipEntity.getComponent(Transform).position.z - moveMeters;
+        GlobalVariables.shipEntity.getComponent(Transform).position.z -
+        moveMeters;
       if (localPos <= 1 || hasWall) {
         return;
       }
@@ -633,11 +646,11 @@ export class PlayerMovement {
         rayFromPoints,
         (e) => {
           if (e == undefined) {
-            log("player raycast undefined")
+            log("player raycast undefined");
             return;
           }
           for (let entityHit of e.entities) {
-            log("detectWallBeforeMove "+entityHit.entity.meshName);
+            log("detectWallBeforeMove " + entityHit.entity.meshName);
             if (
               entityHit.entity.meshName.indexOf("wall") == 0 ||
               entityHit.entity.meshName.indexOf("fantasmico") == 0 ||
@@ -674,14 +687,14 @@ export class PlayerMovement {
         rayFromPoints,
         (e) => {
           if (e == undefined) {
-            log("bullet raycast before move undefined")
+            log("bullet raycast before move undefined");
             return;
           }
           for (let entityHit of e.entities) {
-            log("detectWallBulletBeforeMove "+entityHit.entity.meshName);
+            log("detectWallBulletBeforeMove " + entityHit.entity.meshName);
             if (entityHit.entity.meshName.indexOf("wall") == 0) {
               hasWall = true;
-            } 
+            }
           }
           if (hasWall) {
             bulletWall();
@@ -710,76 +723,80 @@ export class PlayerMovement {
         rayFromPoints,
         (e) => {
           if (e == undefined) {
-            log("bullet raycast undefined during move")
+            log("bullet raycast undefined during move");
             return;
           }
           for (let entityHit of e.entities) {
-            log("detectWallBulletDuringMove "+entityHit.entity.meshName);
+            log("detectWallBulletDuringMove " + entityHit.entity.meshName);
             if (entityHit.entity.meshName.indexOf("wall") == 0) {
               hasWall = true;
-            }else 
-            if (entityHit.entity.meshName.indexOf("center_collider") == 0) {
-              log("hit center")
-              let entityComponent01 = GlobalVariables.finalBoss.getComponent(FinalBossComponent)
-              if ( entityComponent01.leftlives>0 || entityComponent01.rightlives>0){
-                return
+            } else if (
+              entityHit.entity.meshName.indexOf("center_collider") == 0
+            ) {
+              log("hit center");
+              let entityComponent01 =
+                GlobalVariables.finalBoss.getComponent(FinalBossComponent);
+              if (
+                entityComponent01.leftlives > 0 ||
+                entityComponent01.rightlives > 0
+              ) {
+                return;
               }
-              entityComponent01.mainlives = entityComponent01.mainlives -1
-              if (entityComponent01.mainlives <0){
-                //bossdie
-                return
-              }else{
-              GlobalVariables.hitMain = true
-              golpeBoss()
-              fire_ent.getComponent(Transform).position.y = -50
+              entityComponent01.mainlives = entityComponent01.mainlives - 1;
+              if (entityComponent01.mainlives < 0) {
+                GlobalVariables.hitMainDie = true;
+              }
+              GlobalVariables.hitMain = true;
+              golpeBoss();
+              fire_ent.getComponent(Transform).position.y = -50;
               firemoveRight = false;
               firemoveLeft = false;
               firemoveUp = false;
               firemoveDown = false;
               firemoving = false;
+            } else if (
+              entityHit.entity.meshName.indexOf("left_collider") == 0
+            ) {
+              log("hit left");
+              let entityComponent01 =
+                GlobalVariables.finalBoss.getComponent(FinalBossComponent);
+              entityComponent01.leftlives = entityComponent01.leftlives - 1;
+              if (entityComponent01.leftlives < 0) {
+                GlobalVariables.hitLeftDie = true;
               }
-            }
-            else 
-            if (entityHit.entity.meshName.indexOf("left_collider") == 0) {
-              log("hit left")
-              let entityComponent01 = GlobalVariables.finalBoss.getComponent(FinalBossComponent)
-              entityComponent01.leftlives = entityComponent01.leftlives -1
-              if (entityComponent01.leftlives <0){
-                return
-              }else{
-                GlobalVariables.hitLeft = true
-                golpeBoss()
-                fire_ent.getComponent(Transform).position.y = -50
-                firemoveRight = false;
-                firemoveLeft = false;
-                firemoveUp = false;
-                firemoveDown = false;
-                firemoving = false;
+
+              GlobalVariables.hitLeft = true;
+              golpeBoss();
+              fire_ent.getComponent(Transform).position.y = -50;
+              firemoveRight = false;
+              firemoveLeft = false;
+              firemoveUp = false;
+              firemoveDown = false;
+              firemoving = false;
+            } else if (
+              entityHit.entity.meshName.indexOf("right_collider") == 0
+            ) {
+              log("hit right");
+              let entityComponent01 =
+                GlobalVariables.finalBoss.getComponent(FinalBossComponent);
+              entityComponent01.rightlives = entityComponent01.rightlives - 1;
+              if (entityComponent01.rightlives < 0) {
+                GlobalVariables.hitRightDie = true;
               }
-            }
-            else 
-            if (entityHit.entity.meshName.indexOf("right_collider") == 0) {
-              log("hit right")
-              let entityComponent01 = GlobalVariables.finalBoss.getComponent(FinalBossComponent)
-              entityComponent01.rightlives = entityComponent01.rightlives -1
-              if (entityComponent01.rightlives <0){
-                return
-              }else{
-                GlobalVariables.hitRight = true
-                golpeBoss()
-                fire_ent.getComponent(Transform).position.y = -50
-                firemoveRight = false;
-                firemoveLeft = false;
-                firemoveUp = false;
-                firemoveDown = false;
-                firemoving = false;
-              }
+              GlobalVariables.hitRight = true;
+              golpeBoss();
+              fire_ent.getComponent(Transform).position.y = -50;
+              firemoveRight = false;
+              firemoveLeft = false;
+              firemoveUp = false;
+              firemoveDown = false;
+              firemoving = false;
             }
           }
           if (hasWall) {
             bulletWall();
-            fire_ent.getComponent(Transform).position.y = -50
-/*             if (fire_ent.isAddedToEngine()) {
+            fire_ent.getComponent(Transform).position.y = -50;
+            /*             if (fire_ent.isAddedToEngine()) {
               engine.removeEntity(fire_ent);
             } */
             firemoveRight = false;
@@ -823,8 +840,8 @@ export class PlayerMovement {
         bulletWall();
         firemoveRight = false;
         firemoving = false;
-        fire_ent.getComponent(Transform).position.y = -50
-/*         if (fire_ent.isAddedToEngine()) {
+        fire_ent.getComponent(Transform).position.y = -50;
+        /*         if (fire_ent.isAddedToEngine()) {
           engine.removeEntity(fire_ent);
         } */
       }
@@ -836,8 +853,8 @@ export class PlayerMovement {
         bulletWall();
         firemoveLeft = false;
         firemoving = false;
-        fire_ent.getComponent(Transform).position.y = -50
-/*         if (fire_ent.isAddedToEngine()) {
+        fire_ent.getComponent(Transform).position.y = -50;
+        /*         if (fire_ent.isAddedToEngine()) {
           engine.removeEntity(fire_ent);
         } */
       }
@@ -850,8 +867,8 @@ export class PlayerMovement {
         firemoveDown = false;
         firemoving = false;
         bulletWall();
-        fire_ent.getComponent(Transform).position.y = -50
-/*         if (fire_ent.isAddedToEngine()) {
+        fire_ent.getComponent(Transform).position.y = -50;
+        /*         if (fire_ent.isAddedToEngine()) {
           engine.removeEntity(fire_ent);
         } */
       }
@@ -864,8 +881,8 @@ export class PlayerMovement {
         firemoveUp = false;
         firemoving = false;
         bulletWall();
-        fire_ent.getComponent(Transform).position.y = -50
-/*         if (fire_ent.isAddedToEngine()) {
+        fire_ent.getComponent(Transform).position.y = -50;
+        /*         if (fire_ent.isAddedToEngine()) {
           engine.removeEntity(fire_ent);
         } */
       }
@@ -892,12 +909,14 @@ export class PlayerMovement {
           let hitPlayer = false;
           if (direction == Direction.Up) {
             let firstDiff =
-              Math.floor(GlobalVariables.shipEntity.getComponent(Transform).position.z) -
-              Math.floor(newOriginPos.z);
+              Math.floor(
+                GlobalVariables.shipEntity.getComponent(Transform).position.z
+              ) - Math.floor(newOriginPos.z);
             if (firstDiff < 1.1 && firstDiff > -1.1) {
               let diff =
-                Math.floor(GlobalVariables.shipEntity.getComponent(Transform).position.x) -
-                Math.floor(newOriginPos.x);
+                Math.floor(
+                  GlobalVariables.shipEntity.getComponent(Transform).position.x
+                ) - Math.floor(newOriginPos.x);
 
               if (diff <= 2 && diff >= -2) {
                 hitPlayer = true;
@@ -917,12 +936,14 @@ export class PlayerMovement {
             }
           } else if (direction == Direction.Down) {
             let firstDiff =
-              Math.floor(GlobalVariables.shipEntity.getComponent(Transform).position.z) -
-              Math.floor(newOriginPos.z);
+              Math.floor(
+                GlobalVariables.shipEntity.getComponent(Transform).position.z
+              ) - Math.floor(newOriginPos.z);
             if (firstDiff < 1.1 && firstDiff > -1.1) {
               let diff =
-                Math.floor(GlobalVariables.shipEntity.getComponent(Transform).position.x) -
-                Math.floor(newOriginPos.x);
+                Math.floor(
+                  GlobalVariables.shipEntity.getComponent(Transform).position.x
+                ) - Math.floor(newOriginPos.x);
 
               if (diff <= 2 && diff >= -2) {
                 fantasmicoDetails.moving = false;
@@ -940,12 +961,14 @@ export class PlayerMovement {
             }
           } else if (direction == Direction.Right) {
             let firstDiff =
-              Math.floor(GlobalVariables.shipEntity.getComponent(Transform).position.x) -
-              Math.floor(newOriginPos.x);
+              Math.floor(
+                GlobalVariables.shipEntity.getComponent(Transform).position.x
+              ) - Math.floor(newOriginPos.x);
             if (firstDiff < 1.1 && firstDiff > -1.1) {
               let diff =
-                Math.floor(GlobalVariables.shipEntity.getComponent(Transform).position.z) -
-                Math.floor(newOriginPos.z);
+                Math.floor(
+                  GlobalVariables.shipEntity.getComponent(Transform).position.z
+                ) - Math.floor(newOriginPos.z);
 
               if (diff <= 2 && diff >= -2) {
                 fantasmicoDetails.moving = false;
@@ -963,12 +986,14 @@ export class PlayerMovement {
             }
           } else if (direction == Direction.Left) {
             let firstDiff =
-              Math.floor(GlobalVariables.shipEntity.getComponent(Transform).position.x) -
-              Math.floor(newOriginPos.x);
+              Math.floor(
+                GlobalVariables.shipEntity.getComponent(Transform).position.x
+              ) - Math.floor(newOriginPos.x);
             if (firstDiff < 1.1 && firstDiff > -1.1) {
               let diff =
-                Math.floor(GlobalVariables.shipEntity.getComponent(Transform).position.z) -
-                Math.floor(newOriginPos.z);
+                Math.floor(
+                  GlobalVariables.shipEntity.getComponent(Transform).position.z
+                ) - Math.floor(newOriginPos.z);
 
               if (diff <= 2 && diff >= -2) {
                 fantasmicoDetails.moving = false;
@@ -1001,12 +1026,14 @@ export class PlayerMovement {
         if (fantasmicoDetails.hitPlayer && fantasmicoDetails.moving) {
           if (fantasmicoDetails.direction == Direction.Up) {
             let firstDiff =
-              Math.floor(GlobalVariables.shipEntity.getComponent(Transform).position.z) -
-              Math.floor(transform.position.z);
+              Math.floor(
+                GlobalVariables.shipEntity.getComponent(Transform).position.z
+              ) - Math.floor(transform.position.z);
             if (firstDiff < 1.1 && firstDiff > -1.1) {
               let diff =
-                Math.floor(GlobalVariables.shipEntity.getComponent(Transform).position.x) -
-                Math.floor(transform.position.x);
+                Math.floor(
+                  GlobalVariables.shipEntity.getComponent(Transform).position.x
+                ) - Math.floor(transform.position.x);
               log("Diff" + diff);
               if (diff > -2.5 && diff < 2.5) {
                 if (fantasmicoDetails.lives > 0) {
@@ -1017,12 +1044,14 @@ export class PlayerMovement {
             }
           } else if (fantasmicoDetails.direction == Direction.Down) {
             let firstDiff =
-              Math.floor(GlobalVariables.shipEntity.getComponent(Transform).position.z) -
-              Math.floor(transform.position.z);
+              Math.floor(
+                GlobalVariables.shipEntity.getComponent(Transform).position.z
+              ) - Math.floor(transform.position.z);
             if (firstDiff < 1.1 && firstDiff > -1.1) {
               let diff =
-                Math.floor(GlobalVariables.shipEntity.getComponent(Transform).position.x) -
-                Math.floor(transform.position.x);
+                Math.floor(
+                  GlobalVariables.shipEntity.getComponent(Transform).position.x
+                ) - Math.floor(transform.position.x);
               log("Diff" + diff);
               if (diff > -2.5 && diff < 2.5) {
                 if (fantasmicoDetails.lives > 0) {
@@ -1033,12 +1062,14 @@ export class PlayerMovement {
             }
           } else if (fantasmicoDetails.direction == Direction.Right) {
             let firstDiff =
-              Math.floor(GlobalVariables.shipEntity.getComponent(Transform).position.x) -
-              Math.floor(transform.position.x);
+              Math.floor(
+                GlobalVariables.shipEntity.getComponent(Transform).position.x
+              ) - Math.floor(transform.position.x);
             if (firstDiff < 1.1 && firstDiff > -1.1) {
               let diff =
-                Math.floor(GlobalVariables.shipEntity.getComponent(Transform).position.z) -
-                Math.floor(transform.position.z);
+                Math.floor(
+                  GlobalVariables.shipEntity.getComponent(Transform).position.z
+                ) - Math.floor(transform.position.z);
               log("Diff" + diff);
               if (diff > -2.5 && diff < 2.5) {
                 if (fantasmicoDetails.lives > 0) {
@@ -1049,12 +1080,14 @@ export class PlayerMovement {
             }
           } else if (fantasmicoDetails.direction == Direction.Left) {
             let firstDiff =
-              Math.floor(GlobalVariables.shipEntity.getComponent(Transform).position.x) -
-              Math.floor(transform.position.x);
+              Math.floor(
+                GlobalVariables.shipEntity.getComponent(Transform).position.x
+              ) - Math.floor(transform.position.x);
             if (firstDiff < 1.1 && firstDiff > -1.1) {
               let diff =
-                Math.floor(GlobalVariables.shipEntity.getComponent(Transform).position.z) -
-                Math.floor(transform.position.z);
+                Math.floor(
+                  GlobalVariables.shipEntity.getComponent(Transform).position.z
+                ) - Math.floor(transform.position.z);
               log("Diff" + diff);
               if (diff > -2.5 && diff < 2.5) {
                 if (fantasmicoDetails.lives > 0) {
@@ -1080,8 +1113,9 @@ export class PlayerMovement {
           if (fantasmicoDetails.moving) {
             if (fantasmicoDetails.direction == Direction.Up) {
               let diff =
-                Math.floor(GlobalVariables.shipEntity.getComponent(Transform).position.x) -
-                Math.floor(transform.position.x);
+                Math.floor(
+                  GlobalVariables.shipEntity.getComponent(Transform).position.x
+                ) - Math.floor(transform.position.x);
               log("Diff" + diff);
 
               if (diff < -2 || diff > 2) {
@@ -1091,8 +1125,9 @@ export class PlayerMovement {
               }
             } else if (fantasmicoDetails.direction == Direction.Down) {
               let diff =
-                Math.floor(GlobalVariables.shipEntity.getComponent(Transform).position.x) -
-                Math.floor(transform.position.x);
+                Math.floor(
+                  GlobalVariables.shipEntity.getComponent(Transform).position.x
+                ) - Math.floor(transform.position.x);
               log("Diff" + diff);
 
               if (diff < -2 || diff > 2) {
@@ -1102,8 +1137,9 @@ export class PlayerMovement {
               }
             } else if (fantasmicoDetails.direction == Direction.Right) {
               let diff =
-                Math.floor(GlobalVariables.shipEntity.getComponent(Transform).position.z) -
-                Math.floor(transform.position.z);
+                Math.floor(
+                  GlobalVariables.shipEntity.getComponent(Transform).position.z
+                ) - Math.floor(transform.position.z);
               log("Diff" + diff);
 
               if (diff < -2 || diff > 2) {
@@ -1113,8 +1149,9 @@ export class PlayerMovement {
               }
             } else if (fantasmicoDetails.direction == Direction.Left) {
               let diff =
-                Math.floor(GlobalVariables.shipEntity.getComponent(Transform).position.z) -
-                Math.floor(transform.position.z);
+                Math.floor(
+                  GlobalVariables.shipEntity.getComponent(Transform).position.z
+                ) - Math.floor(transform.position.z);
               log("Diff" + diff);
               if (diff < -2 || diff > 2) {
                 transform.position.z = transform.position.z + velocity * dt;

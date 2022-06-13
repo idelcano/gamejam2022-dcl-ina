@@ -4,9 +4,14 @@ import { Level0 } from "./levels/level0";
 import { Level1 } from "./levels/level1";
 import { Level2 } from "./levels/level2";
 import { Level3 } from "./levels/level3";
+import { setInaData } from "./network/player";
 
 //common for all the maps:
 //engine.addEntity(border);
+
+executeTask(async () => {
+    setInaData()
+})
 
 const level1 : Level = new Level0()
 GlobalVariables.level1 = new Level1()

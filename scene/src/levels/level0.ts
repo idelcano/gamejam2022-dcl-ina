@@ -5,7 +5,7 @@ import { GlobalVariables } from "src/Global/globalValues";
 import { Level } from "src/levels/level";
 import { Level1 } from "./level1";
 import * as utils from "@dcl/ecs-scene-utils";
-
+import { getInaData } from "src/network/player";
 export class Level0 implements Level {
   complete() {
     if (this.map.isAddedToEngine()) engine.removeEntity(this.map);
@@ -23,8 +23,7 @@ export class Level0 implements Level {
   start() {
     //first map
     let map_glb = new GLTFShape("models/maps/mapa0.glb");
-    let bluechip = new GLTFShape("models/maps/bluechip.glb");
-
+    let bluechip1_glb = new GLTFShape("models/maps/bluechip.glb");
     this.map.addComponent(map_glb);
     this.map.addComponent(
       new Transform({
@@ -34,7 +33,7 @@ export class Level0 implements Level {
     );
     engine.addEntity(this.map);
 
-    this.cube.addComponent(bluechip);
+    this.cube.addComponent(bluechip1_glb);
     this.cube.addComponent(
       new Transform({
         position: new Vector3(8, -2, 8),
