@@ -23,6 +23,7 @@ export class GlobalVariables {
   static hitMainDie: boolean = false;
   static movingMain: boolean = false;
   static finalBoss: Entity;
+  static gamefinish: boolean = false;
 }
 export function activateUI(){
 let healthLabel = new ui.CornerLabel(

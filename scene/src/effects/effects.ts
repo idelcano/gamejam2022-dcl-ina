@@ -11,9 +11,10 @@ import {
   firstIntro,
   thirdintro,
   gameover,
+  gameendtext,
 } from "src/ui/ui";
 import { DialogWindow } from "@dcl/npc-scene-utils";
-import { gameovernot } from "src/dialogs/dialogs";
+import { gamefinishA, gamefinishB, gamefinishC, gameovernot } from "src/dialogs/dialogs";
 
 const cube = new Entity();
 const cube2 = new Entity();
@@ -146,6 +147,41 @@ export function gameoverui() {
     hidegameoverui();
   });
 }
+
+
+export function gameend() {
+  yeah();
+  
+  utils.setTimeout(1000, () => {
+    let dialogWindow = new DialogWindow();
+    dialogWindow.openDialogWindow(gamefinishA, 0);
+  });
+}
+
+
+export function gamebad() {
+  firstPersonText.visible = true;
+  gameendtext.visible = true;
+  malorisa()
+  firstPersonText.visible = true;
+  utils.setTimeout(1000, () => {
+    let dialogWindow = new DialogWindow();
+    dialogWindow.openDialogWindow(gamefinishB, 0);
+  });
+}
+
+
+export function gamegood() {
+  firstPersonText.visible = true;
+  gameendtext.visible = true;
+  yeah();
+  firstPersonText.visible = true;
+  utils.setTimeout(1000, () => {
+    let dialogWindow = new DialogWindow();
+    dialogWindow.openDialogWindow(gamefinishC, 0);
+  });
+}
+
 export function hidegameoverui() {
   firstPersonText.visible = false;
   gameover.visible = false;

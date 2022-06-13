@@ -69,6 +69,13 @@ gameover.positionX = "-15%"
 gameover.color = Color4.Red()
 gameover.visible=false
 
+export const gameendtext = new UIText(canvas)
+gameendtext.value = "Thanks for playing!"
+gameendtext.font = new Font(Fonts.SanFrancisco)
+gameendtext.fontSize = 20
+gameendtext.positionX = "-15%"
+gameendtext.color = Color4.Red()
+gameendtext.visible=false
 export const levelCompleted = new UIText(canvas)
 levelCompleted.value = "Congrats! Level completed. Loading next level..."
 levelCompleted.font = new Font(Fonts.SanFrancisco)

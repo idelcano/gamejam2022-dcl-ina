@@ -105,3 +105,73 @@ export let gameovernot: npc.Dialog[] = [
         },
     },
 ]
+export let gamefinishA: npc.Dialog[] = [
+    {
+        text: "You did it!!!\nCool!!\nNow you can open one of the jails.\nHey... I hope you don't choose the blue chip again!",
+        isEndOfDialog: true,
+        image:{
+            path: face,
+            height: 250,
+            width: 230,
+            offsetX: -700,
+            offsetY: -50,
+        },
+    },
+]
+export let gamefinishC: npc.Dialog[] = [
+    {
+        text: "I can't believe you're save me!!!...\nThank you, I can only paraphrase Quevedo",
+        image:{
+            path: face,
+            height: 250,
+            width: 230,
+            offsetX: -700,
+            offsetY: -50,
+        },
+    },
+    {
+        text: "El amigo ha de ser como la sangre,\nque acude luego a la herida sin esperar a que le llamen. \n- Francisco de Quevedo",
+        isEndOfDialog: true,
+        image:{
+            path: face,
+            height: 250,
+            width: 230,
+            offsetX: -700,
+            offsetY: -50,
+        },
+    }
+]
+
+export let gamefinishB: npc.Dialog[] = [
+    {
+        text: "I can't believe you're leaving me locked up here...\nI can only paraphrase Quevedo",
+        image:{
+            path: face,
+            height: 250,
+            width: 230,
+            offsetX: -700,
+            offsetY: -50,
+        },
+    },
+    {
+        text: "A un avariento\nEn aqueste enterramiento\nhumilde, pobre y mezquino,\nyace envuelto en oro fino\nun hombre rico avariento.",
+        image:{
+            path: face,
+            height: 250,
+            width: 230,
+            offsetX: -700,
+            offsetY: -50,
+        },
+    },
+    {
+        text: "Murió con cien mil dolores\nsin poderlo remediar,\ntan sólo por no gastar\nni aun gasta malos humores.\n- Francisco de Quevedo",
+        isEndOfDialog: true,
+        image:{
+            path: face,
+            height: 250,
+            width: 230,
+            offsetX: -700,
+            offsetY: -50,
+        },
+    },
+]

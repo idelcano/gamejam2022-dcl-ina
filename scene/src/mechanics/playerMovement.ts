@@ -740,13 +740,20 @@ export class PlayerMovement {
                 entityComponent01.leftlives > 0 ||
                 entityComponent01.rightlives > 0
               ) {
-                return;
+                fire_ent.getComponent(Transform).position.y = -50;
+                firemoveRight = false;
+                firemoveLeft = false;
+                firemoveUp = false;
+                firemoveDown = false;
+                firemoving = false;
+                return
               }
               entityComponent01.mainlives = entityComponent01.mainlives - 1;
-              if (entityComponent01.mainlives < 0) {
+              if (entityComponent01.mainlives < 0 && !GlobalVariables.hitMainDie) {
                 GlobalVariables.hitMainDie = true;
+              }else{
+                GlobalVariables.hitMain = true;
               }
-              GlobalVariables.hitMain = true;
               golpeBoss();
               fire_ent.getComponent(Transform).position.y = -50;
               firemoveRight = false;
@@ -761,12 +768,11 @@ export class PlayerMovement {
               let entityComponent01 =
                 GlobalVariables.finalBoss.getComponent(FinalBossComponent);
               entityComponent01.leftlives = entityComponent01.leftlives - 1;
-              if (entityComponent01.leftlives < 0) {
+              if (entityComponent01.leftlives < 0 && !GlobalVariables.hitLeftDie) {
                 GlobalVariables.hitLeftDie = true;
+              }else{
+                GlobalVariables.hitLeft = true;
               }
-
-              GlobalVariables.hitLeft = true;
-              golpeBoss();
               fire_ent.getComponent(Transform).position.y = -50;
               firemoveRight = false;
               firemoveLeft = false;
@@ -780,11 +786,11 @@ export class PlayerMovement {
               let entityComponent01 =
                 GlobalVariables.finalBoss.getComponent(FinalBossComponent);
               entityComponent01.rightlives = entityComponent01.rightlives - 1;
-              if (entityComponent01.rightlives < 0) {
+              if (entityComponent01.rightlives < 0 && !GlobalVariables.hitRightDie) {
                 GlobalVariables.hitRightDie = true;
+              }else{
+                GlobalVariables.hitRight = true;
               }
-              GlobalVariables.hitRight = true;
-              golpeBoss();
               fire_ent.getComponent(Transform).position.y = -50;
               firemoveRight = false;
               firemoveLeft = false;
