@@ -156,6 +156,7 @@ export function hitui() {
   utils.setTimeout(200, () => {
     doorHit1.visible = false;
     doorHit2.visible = true;
+    GlobalVariables.lives = GlobalVariables.lives - 10;
     GlobalVariables.livesui.decrease(10);
   });
   utils.setTimeout(300, () => {

@@ -139,8 +139,8 @@ export class Level1 implements Level {
       if (!doorask3.isAddedToEngine()) {
         return;
       }
-      GlobalVariables.lives = GlobalVariables.lives - 1;
-      GlobalVariables.livesui.decrease();
+      GlobalVariables.lives = GlobalVariables.lives - 10;
+      GlobalVariables.livesui.decrease(10);
       engine.removeEntity(doorask3);
       hitui();
     };
@@ -150,8 +150,8 @@ export class Level1 implements Level {
       if (!doorask2.isAddedToEngine()) {
         return;
       }
-      GlobalVariables.lives = GlobalVariables.lives - 1;
-      GlobalVariables.livesui.decrease();
+      GlobalVariables.lives = GlobalVariables.lives - 10;
+      GlobalVariables.livesui.decrease(10);
       engine.removeEntity(doorask2);
       hitui();
     };

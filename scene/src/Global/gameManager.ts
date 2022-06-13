@@ -12,7 +12,7 @@ export function loadGameMechanics(){
 export function completeLevel0() {
     GlobalVariables.level.complete();
     loadGameMechanics()
-    GlobalVariables.level = GlobalVariables.level1;
+    GlobalVariables.level = GlobalVariables.level3;
     activateUI()
   
     GlobalVariables.level.start()

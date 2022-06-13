@@ -7,7 +7,7 @@ const question = [
        "anwser3":"60910"
     },
     {
-       "question":"What is the sice of a single land?",
+       "question":"What is the size of a single land?",
        "anwser1":"16x16",
        "anwser2":"10x10",
        "anwser3":"20x20"

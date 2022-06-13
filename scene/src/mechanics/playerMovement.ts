@@ -40,7 +40,7 @@ const moveMeters = 1;
 let glb = new GLTFShape("models/player/block_user_col.glb");
 let glb_bullet = new GLTFShape("models/items/bullet.glb");
 let fire_ent = new Entity("bullet");
-
+fire_ent.addComponentOrReplace(glb_bullet);
 GlobalVariables.shipEntity = new Entity();
 
 let physicsCast = PhysicsCast.instance;
@@ -137,6 +137,7 @@ export class PlayerMovement {
     });
     input.subscribe("BUTTON_UP", ActionButton.WALK, false, (e) => {
       log("pointer Up", e);
+      if(moving) return;
       if (firemoving) {
         startMove = 0;
         emptyMove = true;
@@ -234,6 +235,8 @@ export class PlayerMovement {
 
         }
         if(gameover){
+          GlobalVariables.lives = GlobalVariables.lives - 10;
+          GlobalVariables.steps = GlobalVariables.steps - 1000;
           GlobalVariables.livesui.increase(100)
           GlobalVariables.stepsui.increase(1000)
           gameover = false
@@ -255,6 +258,7 @@ export class PlayerMovement {
               moveUp = false;
               moving = false;
               hitFantasmicos();
+              GlobalVariables.steps = GlobalVariables.steps + 1;
               GlobalVariables.stepsui.increase();
             }
           } else if (moveDown) {
@@ -266,6 +270,7 @@ export class PlayerMovement {
               moveDown = false;
               moving = false;
               hitFantasmicos();
+              GlobalVariables.steps = GlobalVariables.steps + 1;
               GlobalVariables.stepsui.increase();
             }
           } else if (moveLeft) {
@@ -275,6 +280,7 @@ export class PlayerMovement {
               moveLeft = false;
               moving = false;
               hitFantasmicos();
+              GlobalVariables.steps = GlobalVariables.steps + 1;
               GlobalVariables.stepsui.increase();
             }
             log(transform.position.z);
@@ -285,6 +291,7 @@ export class PlayerMovement {
               moveRight = false;
               moving = false;
               hitFantasmicos();
+              GlobalVariables.steps = GlobalVariables.steps + 1;
               GlobalVariables.stepsui.increase();
             }
             log(transform.position.z);
@@ -294,6 +301,7 @@ export class PlayerMovement {
             moveRotateLeft = false;
             moving = false;
             hitFantasmicos();
+            GlobalVariables.steps = GlobalVariables.steps + 1;
             GlobalVariables.stepsui.increase();
           } else if (moveRotateRight) {
             let transform = GlobalVariables.shipEntity.getComponent(Transform);
@@ -301,6 +309,7 @@ export class PlayerMovement {
             moveRotateRight = false;
             moving = false;
             hitFantasmicos();
+            GlobalVariables.steps = GlobalVariables.steps + 1;
             GlobalVariables.stepsui.increase();
           }
         }
@@ -388,6 +397,7 @@ export class PlayerMovement {
             if (startMove >= endMove) {
               emptyMove = false;
               hitFantasmicos();
+              GlobalVariables.steps = GlobalVariables.steps + 1;
               GlobalVariables.stepsui.increase();
             }
           }
@@ -462,10 +472,9 @@ export class PlayerMovement {
           scale: new Vector3(0.02, 0.02, 0.02),
         })
       );
-      fire_ent.addComponentOrReplace(glb_bullet);
-
-      openfire();
       engine.addEntity(fire_ent);
+        log(originFire)
+      openfire();
 
       let triggerBox = new utils.TriggerBoxShape(new Vector3(0.2, 0.2, 0.2));
       fire_ent.addComponentOrReplace(
@@ -482,20 +491,25 @@ export class PlayerMovement {
                 engine.removeEntity(entity);
                 GlobalVariables.activeFantasmicos;
               }
-              engine.removeEntity(fire_ent);
               firemoveDown = false;
               firemoveLeft = false;
               firemoveRight = false;
               firemoveUp = false;
               firemoving = false;
-            } else {
-              engine.removeEntity(fire_ent);
+              fire_ent.getComponent(Transform).position.y = -50
+              /* if (fire_ent.isAddedToEngine())
+              engine.removeEntity(fire_ent); */
+            } 
+/*             else {
               firemoveDown = false;
               firemoveLeft = false;
               firemoveRight = false;
               firemoveUp = false;
               firemoving = false;
-            }
+              fire_ent.getComponent(Transform).position.y = -50
+               if (fire_ent.isAddedToEngine())
+              engine.removeEntity(fire_ent); 
+            } */
           },
           enableDebug: false,
         })
@@ -692,6 +706,7 @@ export class PlayerMovement {
         (e) => {
           if (e == undefined) {
             return;
+            log("bullet raycast undefined")
           }
           for (let entityHit of e.entities) {
             log(entityHit.entity.meshName);
@@ -701,9 +716,10 @@ export class PlayerMovement {
           }
           if (hasWall) {
             bulletWall();
-            if (fire_ent.isAddedToEngine()) {
+            fire_ent.getComponent(Transform).position.y = -50
+/*             if (fire_ent.isAddedToEngine()) {
               engine.removeEntity(fire_ent);
-            }
+            } */
             firemoveRight = false;
             firemoveLeft = false;
             firemoveUp = false;
@@ -741,51 +757,55 @@ export class PlayerMovement {
     function continueFireRight() {
       let transform = fire_ent.getComponent(Transform);
       transform.position.z = transform.position.z - velocity * auxiliar_dt;
-      if (transform.position.z >= 16 || transform.position.z <= 0) {
+      if (transform.position.z >= 15 || transform.position.z <= 1) {
         bulletWall();
-        if (fire_ent.isAddedToEngine()) {
-          engine.removeEntity(fire_ent);
-        }
         firemoveRight = false;
         firemoving = false;
+        fire_ent.getComponent(Transform).position.y = -50
+/*         if (fire_ent.isAddedToEngine()) {
+          engine.removeEntity(fire_ent);
+        } */
       }
     }
     function continueFireLeft() {
       let transform = fire_ent.getComponent(Transform);
       transform.position.z = transform.position.z + velocity * auxiliar_dt;
-      if (transform.position.z >= 16 || transform.position.z <= 0) {
+      if (transform.position.z >= 15 || transform.position.z <= 1) {
         bulletWall();
-        if (fire_ent.isAddedToEngine()) {
-          engine.removeEntity(fire_ent);
-        }
         firemoveLeft = false;
         firemoving = false;
+        fire_ent.getComponent(Transform).position.y = -50
+/*         if (fire_ent.isAddedToEngine()) {
+          engine.removeEntity(fire_ent);
+        } */
       }
     }
 
     function continueFireDown() {
       let transform = fire_ent.getComponent(Transform);
       transform.position.x = transform.position.x - velocity * auxiliar_dt;
-      if (transform.position.x >= 16 || transform.position.x <= 0) {
-        bulletWall();
-        if (fire_ent.isAddedToEngine()) {
-          engine.removeEntity(fire_ent);
-        }
+      if (transform.position.x >= 15 || transform.position.x <= 1) {
         firemoveDown = false;
         firemoving = false;
+        bulletWall();
+        fire_ent.getComponent(Transform).position.y = -50
+/*         if (fire_ent.isAddedToEngine()) {
+          engine.removeEntity(fire_ent);
+        } */
       }
     }
 
     function continueFireUp() {
       let transform = fire_ent.getComponent(Transform);
       transform.position.x = transform.position.x + velocity * auxiliar_dt;
-      if (transform.position.x >= 16 || transform.position.x <= 0) {
-        bulletWall();
-        if (fire_ent.isAddedToEngine()) {
-          engine.removeEntity(fire_ent);
-        }
+      if (transform.position.x >= 15 || transform.position.x <= 1) {
         firemoveUp = false;
         firemoving = false;
+        bulletWall();
+        fire_ent.getComponent(Transform).position.y = -50
+/*         if (fire_ent.isAddedToEngine()) {
+          engine.removeEntity(fire_ent);
+        } */
       }
     }
 
@@ -926,7 +946,7 @@ export class PlayerMovement {
                 Math.floor(GlobalVariables.shipEntity.getComponent(Transform).position.x) -
                 Math.floor(transform.position.x);
               log("Diff" + diff);
-              if (diff > -2 && diff < 2) {
+              if (diff > -2.5 && diff < 2.5) {
                 if (fantasmicoDetails.lives > 0) {
                   hitui();
                 }
@@ -942,7 +962,7 @@ export class PlayerMovement {
                 Math.floor(GlobalVariables.shipEntity.getComponent(Transform).position.x) -
                 Math.floor(transform.position.x);
               log("Diff" + diff);
-              if (diff > -2 && diff < 2) {
+              if (diff > -2.5 && diff < 2.5) {
                 if (fantasmicoDetails.lives > 0) {
                   hitui();
                 }
@@ -958,7 +978,7 @@ export class PlayerMovement {
                 Math.floor(GlobalVariables.shipEntity.getComponent(Transform).position.z) -
                 Math.floor(transform.position.z);
               log("Diff" + diff);
-              if (diff > -2 && diff < 2) {
+              if (diff > -2.5 && diff < 2.5) {
                 if (fantasmicoDetails.lives > 0) {
                   hitui();
                 }
@@ -974,7 +994,7 @@ export class PlayerMovement {
                 Math.floor(GlobalVariables.shipEntity.getComponent(Transform).position.z) -
                 Math.floor(transform.position.z);
               log("Diff" + diff);
-              if (diff > -2 && diff < 2) {
+              if (diff > -2.5 && diff < 2.5) {
                 if (fantasmicoDetails.lives > 0) {
                   hitui();
                 }
