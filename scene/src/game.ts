@@ -6,8 +6,6 @@ import { Level2 } from "./levels/level2";
 import { Level3 } from "./levels/level3";
 import { setInaData } from "./network/player";
 import * as utils from "@dcl/ecs-scene-utils";
-import { getScores } from "./network/score";
-import { gameendscore } from "./ui/ui";
 
 //common for all the maps:
 //engine.addEntity(border);
@@ -49,18 +47,3 @@ GlobalVariables.level3 = new Level3()
 level1.start()
 GlobalVariables.level = level1
 
-
-
-executeTask(async () => {
- 
-    let scores = await getScores()
-    let stringify_score =""
-    for(let score of await scores) {
-      stringify_score = "Name: "+score["name"] + " score: "+score["score"] + " final: "+ score["comment"] + "\n" + stringify_score
-      
-    }
-    log(stringify_score)
-    stringify_score = stringify_score+ "\n\nThanks for playing!\nRefresh or move to \nanother location.\nSpecial thanks to Okita\n for its tests"
-    gameendscore.value= stringify_score
-    gameendscore.visible=true
-    })
