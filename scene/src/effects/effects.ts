@@ -212,9 +212,10 @@ export function gamegood() {
       
     }
     log(stringify_score)
-    stringify_score = stringify_score+ "\n\nThanks for playing!\nRefresh or move to \nanother location.\nSpecial thanks to Okita\n for its tests"
+    stringify_score = stringify_score+ "\n\nThanks for playing!\nRemember that less score its better in this game!\nRefresh or move to another location.\nSpecial thanks to Okita for its tests"
     gameendscore.value= stringify_score
     gameendscore.visible=true
+    info1.visible = false
     })
   let dialogWindow = new DialogWindow();
   dialogWindow.openDialogWindow(gamefinishC, 0);
