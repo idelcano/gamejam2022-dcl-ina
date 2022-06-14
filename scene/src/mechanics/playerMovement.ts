@@ -8,11 +8,11 @@ import {
   openfire,
   walk,
 } from "src/effects/effects";
-import { GlobalVariables } from "src/Global/globalValues";
 import { getData } from "../network/player";
 import * as utils from "@dcl/ecs-scene-utils";
 import { Direction, FantasmicoDetails } from "./fantasmicoEnemy";
 import { FinalBossComponent } from "src/levels/level3";
+import { GlobalVariables } from "src/Global/globalValues";
 
 const velocity = 0.5;
 const distance = 1.5;
@@ -23,7 +23,7 @@ let firemoveDown = false;
 let firemoveLeft = false;
 let firemoveRight = false;
 let firemoving = false;
-let emptyMove = false;
+GlobalVariables.emptyMove = false;
 let startMove = 0;
 const endMove = 1;
 let moveUp = false;
@@ -33,7 +33,7 @@ let moveRight = false;
 let moveRotateRight = false;
 let moveRotateLeft = false;
 let rotationDiff = 0;
-let moving = false;
+GlobalVariables.moving = false;
 // button up event
 let maxXPos = 1;
 let maxZPos = 1;
@@ -56,7 +56,7 @@ export function restart() {
   firemoveLeft = false;
   firemoveRight = false;
   firemoving = false;
-  emptyMove = false;
+  GlobalVariables.emptyMove = false;
   startMove = 0;
   moveUp = false;
   moveDown = false;
@@ -65,7 +65,7 @@ export function restart() {
   moveRotateRight = false;
   moveRotateLeft = false;
   let rotationDiff = 0;
-  moving = false;
+  GlobalVariables.moving = false;
   maxXPos = 1;
   maxZPos = 1;
   auxiliar_dt = 0;
@@ -139,10 +139,11 @@ export class PlayerMovement {
     });
     input.subscribe("BUTTON_UP", ActionButton.WALK, false, (e) => {
       log("pointer Up", e);
-      if (moving) return;
+      if (GlobalVariables.moving) return;
       if (firemoving) {
         startMove = 0;
-        emptyMove = true;
+        GlobalVariables.emptyMove = true;
+        GlobalVariables.bossMoving = true;
         return;
       }
       if (rotationDiff == 0) {
@@ -197,8 +198,9 @@ export class PlayerMovement {
 
     input.subscribe("BUTTON_UP", ActionButton.PRIMARY, false, (e) => {
       log("pointer Up", e);
-      if (!moving) {
-        moving = true;
+      if (!GlobalVariables.moving) {
+        GlobalVariables.moving = true;
+        GlobalVariables.bossMoving = true;
         moveRotateRight = true;
         position = GlobalVariables.shipEntity.getComponent(Transform);
         rotationDiff = rotationDiff - 1;
@@ -210,8 +212,9 @@ export class PlayerMovement {
 
     input.subscribe("BUTTON_UP", ActionButton.SECONDARY, false, (e) => {
       log("pointer Up", e);
-      if (!moving) {
-        moving = true;
+      if (!GlobalVariables.moving) {
+        GlobalVariables.moving = true;
+        GlobalVariables.bossMoving = true;
         moveRotateLeft = true;
         position = GlobalVariables.shipEntity.getComponent(Transform);
         rotationDiff = rotationDiff + 1;
@@ -222,7 +225,7 @@ export class PlayerMovement {
     });
     class FantasmicosSimpleMove implements ISystem {
       update(dt: number) {
-        if (moving) {
+        if (GlobalVariables.moving) {
           //detect player or hit
           fantasmicosMovements(dt);
         }
@@ -243,7 +246,7 @@ export class PlayerMovement {
           gameover = false;
           gameoverui();
         }
-        if (moving) {
+        if (GlobalVariables.moving) {
           if (!isWrapped) {
             isWrapped = true;
             GlobalVariables.shipEntity
@@ -259,7 +262,7 @@ export class PlayerMovement {
             if (transform.position.x >= maxXPos) {
               transform.position.x = maxXPos;
               moveUp = false;
-              moving = false;
+              GlobalVariables.moving = false;
               hitFantasmicos();
               GlobalVariables.steps = GlobalVariables.steps + 1;
               GlobalVariables.stepsui.increase();
@@ -271,7 +274,7 @@ export class PlayerMovement {
             if (transform.position.x <= maxXPos) {
               transform.position.x = maxXPos;
               moveDown = false;
-              moving = false;
+              GlobalVariables.moving = false;
               hitFantasmicos();
               GlobalVariables.steps = GlobalVariables.steps + 1;
               GlobalVariables.stepsui.increase();
@@ -281,7 +284,7 @@ export class PlayerMovement {
             if (transform.position.z >= maxZPos) {
               transform.position.z = maxZPos;
               moveLeft = false;
-              moving = false;
+              GlobalVariables.moving = false;
               hitFantasmicos();
               GlobalVariables.steps = GlobalVariables.steps + 1;
               GlobalVariables.stepsui.increase();
@@ -292,7 +295,7 @@ export class PlayerMovement {
             if (transform.position.z <= maxZPos) {
               transform.position.z = maxZPos;
               moveRight = false;
-              moving = false;
+              GlobalVariables.moving = false;
               hitFantasmicos();
               GlobalVariables.steps = GlobalVariables.steps + 1;
               GlobalVariables.stepsui.increase();
@@ -302,7 +305,7 @@ export class PlayerMovement {
             let transform = GlobalVariables.shipEntity.getComponent(Transform);
             transform.rotate(new Vector3(0, 1, 0), 90);
             moveRotateLeft = false;
-            moving = false;
+            GlobalVariables.moving = false;
             hitFantasmicos();
             GlobalVariables.steps = GlobalVariables.steps + 1;
             GlobalVariables.stepsui.increase();
@@ -310,14 +313,14 @@ export class PlayerMovement {
             let transform = GlobalVariables.shipEntity.getComponent(Transform);
             transform.rotate(new Vector3(0, 1, 0), -90);
             moveRotateRight = false;
-            moving = false;
+            GlobalVariables.moving = false;
             hitFantasmicos();
             GlobalVariables.steps = GlobalVariables.steps + 1;
             GlobalVariables.stepsui.increase();
           }
         }
-        if (moving || emptyMove) {
-          if (firemoving || emptyMove) {
+        if (GlobalVariables.moving || GlobalVariables.emptyMove) {
+          if (firemoving || GlobalVariables.emptyMove) {
             if (firemoveUp) {
               let transform = fire_ent.getComponent(Transform);
               let newOriginPos = new Vector3(
@@ -393,12 +396,12 @@ export class PlayerMovement {
               );
             }
           }
-          if (emptyMove) {
+          if (GlobalVariables.emptyMove) {
             startMove = startMove + velocity * dt;
 
             //log("startmove" + startMove);
             if (startMove >= endMove) {
-              emptyMove = false;
+              GlobalVariables.emptyMove = false;
               hitFantasmicos();
               GlobalVariables.steps = GlobalVariables.steps + 1;
               GlobalVariables.stepsui.increase();
@@ -519,6 +522,7 @@ export class PlayerMovement {
         })
       );
       firemoving = true;
+      GlobalVariables.bossMoving = true;
     }
 
     function moveForward() {
@@ -541,10 +545,11 @@ export class PlayerMovement {
       if (localPos >= 15 || hasWall) {
         return;
       }
-      if (!moving) {
+      if (!GlobalVariables.moving) {
         position = GlobalVariables.shipEntity.getComponent(Transform);
         maxXPos = position.position.x + moveMeters;
-        moving = true;
+        GlobalVariables.moving = true;
+        GlobalVariables.bossMoving = true;
         moveUp = true;
       }
     }
@@ -568,10 +573,11 @@ export class PlayerMovement {
       if (localPos <= 1 || hasWall) {
         return;
       }
-      if (!moving) {
+      if (!GlobalVariables.moving) {
         position = GlobalVariables.shipEntity.getComponent(Transform);
         maxXPos = position.position.x - moveMeters;
-        moving = true;
+        GlobalVariables.moving = true;
+        GlobalVariables.bossMoving = true;
         moveDown = true;
       }
     }
@@ -594,10 +600,11 @@ export class PlayerMovement {
       if (localPos >= 15 || hasWall) {
         return;
       }
-      if (!moving) {
+      if (!GlobalVariables.moving) {
         position = GlobalVariables.shipEntity.getComponent(Transform);
         maxZPos = position.position.z + moveMeters;
-        moving = true;
+        GlobalVariables.moving = true;
+        GlobalVariables.bossMoving = true;
         moveLeft = true;
       }
     }
@@ -621,10 +628,11 @@ export class PlayerMovement {
       if (localPos <= 1 || hasWall) {
         return;
       }
-      if (!moving) {
+      if (!GlobalVariables.moving) {
         position = GlobalVariables.shipEntity.getComponent(Transform);
         maxZPos = position.position.z - moveMeters;
-        moving = true;
+        GlobalVariables.moving = true;
+        GlobalVariables.bossMoving = true;
         moveRight = true;
       }
     }

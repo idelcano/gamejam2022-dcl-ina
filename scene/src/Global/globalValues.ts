@@ -24,6 +24,9 @@ export class GlobalVariables {
   static movingMain: boolean = false;
   static finalBoss: Entity;
   static gamefinish: boolean = false;
+  static bossMoving = false
+  static moving = false
+  static emptyMove = false
 }
 export function activateUI(){
 let healthLabel = new ui.CornerLabel(
