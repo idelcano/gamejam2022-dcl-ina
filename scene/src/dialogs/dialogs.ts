@@ -39,7 +39,7 @@ export let heyhello: npc.Dialog[] = [
         },
 
     {
-        text: "And only for you know! you could move in any direction using asdw, and rotate your mecha with e and d!",
+        text: "And only for you know! you could move in any direction using asdw, and rotate your mecha with e and f!",
         isEndOfDialog: true,
         image: {
             path: face,

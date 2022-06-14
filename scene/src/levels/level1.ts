@@ -17,6 +17,7 @@ import {
 import { Level } from "src/levels/level";
 import { movePlayerTo } from "@decentraland/RestrictedActions";
 import { completeLevel1 } from "src/Global/gameManager";
+import { info1 } from "src/ui/ui";
 let power_up_glb = new GLTFShape("models/items/powerup.glb");
 let powerUp2 = new Entity();
 let powerUp1 = new Entity();

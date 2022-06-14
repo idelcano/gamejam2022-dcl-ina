@@ -12,6 +12,8 @@ import {
   thirdintro,
   gameover,
   gameendtext,
+  info,
+  info1,
 } from "src/ui/ui";
 import { DialogWindow } from "@dcl/npc-scene-utils";
 import { gamefinishA, gamefinishB, gamefinishC, gameovernot } from "src/dialogs/dialogs";
@@ -132,6 +134,7 @@ export function intro() {
   utils.setTimeout(8000, () => {
     firstPersonText.visible = false;
     endIntro.visible = false;
+    info1.visible=true
   });
 }
 
@@ -146,6 +149,16 @@ export function gameoverui() {
   utils.setTimeout(3000, () => {
     hidegameoverui();
   });
+}
+
+export function showInfo() {
+  firstPersonText.visible = !firstPersonText.visible;
+  info.visible = !info.visible;
+}
+
+export function hideInfo() {;
+  firstPersonText.visible = false;
+  info.visible = true;
 }
 
 

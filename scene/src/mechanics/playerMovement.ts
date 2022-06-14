@@ -3,9 +3,11 @@ import {
   bulletWall,
   gameoverui,
   golpeBoss,
+  hideInfo,
   hitFantasmicoSound,
   hitui,
   openfire,
+  showInfo,
   walk,
 } from "src/effects/effects";
 import { getData } from "../network/player";
@@ -126,6 +128,21 @@ export class PlayerMovement {
     playerPanel.setParent(GlobalVariables.shipEntity);
     const input = Input.instance;
     let position = GlobalVariables.shipEntity.getComponent(Transform);
+    input.subscribe("BUTTON_UP", ActionButton.ACTION_3, false, (e) => {
+      log("pointer Up", e);
+      if (GlobalVariables.startGame){
+        showInfo()
+      }
+    });
+
+    input.subscribe("BUTTON_UP", ActionButton.ACTION_4, false, (e) => {
+      log("pointer Up", e);
+      if (GlobalVariables.startGame){
+      swapUser()
+      }
+      
+    });
+    
     input.subscribe("BUTTON_UP", ActionButton.FORWARD, false, (e) => {
       log("pointer Up", e);
       if (rotationDiff == 0) {
@@ -1195,3 +1212,13 @@ export class PlayerMovement {
     }
   }
 }
+function swapUser() {
+  GlobalVariables.shipEntity.getComponent(Transform).position.x = 1;
+  GlobalVariables.shipEntity.getComponent(Transform).position.z = 8;
+  GlobalVariables.shipEntity.getComponent(Transform).position.y = 0;
+  GlobalVariables.shipEntity.getComponent(Transform).scale.setAll(0.85);
+  executeTask(async () => {
+    movePlayerTo({ x: 1, y: 0, z: 8 });
+  })
+}
+

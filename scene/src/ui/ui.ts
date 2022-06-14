@@ -73,14 +73,36 @@ export const turnEnd = new UIText(canvas)
 turnEnd.value = "Turn End. Wait!"
 turnEnd.font = new Font(Fonts.SanFrancisco)
 turnEnd.fontSize = 20
-turnEnd.positionX = "-10%"
+turnEnd.vAlign = "center"
 turnEnd.color = Color4.Yellow()
 turnEnd.visible=false
+
+export const info = new UIText(canvas)
+info.value = "This game is based on turns. Please wait to the next turn to do next action.\n\nUse asdw to move\n\nUse E oe F to rotate\n\nUse shift to fire or move next turn if you alreeady do fire\nThis demo have 3 levels:\n\n1 leveL: Simple level with some lives hidden\n\n2 level: kill some enemies to move to the next level\n\n3 level: kill the final boss and end the game.\n\nKnowed bugs, some old computers could make \nyour avatar swap out of the \"MECHA\", in that case \nyou could click action3 to restart the level.\n\n\nClick 1 to hide the info panel"
+info.font = new Font(Fonts.SanFrancisco)
+info.fontSize = 20
+info.vAlign = "center"
+info.width = "400"
+info.height= "500"
+info.color = Color4.Yellow()
+info.visible=false
+
+export const info1 = new UIText(canvas)
+info1.value = "Click 1 to see/hide the instructions"
+info1.font = new Font(Fonts.SanFrancisco)
+info1.fontSize = 10
+info1.width=200
+info1.hAlign= "right"
+info1.vAlign = "top"
+info1.color = Color4.Yellow()
+info1.visible=false
+
 export const gameendtext = new UIText(canvas)
 gameendtext.value = "Thanks for playing!"
 gameendtext.font = new Font(Fonts.SanFrancisco)
 gameendtext.fontSize = 20
 gameendtext.positionX = "-15%"
+gameendtext.vAlign = "center"
 gameendtext.color = Color4.Red()
 gameendtext.visible=false
 export const levelCompleted = new UIText(canvas)
