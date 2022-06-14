@@ -18,6 +18,7 @@ import { Direction, Fantasmico } from "src/mechanics/fantasmicoEnemy";
 import { completeLevel2 } from "src/Global/gameManager";
 import { movePlayerTo } from "@decentraland/RestrictedActions";
 import { PlayerModifiers } from "src/mechanics/avatarModifiers";
+import { turnEnd } from "src/ui/ui";
 let scene = new Entity();
 let base1_glb = new GLTFShape("models/enemies/base1.glb");
 let fantasmicos = [];
@@ -67,26 +68,15 @@ export class Level2 implements Level {
     engine.addEntity(this.map);
     let fantasmicosList = [
       { posX: 3, posZ: 14, dir: "right" },
-      { posX: 7.7, posZ: 4, dir: "left" },
       { posX: 7.7, posZ: 5, dir: "left" },
-      { posX: 7.7, posZ: 6, dir: "left" },
       { posX: 7.7, posZ: 7, dir: "left" },
-      { posX: 7.7, posZ: 8, dir: "left" },
       { posX: 7.7, posZ: 9, dir: "left" },
-      { posX: 7.7, posZ: 10, dir: "left" },
       { posX: 7.7, posZ: 11, dir: "left" },
-      { posX: 7.7, posZ: 12, dir: "left" },
-      { posX: 13, posZ: 4, dir: "right" },
       { posX: 13, posZ: 5, dir: "right" },
-      { posX: 13, posZ: 6, dir: "right" },
       { posX: 13, posZ: 7, dir: "right" },
-      { posX: 13, posZ: 8, dir: "right" },
       { posX: 13, posZ: 9, dir: "right" },
-      { posX: 13, posZ: 10, dir: "right" },
       { posX: 13, posZ: 11, dir: "right" },
-      { posX: 13, posZ: 12, dir: "right" },
       { posX: 13, posZ: 13, dir: "right" },
-      { posX: 13, posZ: 14, dir: "right" },
     ];
     createFantasmicos(fantasmicosList);
 
@@ -109,9 +99,10 @@ export class Level2 implements Level {
       changeLevel();
       completeLevel2();
     }
-    const trigger7 = new Trigger(new Vector3(14.5, 2, 14.5), finalLevel, false);
+    const trigger7 = new Trigger(new Vector3(14.2, 2, 14.5), finalLevel, false);
 
 
+    turnEnd.visible = false
   }
 }
 function createFantasmicos(

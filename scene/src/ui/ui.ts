@@ -69,6 +69,13 @@ gameover.positionX = "-15%"
 gameover.color = Color4.Red()
 gameover.visible=false
 
+export const turnEnd = new UIText(canvas)
+turnEnd.value = "Turn End. Wait!"
+turnEnd.font = new Font(Fonts.SanFrancisco)
+turnEnd.fontSize = 20
+turnEnd.positionX = "-10%"
+turnEnd.color = Color4.Yellow()
+turnEnd.visible=false
 export const gameendtext = new UIText(canvas)
 gameendtext.value = "Thanks for playing!"
 gameendtext.font = new Font(Fonts.SanFrancisco)

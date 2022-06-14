@@ -57,7 +57,7 @@ export class Fantasmico extends Entity{
     engine.addEntity(this.entity);
     this.entity.addComponent(new Billboard())
 
-    let triggerBox = new utils.TriggerBoxShape(new Vector3(0.5,0.8,0.5)
+    let triggerBox = new utils.TriggerBoxShape(new Vector3(1.5,0.8,0.5)
     );
     this.entity.addComponentOrReplace(
       new utils.TriggerComponent(
@@ -71,7 +71,7 @@ export class Fantasmico extends Entity{
               if (entity.name?.indexOf("Bullet") !== -1) {
               }
           },
-          enableDebug: false,
+          enableDebug: true,
         }
       )
     );

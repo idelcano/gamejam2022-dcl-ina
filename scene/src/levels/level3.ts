@@ -15,6 +15,7 @@ import {
   getQuestionB,
   getQuestionC,
 } from "src/network/questions";
+import { turnEnd } from "src/ui/ui";
 import { Level } from "./level";
 
 @Component("FinalBossComponent")
@@ -320,6 +321,7 @@ export class Level3 implements Level {
     this.textC.getComponent(TextShape).shadowOffsetX = -1;
     engine.addEntity(this.textC);
     this.textC.setParent(doorask1);
+    turnEnd.visible = false
   }
 
   complete() {

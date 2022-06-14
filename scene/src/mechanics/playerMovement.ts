@@ -13,6 +13,7 @@ import * as utils from "@dcl/ecs-scene-utils";
 import { Direction, FantasmicoDetails } from "./fantasmicoEnemy";
 import { FinalBossComponent } from "src/levels/level3";
 import { GlobalVariables } from "src/Global/globalValues";
+import { turnEnd } from "src/ui/ui";
 
 const velocity = 0.5;
 const distance = 1.5;
@@ -247,6 +248,7 @@ export class PlayerMovement {
           gameoverui();
         }
         if (GlobalVariables.moving) {
+          turnEnd.visible = true
           if (!isWrapped) {
             isWrapped = true;
             GlobalVariables.shipEntity
@@ -263,6 +265,7 @@ export class PlayerMovement {
               transform.position.x = maxXPos;
               moveUp = false;
               GlobalVariables.moving = false;
+              turnEnd.visible = false
               hitFantasmicos();
               GlobalVariables.steps = GlobalVariables.steps + 1;
               GlobalVariables.stepsui.increase();
@@ -275,6 +278,8 @@ export class PlayerMovement {
               transform.position.x = maxXPos;
               moveDown = false;
               GlobalVariables.moving = false;
+
+              turnEnd.visible = false
               hitFantasmicos();
               GlobalVariables.steps = GlobalVariables.steps + 1;
               GlobalVariables.stepsui.increase();
@@ -285,6 +290,7 @@ export class PlayerMovement {
               transform.position.z = maxZPos;
               moveLeft = false;
               GlobalVariables.moving = false;
+              turnEnd.visible = false
               hitFantasmicos();
               GlobalVariables.steps = GlobalVariables.steps + 1;
               GlobalVariables.stepsui.increase();
@@ -296,6 +302,7 @@ export class PlayerMovement {
               transform.position.z = maxZPos;
               moveRight = false;
               GlobalVariables.moving = false;
+              turnEnd.visible = false
               hitFantasmicos();
               GlobalVariables.steps = GlobalVariables.steps + 1;
               GlobalVariables.stepsui.increase();
@@ -306,6 +313,7 @@ export class PlayerMovement {
             transform.rotate(new Vector3(0, 1, 0), 90);
             moveRotateLeft = false;
             GlobalVariables.moving = false;
+            turnEnd.visible = false
             hitFantasmicos();
             GlobalVariables.steps = GlobalVariables.steps + 1;
             GlobalVariables.stepsui.increase();
@@ -314,6 +322,7 @@ export class PlayerMovement {
             transform.rotate(new Vector3(0, 1, 0), -90);
             moveRotateRight = false;
             GlobalVariables.moving = false;
+            turnEnd.visible = false
             hitFantasmicos();
             GlobalVariables.steps = GlobalVariables.steps + 1;
             GlobalVariables.stepsui.increase();
@@ -321,6 +330,7 @@ export class PlayerMovement {
         }
         if (GlobalVariables.moving || GlobalVariables.emptyMove) {
           if (firemoving || GlobalVariables.emptyMove) {
+            turnEnd.visible = true
             if (firemoveUp) {
               let transform = fire_ent.getComponent(Transform);
               let newOriginPos = new Vector3(
@@ -402,6 +412,7 @@ export class PlayerMovement {
             //log("startmove" + startMove);
             if (startMove >= endMove) {
               GlobalVariables.emptyMove = false;
+              turnEnd.visible = false
               hitFantasmicos();
               GlobalVariables.steps = GlobalVariables.steps + 1;
               GlobalVariables.stepsui.increase();
@@ -550,6 +561,7 @@ export class PlayerMovement {
         maxXPos = position.position.x + moveMeters;
         GlobalVariables.moving = true;
         GlobalVariables.bossMoving = true;
+        turnEnd.visible = true
         moveUp = true;
       }
     }
@@ -578,6 +590,7 @@ export class PlayerMovement {
         maxXPos = position.position.x - moveMeters;
         GlobalVariables.moving = true;
         GlobalVariables.bossMoving = true;
+        turnEnd.visible = true
         moveDown = true;
       }
     }
@@ -605,6 +618,7 @@ export class PlayerMovement {
         maxZPos = position.position.z + moveMeters;
         GlobalVariables.moving = true;
         GlobalVariables.bossMoving = true;
+        turnEnd.visible = true
         moveLeft = true;
       }
     }
@@ -633,6 +647,7 @@ export class PlayerMovement {
         maxZPos = position.position.z - moveMeters;
         GlobalVariables.moving = true;
         GlobalVariables.bossMoving = true;
+        turnEnd.visible = true
         moveRight = true;
       }
     }
