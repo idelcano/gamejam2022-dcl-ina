@@ -15,7 +15,7 @@ import * as utils from "@dcl/ecs-scene-utils";
 import { Direction, FantasmicoDetails } from "./fantasmicoEnemy";
 import { FinalBossComponent } from "src/levels/level3";
 import { GlobalVariables } from "src/Global/globalValues";
-import { turnEnd } from "src/ui/ui";
+import { press4, turnEnd } from "src/ui/ui";
 
 const velocity = 0.5;
 const distance = 1.5;
@@ -135,7 +135,7 @@ export class PlayerMovement {
       }
     });
 
-    input.subscribe("BUTTON_UP", ActionButton.ACTION_4, false, (e) => {
+    input.subscribe("BUTTON_UP", ActionButton.ACTION_6, false, (e) => {
       log("pointer Up", e);
       if (GlobalVariables.startGame){
       swapUser()
@@ -145,6 +145,11 @@ export class PlayerMovement {
     
     input.subscribe("BUTTON_UP", ActionButton.FORWARD, false, (e) => {
       log("pointer Up", e);
+      if (!GlobalVariables.startGame){return}
+      if(!GlobalVariables.firstLevelStep){
+        swapUser()
+        return
+      }
       if (rotationDiff == 0) {
         moveForward();
       } else if (rotationDiff == 1 || rotationDiff == -3) {
@@ -157,6 +162,11 @@ export class PlayerMovement {
     });
     input.subscribe("BUTTON_UP", ActionButton.WALK, false, (e) => {
       log("pointer Up", e);
+      if (!GlobalVariables.startGame){return}
+      if(!GlobalVariables.firstLevelStep){
+        swapUser()
+        return
+      }
       if (GlobalVariables.moving) return;
       if (firemoving) {
         startMove = 0;
@@ -177,6 +187,11 @@ export class PlayerMovement {
 
     input.subscribe("BUTTON_UP", ActionButton.BACKWARD, false, (e) => {
       log("pointer Up", e);
+      if (!GlobalVariables.startGame){return}
+      if(!GlobalVariables.firstLevelStep){
+        swapUser()
+        return
+      }
       if (rotationDiff == 0) {
         moveBackward();
       } else if (rotationDiff == 1 || rotationDiff == -3) {
@@ -190,6 +205,11 @@ export class PlayerMovement {
 
     input.subscribe("BUTTON_UP", ActionButton.LEFT, false, (e) => {
       log("pointer Up", e);
+      if (!GlobalVariables.startGame){return}
+      if(!GlobalVariables.firstLevelStep){
+        swapUser()
+        return
+      }
       if (rotationDiff == 0) {
         moveToLeft();
       } else if (rotationDiff == 1 || rotationDiff == -3) {
@@ -203,6 +223,11 @@ export class PlayerMovement {
 
     input.subscribe("BUTTON_UP", ActionButton.RIGHT, false, (e) => {
       log("pointer Up", e);
+      if (!GlobalVariables.startGame){return}
+      if(!GlobalVariables.firstLevelStep){
+        swapUser()
+        return
+      }
       if (rotationDiff == 0) {
         moveToRight();
       } else if (rotationDiff == 1 || rotationDiff == -3) {
@@ -216,6 +241,11 @@ export class PlayerMovement {
 
     input.subscribe("BUTTON_UP", ActionButton.PRIMARY, false, (e) => {
       log("pointer Up", e);
+      if (!GlobalVariables.startGame){return}
+      if(!GlobalVariables.firstLevelStep){
+        swapUser()
+        return
+      }
       if (!GlobalVariables.moving) {
         GlobalVariables.moving = true;
         GlobalVariables.bossMoving = true;
@@ -230,6 +260,11 @@ export class PlayerMovement {
 
     input.subscribe("BUTTON_UP", ActionButton.SECONDARY, false, (e) => {
       log("pointer Up", e);
+      if (!GlobalVariables.startGame){return}
+      if(!GlobalVariables.firstLevelStep){
+        swapUser()
+        return
+      }
       if (!GlobalVariables.moving) {
         GlobalVariables.moving = true;
         GlobalVariables.bossMoving = true;
@@ -1213,12 +1248,22 @@ export class PlayerMovement {
   }
 }
 function swapUser() {
-  GlobalVariables.shipEntity.getComponent(Transform).position.x = 1;
-  GlobalVariables.shipEntity.getComponent(Transform).position.z = 8;
-  GlobalVariables.shipEntity.getComponent(Transform).position.y = 0;
-  GlobalVariables.shipEntity.getComponent(Transform).scale.setAll(0.85);
+  log(Camera.instance.feetPosition)
   executeTask(async () => {
-    movePlayerTo({ x: 1, y: 0, z: 8 });
+    log(Camera.instance.feetPosition)
+    log(Math.floor(Camera.instance.feetPosition.x))
+    log(Math.floor(Camera.instance.feetPosition.y))
+    log(Math.floor(Camera.instance.feetPosition.z))
+    if (Math.floor(Camera.instance.feetPosition.x) <= 1 && Math.floor(Camera.instance.feetPosition.x) >= 0 && Math.floor(Camera.instance.feetPosition.y)>=0 && Math.floor(Camera.instance.feetPosition.y)<=1 && Math.floor(Camera.instance.feetPosition.z)==8){
+      GlobalVariables.firstLevelStep = true
+      press4.visible= false
+    }else{
+      GlobalVariables.shipEntity.getComponent(Transform).position.x = 1;
+      GlobalVariables.shipEntity.getComponent(Transform).position.z = 8;
+      GlobalVariables.shipEntity.getComponent(Transform).position.y = 0;
+      GlobalVariables.shipEntity.getComponent(Transform).scale.setAll(0.85);
+      movePlayerTo({ x: 1, y: 0, z: 8 });
+    }
   })
 }
 

@@ -28,6 +28,7 @@ export class GlobalVariables {
   static moving = false
   static emptyMove = false
   static startGame: boolean = false;
+  static firstLevelStep: boolean = false;
 }
 export function activateUI(){
 let healthLabel = new ui.CornerLabel(

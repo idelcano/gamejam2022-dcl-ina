@@ -77,8 +77,16 @@ turnEnd.vAlign = "center"
 turnEnd.color = Color4.Yellow()
 turnEnd.visible=false
 
+export const press4 = new UIText(canvas)
+press4.value = "Press 4 to start the MECHA"
+press4.font = new Font(Fonts.SanFrancisco)
+press4.fontSize = 20
+press4.vAlign = "center"
+press4.color = Color4.Yellow()
+press4.visible=false
+
 export const info = new UIText(canvas)
-info.value = "This game is based on turns. Please wait to the next turn to do next action.\n\nUse asdw to move\n\nUse E oe F to rotate\n\nUse shift to fire or move next turn if you alreeady do fire\nThis demo have 3 levels:\n\n1 leveL: Simple level with some lives hidden\n\n2 level: kill some enemies to move to the next level\n\n3 level: kill the final boss and end the game.\n\nKnowed bugs, some old computers could make \nyour avatar swap out of the \"MECHA\", in that case \nyou could click action3 to restart the level.\n\n\nClick 1 to hide the info panel"
+info.value = "This game is based on turns. Please wait to the next turn to do next action.\n\nUse asdw to move\n\nUse E or F to rotate\n\nUse shift to fire or move next turn if you already do fire\nThis demo have 3 levels:\n\n1 leveL: Simple level with some lives hidden\n\n2 level: kill some enemies to move to the next level\n\n3 level: kill the final boss and end the game.\n\nKnowed bugs, some old computers could make \nyour avatar swap out of the \"MECHA\", in that case \nyou could press 4 to restart the level.\n\n\nTo hide the info panel click 1 or wait 10 seconds if you lost the pointer"
 info.font = new Font(Fonts.SanFrancisco)
 info.fontSize = 20
 info.vAlign = "center"
@@ -110,7 +118,7 @@ levelCompleted.value = "Congrats! Level completed. Loading next level..."
 levelCompleted.font = new Font(Fonts.SanFrancisco)
 levelCompleted.fontSize = 20
 levelCompleted.positionX = "-15%"
-levelCompleted.color = Color4.Blue()
+levelCompleted.color = Color4.Yellow()
 levelCompleted.visible=false
 
 export const doorHit1 = new UIContainerStack(canvas)

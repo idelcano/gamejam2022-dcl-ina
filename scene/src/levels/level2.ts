@@ -52,6 +52,7 @@ export class Level2 implements Level {
   start() {
     //first map
     
+    GlobalVariables.firstLevelStep=false
     GlobalVariables.shipEntity.getComponent(Transform).position.x = 1;
     GlobalVariables.shipEntity.getComponent(Transform).position.z = 8;
     GlobalVariables.shipEntity.getComponent(Transform).position.y = 0;
@@ -99,7 +100,7 @@ export class Level2 implements Level {
       changeLevel();
       completeLevel2();
     }
-    const trigger7 = new Trigger(new Vector3(14.2, 2, 14.5), finalLevel, false);
+    const trigger7 = new Trigger(new Vector3(14.5, 2, 14.5), finalLevel, false);
 
 
     turnEnd.visible = false

@@ -1,3 +1,4 @@
+
 export class PlayerModifiers{
   constructor(){
 
@@ -23,7 +24,7 @@ export class PlayerModifiers{
         })
       )
     
+      engine.addEntity(modArea)
     //modArea.addComponent(new BoxShape()).withCollisions = false
-    engine.addEntity(modArea)
   }
 }

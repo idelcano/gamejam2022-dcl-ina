@@ -46,7 +46,6 @@ export class Level0 implements Level {
           this.cube.getComponent(Transform).position.y = -40;
           intro()
           executeTask(async () => {
-            GlobalVariables.startGame = true
             movePlayerTo({ x: 1, y: 0, z: 8 });
             engine.removeEntity(this.map);
             GlobalVariables.level = new Level1();

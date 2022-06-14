@@ -1,6 +1,5 @@
 import * as utils from "@dcl/ecs-scene-utils";
 import { GlobalVariables } from "src/Global/globalValues";
-import * as ui from "@dcl/ui-scene-utils";
 import {
   doorHit1,
   doorHit2,
@@ -135,6 +134,7 @@ export function intro() {
     firstPersonText.visible = false;
     endIntro.visible = false;
     info1.visible=true
+    GlobalVariables.startGame=true
   });
 }
 
@@ -154,6 +154,10 @@ export function gameoverui() {
 export function showInfo() {
   firstPersonText.visible = !firstPersonText.visible;
   info.visible = !info.visible;
+  utils.setTimeout(10000, () => {
+    firstPersonText.visible = false;
+    info.visible = false;
+  });
 }
 
 export function hideInfo() {;

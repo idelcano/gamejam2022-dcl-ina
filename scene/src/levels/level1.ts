@@ -17,7 +17,7 @@ import {
 import { Level } from "src/levels/level";
 import { movePlayerTo } from "@decentraland/RestrictedActions";
 import { completeLevel1 } from "src/Global/gameManager";
-import { info1 } from "src/ui/ui";
+import { info1, press4 } from "src/ui/ui";
 let power_up_glb = new GLTFShape("models/items/powerup.glb");
 let powerUp2 = new Entity();
 let powerUp1 = new Entity();
@@ -57,21 +57,12 @@ export class Level1 implements Level {
     this.textC = new Entity();
   }
   start() {
+    GlobalVariables.firstLevelStep=false
     GlobalVariables.shipEntity.getComponent(Transform).position.x = 1;
     GlobalVariables.shipEntity.getComponent(Transform).position.z = 8;
     GlobalVariables.shipEntity.getComponent(Transform).position.y = 0;
     GlobalVariables.shipEntity.getComponent(Transform).scale.setAll(0.85);
 
-    let border_glb = new GLTFShape("models/border.glb");
-    let border = new Entity("border");
-    border.addComponent(border_glb);
-    border.addComponent(
-      new Transform({
-        position: new Vector3(8, 0, 8),
-        scale: new Vector3(0.5, 0.5, 0.5),
-      })
-    );
-    engine.addEntity(border);
 
     //first map
     let map_glb = new GLTFShape("models/maps/mapa1.glb");
