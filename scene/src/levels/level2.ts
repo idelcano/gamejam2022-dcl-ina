@@ -90,8 +90,8 @@ export class Level2 implements Level {
     this.nlentity.addComponent(nextlevel);
     this.nlentity.addComponent(
       new Transform({
-        position: new Vector3(14, 1, 14),
-        scale: new Vector3(0.5, 0.5, 1),
+        position: new Vector3(15.5, 1, 14),
+        scale: new Vector3(0.3, 0.5, 1),
       })
     );
     engine.addEntity(this.nlentity);

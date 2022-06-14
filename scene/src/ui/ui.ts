@@ -106,13 +106,25 @@ info1.color = Color4.Yellow()
 info1.visible=false
 
 export const gameendtext = new UIText(canvas)
-gameendtext.value = "Thanks for playing!"
+gameendtext.value = "    "
 gameendtext.font = new Font(Fonts.SanFrancisco)
 gameendtext.fontSize = 20
-gameendtext.positionX = "-15%"
-gameendtext.vAlign = "center"
+gameendtext.hAlign= "left"
+gameendtext.vAlign = "top"
 gameendtext.color = Color4.Red()
 gameendtext.visible=false
+
+
+export const gameendscore = new UIText(canvas)
+gameendscore.value = "Top Score"
+gameendscore.font = new Font(Fonts.SanFrancisco)
+gameendscore.fontSize = 18
+
+gameendtext.hAlign= "right"
+gameendtext.vAlign = "center"
+gameendscore.color = Color4.Yellow()
+gameendscore.visible=false
+
 export const levelCompleted = new UIText(canvas)
 levelCompleted.value = "Congrats! Level completed. Loading next level..."
 levelCompleted.font = new Font(Fonts.SanFrancisco)

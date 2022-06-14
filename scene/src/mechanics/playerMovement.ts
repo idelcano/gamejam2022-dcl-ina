@@ -293,7 +293,7 @@ export class PlayerMovement {
         }
         if (gameover) {
           GlobalVariables.lives = GlobalVariables.lives - 10;
-          GlobalVariables.steps = GlobalVariables.steps - 1000;
+          GlobalVariables.steps = GlobalVariables.steps + 1000;
           GlobalVariables.livesui.increase(100);
           GlobalVariables.stepsui.increase(1000);
           gameover = false;

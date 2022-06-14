@@ -13,9 +13,11 @@ import {
   gameendtext,
   info,
   info1,
+  gameendscore,
 } from "src/ui/ui";
 import { DialogWindow } from "@dcl/npc-scene-utils";
 import { gamefinishA, gamefinishB, gamefinishC, gameovernot } from "src/dialogs/dialogs";
+import { getScores, signScore } from "src/network/score";
 
 const cube = new Entity();
 const cube2 = new Entity();
@@ -180,11 +182,20 @@ export function gamebad() {
   firstPersonText.visible = true;
   gameendtext.visible = true;
   malorisa()
-  firstPersonText.visible = true;
-  utils.setTimeout(1000, () => {
+  executeTask(async () => {
+ 
+  let scores = await signScore(GlobalVariables.steps-GlobalVariables.lives  + "", "Ina was died in prision")
+  let stringify_score =""
+  for(let score of await scores) {
+    stringify_score = "Name: "+score["name"] + " score: "+score["score"] + " final: "+ score["comment"] + "\n" + stringify_score
+    
+  }
+  log(stringify_score)
+  gameendscore.value= stringify_score
+  gameendscore.visible=true
+  })
     let dialogWindow = new DialogWindow();
     dialogWindow.openDialogWindow(gamefinishB, 0);
-  });
 }
 
 
@@ -192,10 +203,24 @@ export function gamegood() {
   firstPersonText.visible = true;
   gameendtext.visible = true;
   yeah();
-  firstPersonText.visible = true;
-  utils.setTimeout(1000, () => {
-    let dialogWindow = new DialogWindow();
-    dialogWindow.openDialogWindow(gamefinishC, 0);
+  executeTask(async () => {
+ 
+    let scores = await signScore(GlobalVariables.steps-GlobalVariables.lives  + "", "Ina was saved")
+    let stringify_score =""
+    for(let score of await scores) {
+      stringify_score = "Name: "+score["name"] + " score: "+score["score"] + " final: "+ score["comment"] + "\n" + stringify_score
+      
+    }
+    log(stringify_score)
+    stringify_score = stringify_score+ "\n\nThanks for playing!\nRefresh or move to \nanother location.\nSpecial thanks to Okita\n for its tests"
+    gameendscore.value= stringify_score
+    gameendscore.visible=true
+    })
+  let dialogWindow = new DialogWindow();
+  dialogWindow.openDialogWindow(gamefinishC, 0);
+
+  utils.setTimeout(10000, () => {
+    log("end")
   });
 }
 
