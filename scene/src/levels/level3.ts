@@ -217,7 +217,7 @@ export class Level3 implements Level {
     blocker_glb.visible = true;
 
     const blocker1_transform = new Transform({
-      position: new Vector3(12, 0, 8),
+      position: new Vector3(12, -1, 8),
       scale: new Vector3(0.5, 0.5, 0.5),
     });
     bloker.addComponentOrReplace(blocker1_transform);
@@ -609,6 +609,9 @@ const finalboss5 = new Entity("finalboss")
       finalbosshit.getComponent(Transform).position.y = -50;
       bloker.getComponent(Transform).position.y = -50;
       gameend();
+      fire_entl.getComponent(Transform).position.y = -50;
+      fire_ent.getComponent(Transform).position.y = -50;
+      fire_entr.getComponent(Transform).position.y = -50;
       GlobalVariables.hitMainDie = false;
       GlobalVariables.gamefinish = true;
       GlobalVariables.hitMain = false;
